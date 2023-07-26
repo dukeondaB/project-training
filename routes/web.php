@@ -34,12 +34,13 @@ Route::group(['middleware' => ['auth','locale']], function () {
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('user', UserController::class)->middleware('can:admin-access');
-    Route::post('user/sort-by-age', [UserController::class,'getUsersByAgeRange'])->name('user-sort-by-age');
+//    Route::post('user/sort-by-age', [UserController::class,'getUsersByAgeRange'])->name('user-sort-by-age');
     Route::resource('profile', ProfileController::class);
     Route::resource('department', DepartmentController::class)->except('index')->middleware('can:admin-access');
     Route::get('department-list', [GetListDepartmentController::class, 'index'])->name('department-list');
     Route::resource('course',CourseController::class)->middleware('can:admin-access');
     Route::get('course-list', [\App\Http\Controllers\Course\GetListCourseController::class, 'index'])->name('course-list');
+    Route::post('course/register/{course_id}',[CourseController::class, 'register'])->name('course-register')->middleware('can:user-access');
 });
 
 

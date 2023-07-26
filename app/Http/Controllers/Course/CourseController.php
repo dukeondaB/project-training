@@ -81,4 +81,15 @@ class CourseController extends Controller
         $this->courseService->delete($id);
         return redirect()->back();
     }
+
+
+    /**
+     * @param int $course_id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function register($course_id)
+    {
+        $this->courseService->register($course_id);
+        return redirect()->back();
+    }
 }

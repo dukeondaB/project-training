@@ -19,8 +19,8 @@ class CreateUserCourseTable extends Migration
             $table->unsignedBigInteger('course_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('course_id')->references('id')->on('courses');
-            $table->float('score',2,2);
-            $table->enum('result',['pass','not_pass','in_studying']);
+            $table->float('score',2,2)->nullable();
+            $table->enum('result',['pass','not_pass','in_studying'])->default('in_studying');
             $table->timestamps();
         });
     }

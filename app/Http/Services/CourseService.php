@@ -4,6 +4,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\CourseRepository;
 use App\Http\Requests\CourseRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class CourseService
@@ -84,6 +85,18 @@ class CourseService
 
         return redirect()->route('course-list')->with('success', 'Course created successfully');
 
+    }
+
+    public function register($course_id)
+    {
+        if (Auth::check()) {
+            // Lấy thông tin người dùng hiện tại
+            $user = Auth::user();
+//            dd($user);
+            // Thêm course vào bảng trung gian "user_course" chỉ với course_id
+            $user->courses()->attach($course_id);
+        }
+        return redirect()->back()->with('success', 'Thành công');
     }
 
 }

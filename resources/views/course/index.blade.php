@@ -48,6 +48,14 @@
                     </form>
                 </td>
                     @endcan
+                @can('user-access', Auth()->user())
+                    <td>
+                        <form action="{{route('course-register', $item->id)}}" method="POST" id="registerForm" >
+                            @csrf
+                            <button class="btn btn-success">Đăng kí</button>
+                        </form>
+                    </td>
+                @endcan
             </tr>
 
         @endforeach

@@ -38,4 +38,8 @@ class CourseRepository
         return $item->update($data);
     }
 
+    public function CourseRegister($course_id){
+        return $this->model->users()->attach($course_id);
+    }
+
 }
