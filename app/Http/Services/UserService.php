@@ -4,7 +4,10 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\UserRequest;
+use App\Jobs\SendMailForDues;
+use App\Mail\SendMail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
@@ -41,6 +44,9 @@ class UserService
         $data['student_code'] = 'sv' . rand(0, 10000);
         $data['password'] = Hash::make('000000');
         $this->userRepository->save($data);
+
+        dispatch(new SendMailForDues($data));
+//        Mail::to('minhducgabc@gmail.com')->send(new SendMail());
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
     }

@@ -20,7 +20,10 @@ class CourseService
     public function showAll()
     {
         $data = $this->courseRepository->showAll();
-        return view('course.index', ['data' => $data]);
+        $isRegister = $this->courseRepository->isRegister();
+//        dd($isRegister, $data);
+//        dd($isRegister->pluck('id')->toArray());
+        return view('course.index', ['data' => $data, 'isRegister' => $isRegister]);
     }
 
     public function getForm()
@@ -92,8 +95,7 @@ class CourseService
         if (Auth::check()) {
             // Lấy thông tin người dùng hiện tại
             $user = Auth::user();
-//            dd($user);
-            // Thêm course vào bảng trung gian "user_course" chỉ với course_id
+
             $user->courses()->attach($course_id);
         }
         return redirect()->back()->with('success', 'Thành công');

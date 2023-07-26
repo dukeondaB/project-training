@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\Course;
+use Illuminate\Support\Facades\Auth;
 
 class CourseRepository
 {
@@ -18,6 +19,13 @@ class CourseRepository
 
     public function showAll(){
         return $this->model->paginate(10);
+    }
+
+    public function isRegister(){
+        $user = Auth::user();
+        $registeredCourses = $user->courses->pluck('id')->toArray();
+//        dd($registeredCourses)
+        return $this->findById($registeredCourses);
     }
 
     public function save($data){

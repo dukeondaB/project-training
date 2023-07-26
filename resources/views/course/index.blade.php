@@ -37,6 +37,7 @@
                 <td>
                     <img width="150px" src="{{ asset('storage/images/courses/' . $item->image) }}" alt="Product Image">
                 </td>
+
                 @can('admin-access', Auth()->user())
                 <td>
                     <form action="{{ route('course.destroy', $item->id) }}" method="POST" id="deleteForm">
@@ -48,14 +49,21 @@
                     </form>
                 </td>
                     @endcan
-                @can('user-access', Auth()->user())
+                @if (in_array($item->id, $isRegister->pluck('id')->toArray()))
                     <td>
-                        <form action="{{route('course-register', $item->id)}}" method="POST" id="registerForm" >
-                            @csrf
-                            <button class="btn btn-success">Đăng kí</button>
-                        </form>
+                        <span>Đã đăng ký</span>
                     </td>
-                @endcan
+                @else
+                    @can('user-access', Auth()->user())
+                        <td>
+                            <form action="{{route('course-register', $item->id)}}" method="POST" id="registerForm" >
+                                @csrf
+
+                                <button class="btn btn-success" {{ in_array($item->id, $isRegister->pluck('id')->toArray()) ? 'disabled' : '' }}>Đăng kí</button>
+                            </form>
+                        </td>
+                    @endcan
+                @endif
             </tr>
 
         @endforeach
