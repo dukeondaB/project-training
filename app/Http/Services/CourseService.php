@@ -3,7 +3,8 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\CourseRepository;
-use App\Http\Requests\CourseRequest;
+use App\Http\Requests\Course\CreateCourseRequest;
+use App\Http\Requests\course\UpdateCourseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -30,7 +31,7 @@ class CourseService
         return view('course.create');
     }
 
-    public function save(CourseRequest $request)
+    public function save(CreateCourseRequest $request)
     {
         $data = $request->all();
 
@@ -63,7 +64,7 @@ class CourseService
         return view('course.edit', ['data' => $data]);
     }
 
-    public function update(CourseRequest $request, $id)
+    public function update(UpdateCourseRequest $request, $id)
     {
         $record = $this->courseRepository->findById($id);
         $data = $request->all();

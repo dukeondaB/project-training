@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Course;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CourseRequest;
+use App\Http\Requests\Course\CreateCourseRequest;
+use App\Http\Requests\course\UpdateCourseRequest;
 use App\Http\Services\CourseService;
 
 class CourseController extends Controller
@@ -31,7 +32,7 @@ class CourseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CourseRequest $request)
+    public function store(CreateCourseRequest $request)
     {
         return $this->courseService->save($request);
     }
@@ -61,11 +62,11 @@ class CourseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  CourseRequest  $request
+     * @param  UpdateCourseRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CourseRequest $request, $id)
+    public function update(UpdateCourseRequest $request, $id)
     {
         return $this->courseService->update($request,$id);
     }

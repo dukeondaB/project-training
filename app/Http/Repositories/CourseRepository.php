@@ -31,8 +31,8 @@ class CourseRepository
     public function getUserScoreInCourse($courseId)
     {
         $user = Auth::user();
-        $userCourse = DB::table('user_course')->where('course_id', $courseId)->first();
-
+        $userCourse = DB::table('user_course')->where('user_id', Auth::id())->where('course_id', $courseId)->first();
+//        dd($userCourse);
         if ($userCourse) {
             return $userCourse->score;
         }

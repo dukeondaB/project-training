@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\user\UpdateUserRequest;
 use App\Http\Services\UserService;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,6 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-//        return $this->userService->getList();
         return $this->userService->getUsersByAgeRange($request);
     }
 
@@ -40,10 +40,10 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  UserRequest  $request
+     * @param  CreateUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(CreateUserRequest $request)
     {
         return $this->userService->save($request);
     }
@@ -73,11 +73,11 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  UserRequest  $request
+     * @param  UpdateUserRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $this->userService->update($request, $id);
     }

@@ -3,7 +3,8 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\DepartmentRepository;
-use App\Http\Requests\DepartmentRequest;
+use App\Http\Requests\Department\CreateDepartmentRequest;
+use App\Http\Requests\department\UpdateDepartmentRequest;
 use Illuminate\Support\Facades\Storage;
 
 class DepartmentService
@@ -31,7 +32,7 @@ class DepartmentService
         return view('department.create');
     }
 
-    public function save(DepartmentRequest $request)
+    public function save(CreateDepartmentRequest $request)
     {
         $data = $request->all();
 
@@ -63,7 +64,7 @@ class DepartmentService
         return view('department.edit', ['data' => $data]);
     }
 
-    public function update(DepartmentRequest $request, $id)
+    public function update(UpdateDepartmentRequest $request, $id)
     {
         $record = $this->DepartmentRepository->findById($id);
         $data = $request->all();

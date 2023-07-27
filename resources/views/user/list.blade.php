@@ -26,10 +26,11 @@
             <th>{{__('Email')}}</th>
             <th>{{__('Phone')}}</th>
             <th>{{__('Avatar')}}</th>
-            <th>{{__('Address')}}</th>
+{{--            <th>{{__('Address')}}</th>--}}
             <th>{{__('Age')}}</th>
             <th>{{__('Gender')}}</th>
             <th>{{__('Student code')}}</th>
+            <th>{{__('Course register count')}}</th>
             <th>{{__('Action')}}</th>
         </tr>
         </thead>
@@ -52,10 +53,21 @@
                 <td>
                     <img width="150px" src="{{ asset('storage/images/user/' . $item->avatar) }}" alt="Product Image">
                 </td>
-                <td>{{$item->address}}</td>
+{{--                <td>{{$item->address}}</td>--}}
                 <td>{{$item->age}}</td>
                 <td>{{__($item->gender)}}</td>
                 <td>{{$item->student_code}}</td>
+                <td>
+                    @php
+                        $count = $countRegisterCourse->countRegisterCourse($item->id);
+                    @endphp
+
+                    @if ($count !== null && $count !== '')
+                        {{$count}}
+                    @else
+                        {{__('N/A')}}
+                    @endif
+                </td>
                 <td>
                     <form action="{{ route('user.destroy', $item->id) }}" method="POST" id="deleteForm">
                         @csrf

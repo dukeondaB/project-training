@@ -23,7 +23,7 @@
         @enderror
         <label for="" class="form-label">{{__('Address')}}</label>
         <input type="text" id="address" value="{{$data->address}}" class="form-control" name="address">
-        @error('full_name')
+        @error('address')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <label for="" class="form-label">{{__('Gender')}}</label>
@@ -33,7 +33,7 @@
             <option value="female" {{$data->gender === 'female' ? 'selected' : ''}}>{{__('Female')}}</option>
             <option value="other" {{$data->gender === 'other' ? 'selected' : ''}}>{{__('Other')}}</option>
         </select>
-        @error('full_name')
+        @error('gender')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">

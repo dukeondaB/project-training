@@ -3,6 +3,7 @@
 namespace App\Http\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository
 {
@@ -47,15 +48,25 @@ class UserRepository
     public function sortByAge($minAge, $maxAge)
     {
         $query = $this->model->where('is_admin', 'user');
-//        dd($query);
+
+//        dd($countRegister);
         if ($minAge !== null && $maxAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) BETWEEN ? AND ?', [$minAge, $maxAge])->paginate(10);
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) BETWEEN ? AND ?', [$minAge, $maxAge])->paginate(1)->withQueryString();
         } elseif ($minAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) >= ?', [$minAge])->paginate(10);
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) >= ?', [$minAge])->paginate(1)->withQueryString();
         } elseif ($maxAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) <= ?', [$maxAge])->paginate(10);
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, datebirth, NOW()) <= ?', [$maxAge])->paginate(1)->withQueryString();
         } else {
             return $query->paginate(10);
         }
+    }
+
+    public function countRegisterCourse($userId){
+        $count = DB::table('user_course')->where('user_id', $userId)->count();
+        if ($count){
+            return $count;
+        }
+
+        return null;
     }
 }

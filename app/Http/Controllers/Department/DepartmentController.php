@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Department;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DepartmentRequest;
+use App\Http\Requests\Department\CreateDepartmentRequest;
+use App\Http\Requests\department\UpdateDepartmentRequest;
 use App\Http\Services\DepartmentService;
-use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
@@ -34,10 +34,10 @@ class DepartmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param DepartmentRequest $request
+     * @param CreateDepartmentRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DepartmentRequest $request)
+    public function store(CreateDepartmentRequest $request)
     {
         return $this->DepartmentService->save($request);
     }
@@ -71,7 +71,7 @@ class DepartmentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(DepartmentRequest $request, $id)
+    public function update(UpdateDepartmentRequest $request, $id)
     {
         return $this->DepartmentService->update($request, $id);
     }

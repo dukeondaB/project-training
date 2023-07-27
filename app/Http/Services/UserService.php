@@ -3,11 +3,10 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\UserRepository;
-use App\Http\Requests\UserRequest;
+use App\Http\Requests\User\CreateUserRequest;
+use App\Http\Requests\user\UpdateUserRequest;
 use App\Jobs\SendMailForDues;
-use App\Mail\SendMail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
@@ -32,7 +31,7 @@ class UserService
         return view('user.create');
     }
 
-    public function save(UserRequest $request)
+    public function save(CreateUserRequest $request)
     {
         $data = $request->all();
         if ($request->hasFile('avatar')) {
@@ -69,10 +68,11 @@ class UserService
         return view('user.edit', ['data' => $data]);
     }
 
-    public function update(UserRequest $request, $id)
+    public function update(UpdateUserRequest $request, $id)
     {
         $record = $this->userRepository->findById($id);
         $data = $request->all();
+//        dd($data);
 
         if ($request->hasFile('avatar')) {
             // Nếu có ảnh mới thay vào, xóa ảnh cũ (nếu có)
@@ -89,7 +89,7 @@ class UserService
             $data['avatar'] = $record->image;
         }
         $this->userRepository->update($data, $id);
-        return redirect()->route('user.index')->with('success', 'Department created successfully');
+        return redirect()->route('user.index')->with('success', 'User update successfully');
     }
 
     public function getUsersByAgeRange($request)
@@ -99,9 +99,9 @@ class UserService
 
         // Kiểm tra nếu minAge và maxAge đều được cung cấp
         $data = $this->userRepository->sortByAge($minAge, $maxAge);
-//        dd($request, $data);
-//        dd($data);
-        return view('user.list', ['data' => $data]);
+        return view('user.list', ['data' => $data])->with(['countRegisterCourse' => $this->userRepository]);
     }
+
+
 
 }

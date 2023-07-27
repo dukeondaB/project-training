@@ -54,6 +54,7 @@
 
 
 
+
             @can('admin-access', Auth()->user())
                 <td>
                     <form action="{{ route('course.destroy', $item->id) }}" method="POST" id="deleteForm">

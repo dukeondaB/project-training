@@ -1,11 +1,16 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Department;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CourseRequest extends FormRequest
+class CreateDepartmentRequest extends FormRequest
 {
+    /**
+     * @var mixed
+     */
+    public $image;
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -24,10 +29,9 @@ class CourseRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:155',
             'detail' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ];
     }
 
