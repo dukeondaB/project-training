@@ -28,11 +28,9 @@ class SendMailForDues implements ShouldQueue
 
     public function handle()
     {
-        Mail::send('mail.sendmail', [
-            'name' => 'Đức',
-            'content' => 'Mật khẩu là 000000',
-        ], function ($msg) {
-            $msg->to($this->data['email'], 'Đòi Nợ')->subject('Thông báo mật khẩu');
+        $student = $this->data;
+        Mail::send('mail.sendmail', compact('student'), function ($msg) {
+            $msg->to($this->data['email'])->subject('Thông báo mật khẩu');
         });
     }
 

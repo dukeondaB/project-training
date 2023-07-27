@@ -20,4 +20,14 @@ class ProfileRepository
 //        return $this->model->where('id',$id)->get();
     }
 
+    public function uploadAvatar($request, $id){
+//        dd($request, $id);
+        $data = $this->findById($id);
+        return $data->update($request);
+    }
+
+    public function findById($id){
+        return $this->model->findOrFail($id);
+    }
+
 }

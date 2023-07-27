@@ -7,11 +7,11 @@
                 <form role="form" action="{{ route('login') }}" method="post" class="login100-form validate-form">
                     @csrf
                     <span class="login100-form-title p-b-49">
-					    {{__('auth.login')}}
+					    {{__('Login')}}
 					</span>
 
                     <div class="wrap-input100 validate-input m-b-23" data-validate = "email is reauired">
-                        <span class="label-input100">{{__('auth.username')}}</span>
+                        <span class="label-input100">{{__('Email')}}</span>
                         <input id="email" class="input100" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
                         @error('email')
@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
-                        <span class="label-input100">Password</span>
+                        <span class="label-input100">{{__('Password')}}</span>
                         <input id="password" class="input100" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
 
                         @error('password')
@@ -44,7 +44,7 @@
                         <div class="wrap-login100-form-btn">
                             <div class="login100-form-bgbtn"></div>
                             <button class="login100-form-btn">
-                                Login
+                                {{__('Login')}}
                             </button>
                         </div>
                     </div>

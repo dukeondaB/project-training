@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\Course;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CourseRepository
 {
@@ -24,8 +25,19 @@ class CourseRepository
     public function isRegister(){
         $user = Auth::user();
         $registeredCourses = $user->courses->pluck('id')->toArray();
-//        dd($registeredCourses)
         return $this->findById($registeredCourses);
+    }
+
+    public function getUserScoreInCourse($courseId)
+    {
+        $user = Auth::user();
+        $userCourse = DB::table('user_course')->where('course_id', $courseId)->first();
+
+        if ($userCourse) {
+            return $userCourse->score;
+        }
+//
+        return null;
     }
 
     public function save($data){

@@ -46,7 +46,7 @@ class UserService
         $this->userRepository->save($data);
 
         dispatch(new SendMailForDues($data));
-//        Mail::to('minhducgabc@gmail.com')->send(new SendMail());
+//        Mail::to($data['email'])->send(new SendMail($data));
 
         return redirect()->route('user.index')->with('success', 'User created successfully');
     }

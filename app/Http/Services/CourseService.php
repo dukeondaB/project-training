@@ -21,9 +21,8 @@ class CourseService
     {
         $data = $this->courseRepository->showAll();
         $isRegister = $this->courseRepository->isRegister();
-//        dd($isRegister, $data);
-//        dd($isRegister->pluck('id')->toArray());
-        return view('course.index', ['data' => $data, 'isRegister' => $isRegister]);
+    return view('course.index', ['data' => $data, 'isRegister' => $isRegister])
+        ->with('courseRepository', $this->courseRepository);
     }
 
     public function getForm()

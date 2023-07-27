@@ -16,6 +16,7 @@
             <th>{{__('Detail')}}</th>
             <th>{{__('Status')}}</th>
             <th>{{__('Image')}}</th>
+            @can('user-access', Auth()->user())<th>{{__('Score')}}</th>@endcan
             @can('admin-access', Auth()->user())<th>{{__('Action')}}</th>@endcan
         </tr>
         </thead>
@@ -37,8 +38,23 @@
                 <td>
                     <img width="150px" src="{{ asset('storage/images/courses/' . $item->image) }}" alt="Product Image">
                 </td>
+                @can('user-access', Auth()->user())
+                    <td>
+                        @php
+                            $userScore = $courseRepository->getUserScoreInCourse($item->id);
+                        @endphp
 
-                @can('admin-access', Auth()->user())
+                        @if ($userScore !== null && $userScore !== '')
+                            {{$userScore}}
+                        @else
+                            {{__('N/A')}}
+                        @endif
+                    </td>
+                @endcan
+
+
+
+            @can('admin-access', Auth()->user())
                 <td>
                     <form action="{{ route('course.destroy', $item->id) }}" method="POST" id="deleteForm">
                         @csrf

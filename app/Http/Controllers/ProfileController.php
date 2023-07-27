@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\ProfileService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
@@ -74,9 +75,10 @@ class ProfileController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $this->profileService->uploadAvatar($request, Auth::id());
+        return redirect()->back();
     }
 
     /**
