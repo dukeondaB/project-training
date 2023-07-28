@@ -41,6 +41,9 @@ Route::group(['middleware' => ['auth','locale']], function () {
     Route::resource('course',CourseController::class)->middleware('can:admin-access');
     Route::get('course-list', [\App\Http\Controllers\Course\GetListCourseController::class, 'index'])->name('course-list');
     Route::post('course/register/{course_id}',[CourseController::class, 'register'])->name('course-register')->middleware('can:user-access');
+    Route::get('user/{user_id}/list-course', [UserController::class, 'getPageAddScore'])->name('list-course-by-user')->middleware('can:admin-access');
+    Route::put('update-score/{user_id}/{course_id}', [UserController::class, 'updateScore'])->name('update-score')->middleware('can:admin-access');
+
 });
 
 

@@ -61,12 +61,21 @@ class UserRepository
         }
     }
 
-    public function countRegisterCourse($userId){
+    public function countRegisterCourse($userId)
+    {
         $count = DB::table('user_course')->where('user_id', $userId)->count();
         if ($count){
             return $count;
         }
 
         return null;
+    }
+
+    public function listScoreStudent($userId){
+//        $user = $this->findById($userId);
+        $userWithCourses = $this->model->with('courses')->where('id',$userId)->get();
+        $user = $this->findById($userId);
+        $courses = $user->courses;
+        return $courses;
     }
 }

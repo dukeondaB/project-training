@@ -63,7 +63,7 @@
                     @endphp
 
                     @if ($count !== null && $count !== '')
-                        {{$count}}
+                        {{$count}} <a href="{{ route('list-course-by-user', ['user_id' => $item->id])}}"> <i class="fa fa-bars"></i> </a>
                     @else
                         {{__('N/A')}}
                     @endif

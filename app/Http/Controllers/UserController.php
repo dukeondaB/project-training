@@ -104,4 +104,13 @@ class UserController extends Controller
 
         return redirect()->back();
     }
+
+    public function getPageAddScore($userId){
+        return $this->userService->getPageAddScore($userId);
+    }
+
+    public function updateScore(Request $request, $userId, $courseId)
+    {
+        return $this->userService->updateScore($request,$userId,$courseId);
+    }
 }

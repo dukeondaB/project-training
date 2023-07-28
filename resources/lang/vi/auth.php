@@ -12,7 +12,7 @@
 */
 
 return [
-    'failed'   => 'Thông tin tài khoản không tìm thấy trong hệ thống.',
+    'failed'   => 'Thông tin tài khoản hoặc mật khẩu không đúng.',
     'password' => 'Mật khẩu không đúng.',
     'throttle' => 'Vượt quá số lần đăng nhập cho phép. Vui lòng thử lại sau :seconds giây.',
 ];

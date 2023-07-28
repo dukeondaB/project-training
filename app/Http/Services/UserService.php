@@ -2,10 +2,13 @@
 
 namespace App\Http\Services;
 
+use App\Http\Repositories\CourseRepository;
+use App\Http\Repositories\UserCourseRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\user\UpdateUserRequest;
 use App\Jobs\SendMailForDues;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
@@ -13,10 +16,17 @@ class UserService
 {
 
     protected $userRepository;
+    protected $courseRepository;
+    /**
+     * @var UserCourseRepository
+     */
+    protected $userCourseRepository;
 
-    public function __construct(UserRepository $userRepository)
+    public function __construct(UserRepository $userRepository, CourseRepository $courseRepository, UserCourseRepository $userCourseRepository)
     {
         $this->userRepository = $userRepository;
+        $this->courseRepository = $courseRepository;
+        $this->userCourseRepository = $userCourseRepository;
     }
 
     public function getList()
@@ -102,6 +112,23 @@ class UserService
         return view('user.list', ['data' => $data])->with(['countRegisterCourse' => $this->userRepository]);
     }
 
+    public function getPageAddScore($userId){
+        $student = $this->userRepository->findById($userId);
+        $data = $this->userRepository->listScoreStudent($userId);
+        $courseRepository = $this->courseRepository;
+//        dd($data);
+        return view('dashboard.addscore',['data' => $data, 'student' => $student, 'courseRepository' => $courseRepository]);
+    }
+
+    public function updateScore(Request $request, $userId, $courseId){
+        $data['score'] = $request->input('score');
+        $this->userCourseRepository->updateScore($userId, $courseId, $data);
+        return redirect()->back()->with(['success','Success']);
+    }
+
+    public function showStudentIsNotRegister(){
+
+    }
 
 
 }

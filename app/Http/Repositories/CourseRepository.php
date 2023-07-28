@@ -40,6 +40,17 @@ class CourseRepository
         return null;
     }
 
+    public function getUerScore($userId,$courseId)
+    {
+        $userCourse = DB::table('user_course')->where('user_id', $userId)->where('course_id', $courseId)->first();
+
+        if ($userCourse) {
+            return $userCourse;
+        }
+//
+        return null;
+    }
+
     public function save($data){
         return $this->model->create($data);
     }

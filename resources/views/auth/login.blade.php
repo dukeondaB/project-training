@@ -12,26 +12,29 @@
 
                     <div class="wrap-input100 validate-input m-b-23" data-validate = "email is reauired">
                         <span class="label-input100">{{__('Email')}}</span>
-                        <input id="email" class="input100" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-
-                        @error('email')
-                        <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                        @enderror
+                        <input id="email" class="input100" placeholder="{{__('Email')}}" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}">
                         <span class="focus-input100" data-symbol="&#xf206;"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Password is required">
                         <span class="label-input100">{{__('Password')}}</span>
-                        <input id="password" class="input100" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+                        <input id="password" class="input100" placeholder="{{__('Password')}}" type="password" class="form-control @error('password') is-invalid @enderror" name="password">
 
+
+                        <span class="focus-input100" data-symbol="&#xf190;"></span>
+                    </div>
+
+                    <div class="wrap-input100">
+                        @error('email')
+                        <span class="text text-danger" role="alert"
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                        @enderror
                         @error('password')
                         <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                         @enderror
-                        <span class="focus-input100" data-symbol="&#xf190;"></span>
                     </div>
 
                     <div class="text-right p-t-8 p-b-31">

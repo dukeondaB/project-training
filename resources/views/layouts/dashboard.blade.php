@@ -68,10 +68,11 @@
                 </div>
                 <div class="navbar-collapse">
 
+
                     <ul class="navbar-nav me-auto">
                         <a href="{!! route('user.change-language', ['en']) !!}">English</a>
                         <a href="{!! route('user.change-language', ['vi']) !!}">Vietnam</a>
-
+                        
                         {{--                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"--}}
 {{--                                href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>--}}
 
