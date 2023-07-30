@@ -8,8 +8,10 @@ use App\Http\Repositories\UserRepository;
 use App\Http\Requests\User\CreateUserRequest;
 use App\Http\Requests\user\UpdateUserRequest;
 use App\Jobs\SendMailForDues;
+use App\Mail\SendMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
 class UserService
