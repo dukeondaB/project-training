@@ -72,7 +72,7 @@
                     <ul class="navbar-nav me-auto">
                         <a href="{!! route('user.change-language', ['en']) !!}">English</a>
                         <a href="{!! route('user.change-language', ['vi']) !!}">Vietnam</a>
-                        
+
                         {{--                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"--}}
 {{--                                href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>--}}
 
@@ -113,19 +113,19 @@
                         <li> <a class="waves-effect waves-dark" href="{{url('dashboard')}}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">{{__('Dashboard')}}</span></a>
                         </li>
-                        @can('admin-access', Auth()->user())
+
                         <li> <a class="waves-effect waves-dark" href="{{url('user')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('User')}}</span></a>
                         </li>
-                        @endcan
+
                         <li> <a class="waves-effect waves-dark" href="{{url('/profile')}}" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">{{__('Profile')}}</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('department-list')}}" aria-expanded="false"><i
-                                    class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('Department')}}</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{route('faculty-list')}}" aria-expanded="false"><i
+                                    class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('faculty')}}</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('course-list')}}" aria-expanded="false"><i
-                                    class="fa fa-briefcase"></i><span class="hide-menu">{{__('Course')}}</span></a>
+                                    class="fa fa-briefcase"></i><span class="hide-menu">{{__('Subject')}}</span></a>
                         </li>
 
                         @guest
