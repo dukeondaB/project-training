@@ -29,8 +29,8 @@
 {{--            <th>{{__('Address')}}</th>--}}
             <th>{{__('Age')}}</th>
             <th>{{__('Gender')}}</th>
-            <th>{{__('Student code')}}</th>
-            <th>{{__('Course register count')}}</th>
+            <th>{{__('StudentRepository code')}}</th>
+            <th>{{__('Subject register count')}}</th>
             <th>{{__('Action')}}</th>
         </tr>
         </thead>
@@ -89,7 +89,7 @@
 
     <script>
         function confirmDelete() {
-            if (confirm('Are you sure you want to delete this department?')) {
+            if (confirm('Are you sure you want to delete this faculty?')) {
                 document.getElementById('deleteForm').submit();
                 return true;
             } else {

@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Course\CourseController;
+use App\Http\Controllers\Subject\SubjectController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\Department\DepartmentController;
-use App\Http\Controllers\Department\GetListDepartmentController;
+use App\Http\Controllers\Faculty\FacultyController;
+use App\Http\Controllers\Faculty\GetListFacultyController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,19 +30,19 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //route admin
 Route::group(['middleware' => ['auth','locale']], function () {
-    Route::get('change-language/{language}',[UserController::class , 'changeLanguage'])->name('user.change-language');
+    Route::get('change-language/{language}',[StudentController::class , 'changeLanguage'])->name('user.change-language');
 
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('user', UserController::class)->middleware('can:admin-access');
-//    Route::post('user/sort-by-age', [UserController::class,'getUsersByAgeRange'])->name('user-sort-by-age');
+    Route::resource('user', StudentController::class);
+//    Route::post('user/sort-by-age', [StudentController::class,'getUsersByAgeRange'])->name('user-sort-by-age');
     Route::resource('profile', ProfileController::class);
-    Route::resource('department', DepartmentController::class)->except('index')->middleware('can:admin-access');
-    Route::get('department-list', [GetListDepartmentController::class, 'index'])->name('department-list');
-    Route::resource('course',CourseController::class)->middleware('can:admin-access');
-    Route::get('course-list', [\App\Http\Controllers\Course\GetListCourseController::class, 'index'])->name('course-list');
-    Route::post('course/register/{course_id}',[CourseController::class, 'register'])->name('course-register')->middleware('can:user-access');
-    Route::get('user/{user_id}/list-course', [UserController::class, 'getPageAddScore'])->name('list-course-by-user')->middleware('can:admin-access');
-    Route::put('update-score/{user_id}/{course_id}', [UserController::class, 'updateScore'])->name('update-score')->middleware('can:admin-access');
+    Route::resource('faculty', FacultyController::class)->except('index');
+    Route::get('faculty-list', [GetListFacultyController::class, 'index'])->name('faculty-list');
+    Route::resource('course',SubjectController::class);
+    Route::get('course-list', [\App\Http\Controllers\Subject\GetListSubjectController::class, 'index'])->name('course-list');
+    Route::post('course/register/{course_id}',[SubjectController::class, 'register'])->name('course-register');
+    Route::get('user/{user_id}/list-course', [StudentController::class, 'getPageAddScore'])->name('list-course-by-user');
+    Route::put('update-score/{user_id}/{course_id}', [StudentController::class, 'updateScore'])->name('update-score');
 
 });
 

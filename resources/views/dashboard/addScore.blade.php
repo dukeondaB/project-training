@@ -29,7 +29,7 @@
                 #
             </th>
             <th>
-                {{__('Course')}}
+                {{__('Subject')}}
             </th>
             <th>
                 {{__('Score')}}

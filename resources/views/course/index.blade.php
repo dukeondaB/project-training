@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title') {{__('Course')}}   @endsection
+@section('title') {{__('Subject')}}   @endsection
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
     @can('admin-access', Auth()->user())
@@ -12,7 +12,7 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>{{__('Course Name')}}</th>
+            <th>{{__('Subject Name')}}</th>
             <th>{{__('Detail')}}</th>
             <th>{{__('Status')}}</th>
             <th>{{__('Image')}}</th>
