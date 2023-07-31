@@ -11,9 +11,8 @@
         <thead>
         <tr>
             <th>#</th>
-            <th>{{__('faculty Name')}}</th>
-            <th>{{__('Details')}}</th>
-            <th>{{__('Image')}}</th>
+            <th>{{__('Faculty Name')}}</th>
+            <th>{{__('Description')}}</th>
 
             <th>{{__('Action')}}</th>
         </tr>
@@ -29,10 +28,7 @@
                     {{$item->name}}
                 </td>
                 <td>
-                    {{$item->detail}}
-                </td>
-                <td>
-                    <img width="150px" src="{{ asset('storage/images/faculty/' . $item->image) }}" alt="Product Image">
+                    {{$item->description}}
                 </td>
 
                 <td>

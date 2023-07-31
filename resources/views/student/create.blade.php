@@ -3,11 +3,11 @@
 @section('sub-title') {{__('Create')}} @endsection
 
 @section('content')
-    <form method="post" action="{{route('user.store')}}" enctype=multipart/form-data>
+    <form method="post" action="{{route('student.store')}}" enctype=multipart/form-data>
         @csrf
         <label for="" class="form-label">{{__('Full name')}}</label>
-        <input type="text" id="full_name" value="{{old('full_name')}}" class="form-control" name="full_name">
-        @error('full_name')
+        <input type="text" id="name" value="{{old('name')}}" class="form-control" name="name">
+        @error('name')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <label for="" class="form-label">{{__('Email')}}</label>
@@ -36,7 +36,7 @@
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <label for="" class="form-label">{{__('Date Birth')}}</label>
-        <input type="date" name="datebirth" class="form-control" value="{{old('datebirth')}}">
+        <input type="date" name="birth_day" class="form-control" value="{{old('birth_day')}}">
         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
         <label for="" class="form-label">{{__('Avatar')}}</label>
         <input class="form-control" type="file" id="avatar" name="avatar" onchange="previewImage(event)">

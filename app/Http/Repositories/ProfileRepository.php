@@ -11,9 +11,15 @@ class ProfileRepository
      */
 
     protected $model;
-    public function __construct(User $model)
+    /**
+     * @var StudentRepository
+     */
+    protected $studentRepository;
+
+    public function __construct(User $model, StudentRepository $studentRepository)
     {
         $this->model = $model;
+        $this->studentRepository = $studentRepository;
     }
 
     public function information(){
@@ -22,7 +28,9 @@ class ProfileRepository
 
     public function uploadAvatar($request, $id){
 //        dd($request, $id);
-        $data = $this->findById($id);
+        $data = $this->studentRepository->findByUserId($id);
+
+//        $data = $this->findById($studentId);
         return $data->update($request);
     }
 

@@ -6,20 +6,14 @@
     <form method="post" action="{{route('faculty.update',$data->id)}}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
-        <label for="" class="form-label">{{__('faculty name')}}</label>
+        <label for="" class="form-label">{{__('Faculty Name')}}</label>
         <input type="text" id="name" class="form-control" name="name" value="{{$data->name}}">
         @error('name')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
-        <label for="" class="form-label">{{__('Detail')}}</label>
-        <textarea id="detail" name="detail" class="form-control" rows="3">{{$data->detail}}</textarea>
-        @error('detail')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-        <label for="" class="form-label">{{__('Image')}}</label>
-        <input  class="form-control" type="file" id="image" name="image" onchange="previewImage(event)">
-        @error('image')
+        <label for="" class="form-label">{{__('Description')}}</label>
+        <textarea id="description" name="description" class="form-control" rows="3">{{$data->description}}</textarea>
+        @error('description')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <div class="pt-3">

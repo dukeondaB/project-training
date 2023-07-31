@@ -3,7 +3,7 @@
 @section('sub-title') {{__('Edit')}} @endsection
 
 @section('content')
-    <form method="post" action="{{route('user.update', $data->id)}}" enctype=multipart/form-data>
+    <form method="post" action="{{route('student.update', $data->id)}}" enctype=multipart/form-data>
         @csrf
         @method('PUT')
         <label for="" class="form-label">{{__('Full name')}}</label>

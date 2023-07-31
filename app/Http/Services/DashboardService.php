@@ -7,6 +7,6 @@ class DashboardService
 {
     public function show(){
         $user = Auth::user();
-        return view('dashboard.index',['user' => $user]);
+        return view('dashboard.index',['student' => $user]);
     }
 }

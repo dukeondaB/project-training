@@ -5,15 +5,14 @@
 @section('content')
    <form method="post" action="{{route('faculty.store')}}">
        @csrf
-       @method('POST')
-       <label for="" class="form-label">{{__('Faculty name')}}</label>
+       <label for="" class="form-label">{{__('Faculty Name')}}</label>
        <input type="text" id="name" value="{{old('name')}}" class="form-control" name="name">
        @error('name')
        <p class="error" style="color: red">{{ $message }}</p>
        @enderror
        <label for="" class="form-label">{{__('Description')}}</label>
-       <textarea id="detail" name="detail" class="form-control" rows="3">{{old('detail')}}</textarea>
-       @error('detail')
+       <textarea id="description" name="description" class="form-control" rows="3">{{old('description')}}</textarea>
+       @error('description')
        <p class="error" style="color: red">{{ $message }}</p>
        @enderror
        <div class="pt-3">

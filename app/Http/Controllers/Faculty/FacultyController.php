@@ -39,7 +39,6 @@ class FacultyController extends Controller
      */
     public function store(CreateFacultyRequest $request)
     {
-        dd($request->all());
         return $this->facultyService->save($request);
     }
 

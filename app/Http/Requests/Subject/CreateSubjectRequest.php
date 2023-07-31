@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class CreateSubjectRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the student is authorized to make this request.
      *
      * @return bool
      */
@@ -25,9 +25,7 @@ class CreateSubjectRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'detail' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required',
+            'description' => 'required|string',
         ];
     }
 
@@ -37,11 +35,9 @@ class CreateSubjectRequest extends FormRequest
             'name.required' => 'Name is required.',
             'name.string' => 'Name must be a string.',
             'name.max' => 'Name may not be greater than :max characters.',
-            'detail.required' => 'Detail is required.',
-            'detail.string' => 'Detail must be a string.',
-            'image.image' => 'The file must be an image.',
-            'image.mimes' => 'The image must be a file of type: :values.',
-            'image.max' => 'The image may not be greater than :max kilobytes.',
+            'description.required' => 'Detail is required.',
+            'description.string' => 'Detail must be a string.',
+
         ];
     }
 }

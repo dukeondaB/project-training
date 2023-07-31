@@ -35,7 +35,6 @@ class FacultyService
     public function save(CreateFacultyRequest $request)
     {
         $data = $request->all();
-        dd($data);
         $this->facultyRepository->save($data);
         return redirect()->route('faculty-list')->with('success', 'faculty created successfully');
     }

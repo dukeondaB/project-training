@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStudentFacultyTable extends Migration
+class AddFacultyIdToStudentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,8 @@ class CreateStudentFacultyTable extends Migration
      */
     public function up()
     {
-        Schema::create('student_faculty', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('faculty_id');
-            $table->timestamps();
+        Schema::table('students', function (Blueprint $table) {
+            //
         });
     }
 
@@ -28,6 +25,9 @@ class CreateStudentFacultyTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('student_faculty');
+        Schema::table('students', function (Blueprint $table) {
+            $table->unsignedBigInteger('faculty_id')->nullable();
+            $table->foreign('faculty_id')->references('id')->on('faculties');
+        });
     }
 }

@@ -11,7 +11,7 @@ class CheckRole
     public function handle(Request $request, Closure $next, $isAdmin)
     {
 
-//        if (!$request->user() || $request->user()->is_admin !== $isAdmin) {
+//        if (!$request->student() || $request->student()->is_admin !== $isAdmin) {
 //            return redirect(RouteServiceProvider::PROFILE);
 //        }
 

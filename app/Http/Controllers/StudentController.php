@@ -10,11 +10,11 @@ use Illuminate\Http\Request;
 class StudentController extends Controller
 {
 
-    protected $userService;
+    protected $studentService;
 
-    public function __construct(StudentService $userService)
+    public function __construct(StudentService $studentService)
     {
-        $this->userService = $userService;
+        $this->studentService = $studentService;
     }
 
     /**
@@ -24,7 +24,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->userService->getUsersByAgeRange($request);
+        return $this->studentService->getUsersByAgeRange($request);
     }
 
     /**
@@ -34,7 +34,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        return $this->userService->getForm();
+        return $this->studentService->getForm();
     }
 
     /**
@@ -45,7 +45,7 @@ class StudentController extends Controller
      */
     public function store(CreateStudentRequest $request)
     {
-        return $this->userService->save($request);
+        return $this->studentService->save($request);
     }
 
     /**
@@ -67,7 +67,7 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        return $this->userService->getById($id);
+        return $this->studentService->getById($id);
     }
 
     /**
@@ -79,7 +79,7 @@ class StudentController extends Controller
      */
     public function update(UpdateStudenttRequest $request, $id)
     {
-        $this->userService->update($request, $id);
+        $this->studentService->update($request, $id);
     }
 
     /**
@@ -90,7 +90,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        return $this->userService->delete($id);
+        return $this->studentService->delete($id);
     }
 
 //    public function getUsersByAgeRange(Request $request)
@@ -105,12 +105,12 @@ class StudentController extends Controller
         return redirect()->back();
     }
 
-    public function getPageAddScore($userId){
-        return $this->userService->getPageAddScore($userId);
+    public function getPageAddScore($studentId){
+        return $this->studentService->getPageAddScore($studentId);
     }
 
-    public function updateScore(Request $request, $userId, $courseId)
+    public function updatePoint(Request $request, $studentId, $subjectId)
     {
-        return $this->userService->updateScore($request,$userId,$courseId);
+        return $this->studentService->updatePoint($request, $studentId, $subjectId);
     }
 }

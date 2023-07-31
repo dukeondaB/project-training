@@ -23,7 +23,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone',
     ];
 
     /**
@@ -45,13 +44,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function getAgeAttribute()
+    public function student()
     {
-        return Carbon::parse($this->datebirth)->age;
-    }
-
-    public function courses()
-    {
-        return $this->belongsToMany(Subject::class, 'user_course');
+        return $this->hasOne(Student::class);
     }
 }

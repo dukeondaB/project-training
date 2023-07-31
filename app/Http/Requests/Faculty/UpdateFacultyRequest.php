@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class UpdateFacultyRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determine if the student is authorized to make this request.
      *
      * @return bool
      */

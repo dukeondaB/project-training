@@ -37,9 +37,9 @@ return [
     */
 
     'preset-messages' => [
-        // An example preset 'user updated' Connectify notification.
-        'user-updated' => [
-            'message' => 'The user has been updated successfully.',
+        // An example preset 'student updated' Connectify notification.
+        'student-updated' => [
+            'message' => 'The student has been updated successfully.',
             'type' => 'success',
             'model' => 'connect',
             'title' => 'User Updated',

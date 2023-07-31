@@ -8,14 +8,14 @@ use Illuminate\Http\Request;
 
 class GetListSubjectController extends Controller
 {
-    protected $courseService;
+    protected $subjectService;
 
-    public function __construct(SubjectService $courseService)
+    public function __construct(SubjectService $subjectService)
     {
-        $this->courseService = $courseService;
+        $this->subjectService = $subjectService;
     }
 
     public function index(){
-        return $this->courseService->showAll();
+        return $this->subjectService->showAll();
     }
 }

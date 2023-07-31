@@ -4,7 +4,7 @@
 @section('content')
 
     <div class="">
-        <a href="{{route('user.index')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Go back')}}</a>
+        <a href="{{route('student.index')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Go back')}}</a>
     </div>
 
 {{--    <div>--}}
@@ -13,12 +13,8 @@
 {{--    </div>--}}
     <table>
         <tr>
-            <td>{{__('Full name')}}</td>
-            <td>{{$student->full_name}}</td>
-        </tr>
-        <tr>
-            <td>{{__('Student_code')}}</td>
-            <td>{{$student->student_code}}</td>
+            <td>{{__('Full name')}}:</td>
+            <td>{{$student->user->name}}</td>
         </tr>
     </table>
 
@@ -52,25 +48,25 @@
             </td>
             <td>
                 @php
-                    $userScore = $courseRepository->getUerScore($student->id,$item->id);
+                    $userScore = $subjectRepository->getStudentPoint($student->id,$item->id);
                 @endphp
 
                 @if ($userScore !== null && $userScore !== '')
-                    {{$userScore->score}}
+                    {{$userScore}}
                 @else
                     {{__('N/A')}}
                 @endif
             </td>
             <td>
-                <form method="post" action="{{route('update-score', ['user_id' => $student->id, 'course_id'=> $item->id])}}">
+                <form method="post" action="{{route('update-point', ['student_id' => $student->id, 'subject_id'=> $item->id])}}">
                     @csrf
                     @method("PUT")
-                    <input type="text" id="score" name="score" placeholder="Enter score">
+                    <input type="text" id="point" name="point" placeholder="Enter score">
                     <button id="update-score-btn">Update Score</button>
                 </form>
-                <input type="hidden" id="user-id-input" value="{{ $student->id }}">
-                <!-- Giá trị của $courseId -->
-                <input type="hidden" id="course-id-input" value="{{ $item->id }}">
+{{--                <input type="hidden" id="user-id-input" value="{{ $student->id }}">--}}
+{{--                <!-- Giá trị của $courseId -->--}}
+{{--                <input type="hidden" id="course-id-input" value="{{ $item->id }}">--}}
 
 
             </td>
@@ -82,8 +78,8 @@
 
 {{--    <script>--}}
 {{--        $('#update-score-btn').click(function() {--}}
-{{--            var userId = $('#user-id-input').val();--}}
-{{--            var courseId = $('#course-id-input').val();--}}
+{{--            var userId = $('#student-id-input').val();--}}
+{{--            var courseId = $('#subject-id-input').val();--}}
 {{--            var score = $('#score-input').val();--}}
 
 {{--            $.ajax({--}}

@@ -10,10 +10,10 @@ use App\Http\Services\SubjectService;
 class SubjectController extends Controller
 {
 
-    protected $courseService;
-    public function __construct(SubjectService $courseService)
+    protected $subjectService;
+    public function __construct(SubjectService $subjectService)
     {
-        $this->courseService = $courseService;
+        $this->subjectService = $subjectService;
     }
 
     /**
@@ -23,7 +23,7 @@ class SubjectController extends Controller
      */
     public function create()
     {
-        return $this->courseService->getForm();
+        return $this->subjectService->getForm();
     }
 
     /**
@@ -34,7 +34,7 @@ class SubjectController extends Controller
      */
     public function store(CreateSubjectRequest $request)
     {
-        return $this->courseService->save($request);
+        return $this->subjectService->save($request);
     }
 
     /**
@@ -56,7 +56,7 @@ class SubjectController extends Controller
      */
     public function edit($id)
     {
-        return $this->courseService->getById($id);
+        return $this->subjectService->getById($id);
     }
 
     /**
@@ -68,7 +68,7 @@ class SubjectController extends Controller
      */
     public function update(UpdateSubjectRequest $request, $id)
     {
-        return $this->courseService->update($request,$id);
+        return $this->subjectService->update($request,$id);
     }
 
     /**
@@ -79,7 +79,7 @@ class SubjectController extends Controller
      */
     public function destroy($id)
     {
-        $this->courseService->delete($id);
+        $this->subjectService->delete($id);
         return redirect()->back();
     }
 
@@ -88,9 +88,9 @@ class SubjectController extends Controller
      * @param int $course_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function register($course_id)
+    public function register($subject_id)
     {
-        $this->courseService->register($course_id);
+        $this->subjectService->register($subject_id);
         return redirect()->back();
     }
 }

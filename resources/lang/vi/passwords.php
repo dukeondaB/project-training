@@ -16,5 +16,5 @@ return [
     'sent'      => 'Hướng dẫn cấp lại mật khẩu đã được gửi!',
     'throttled' => 'Vui lòng đợi trước khi thử lại.',
     'token'     => 'Mã khôi phục mật khẩu không hợp lệ.',
-    'user'      => 'Không tìm thấy người dùng với địa chỉ email này.',
+    'student'      => 'Không tìm thấy người dùng với địa chỉ email này.',
 ];

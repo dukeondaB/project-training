@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\Student;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,29 +24,44 @@ class SubjectRepository
     }
 
     public function isRegister(){
-        $user = Auth::user();
-        $registeredCourses = $user->courses->pluck('id')->toArray();
+//        $user = Auth::user();
+        $student = $this->model->students()->where('user_id', Auth::id());
+        $registeredCourses = $student->courses->pluck('id')->toArray();
         return $this->findById($registeredCourses);
     }
 
-    public function getUserScoreInCourse($courseId)
+    public function getStudentPointInSubject($subjectId)
     {
-        $user = Auth::user();
-        $userCourse = DB::table('user_course')->where('user_id', Auth::id())->where('course_id', $courseId)->first();
-//        dd($userCourse);
-        if ($userCourse) {
-            return $userCourse->score;
+        $student = Student::where('user_id', Auth::id())->first();
+
+        if ($student) {
+            $studentPoint = DB::table('student_subject')
+                ->where('student_id', $student->id)
+                ->where('subject_id', $subjectId)
+                ->first();
+
+            if ($studentPoint && isset($studentPoint->point)) {
+                return $studentPoint->point;
+            }
+
+            // Hoặc sử dụng ?? để trả về giá trị mặc định (ví dụ: 0) nếu không có điểm
+            // return $studentPoint->point ?? 0;
+
+            // Hoặc trả về null nếu không có điểm
+            // return $studentPoint ? $studentPoint->point : null;
         }
-//
+
         return null;
+
     }
 
-    public function getUerScore($userId,$courseId)
+    public function getStudentPoint($studentId,$subjectId)
     {
-        $userCourse = DB::table('user_course')->where('user_id', $userId)->where('course_id', $courseId)->first();
-
-        if ($userCourse) {
-            return $userCourse;
+        $userCourse = DB::table('student_subject')->where('student_id', $studentId)->where('subject_id', $subjectId)->first();
+//        $studentSubject = $this->model->students();
+//        dd($studentSubject);
+        if ($userCourse->point) {
+            return $userCourse->point;
         }
 //
         return null;

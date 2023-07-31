@@ -5,68 +5,60 @@ namespace App\Http\Services;
 use App\Http\Repositories\SubjectRepository;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SubjectService
 {
 
-    protected $courseRepository;
+    protected $subjectRepository;
 
-    public function __construct(SubjectRepository $courseRepository)
+    public function __construct(SubjectRepository $subjectRepository)
     {
-        $this->courseRepository = $courseRepository;
+        $this->subjectRepository = $subjectRepository;
     }
 
     public function showAll()
     {
-        $data = $this->courseRepository->showAll();
-        $isRegister = $this->courseRepository->isRegister();
-    return view('course.index', ['data' => $data, 'isRegister' => $isRegister])
-        ->with('courseRepository', $this->courseRepository);
+        $data = $this->subjectRepository->showAll();
+        $user = Auth::user();
+        return view('subject.index', ['data' => $data, 'user' => $user, 'subjectRepository' => $this->subjectRepository]);
     }
 
     public function getForm()
     {
-        return view('course.create');
+        return view('subject.create');
     }
 
     public function save(CreateSubjectRequest $request)
     {
         $data = $request->all();
+        $this->subjectRepository->save($data);
 
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/courses', $imageName);
-            $data['image'] = $imageName;
-        }
-
-        $this->courseRepository->save($data);
-
-        return redirect()->route('course-list')->with('success', 'Subject created successfully');
+        return redirect()->route('subject-list')->with('success', 'Subject created successfully');
     }
 
     public function delete($id)
     {
         try {
-            $this->courseRepository->delete($id);
-            return redirect()->route('course-list')->with('success', 'deleted');
+            $this->subjectRepository->delete($id);
+            return redirect()->route('subject-list')->with('success', 'deleted');
         } catch (\Exception $e) {
 
-            return redirect()->route('course-list')->with('error', 'An error occurred while deleting faculty.');
+            return redirect()->route('subject-list')->with('error', 'An error occurred while deleting faculty.');
         }
     }
 
     public function getById($id)
     {
-        $data = $this->courseRepository->findById($id);
-        return view('course.edit', ['data' => $data]);
+        $data = $this->subjectRepository->findById($id);
+        return view('subject.edit', ['data' => $data]);
     }
 
     public function update(UpdateSubjectRequest $request, $id)
     {
-        $record = $this->courseRepository->findById($id);
+        $record = $this->subjectRepository->findById($id);
         $data = $request->all();
 
         if ($request->hasFile('image')) {
@@ -84,19 +76,17 @@ class SubjectService
             $data['image'] = $record->image;
         }
 
-        $this->courseRepository->update($data, $id);
+        $this->subjectRepository->update($data, $id);
 
-        return redirect()->route('course-list')->with('success', 'Subject created successfully');
+        return redirect()->route('subject-list')->with('success', 'Subject created successfully');
 
     }
 
     public function register($course_id)
     {
         if (Auth::check()) {
-            // Lấy thông tin người dùng hiện tại
             $user = Auth::user();
-
-            $user->courses()->attach($course_id);
+            $user->student->subjects()->attach($course_id);
         }
         return redirect()->back()->with('success', 'Thành công');
     }

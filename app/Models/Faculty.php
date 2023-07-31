@@ -12,7 +12,6 @@ class Faculty extends Model
 
     protected $fillable = [
         'name',
-        'image',
-        'detail',
+        'description',
     ];
 }

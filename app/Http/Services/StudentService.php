@@ -5,6 +5,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\SubjectRepository;
 use App\Http\Repositories\StudentSubjectRepository;
 use App\Http\Repositories\StudentRepository;
+use App\Http\Repositories\UserRepository;
 use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\UpdateStudenttRequest;
 use App\Jobs\SendMailForDues;
@@ -17,91 +18,96 @@ use Illuminate\Support\Facades\Storage;
 class StudentService
 {
 
-    protected $userRepository;
-    protected $courseRepository;
+    protected $studentRepository;
+    protected $subjectRepository;
     /**
      * @var StudentSubjectRepository
      */
     protected $userCourseRepository;
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
 
-    public function __construct(StudentRepository $userRepository, SubjectRepository $courseRepository, StudentSubjectRepository $userCourseRepository)
+    public function __construct(StudentRepository $studentRepository, SubjectRepository $subjectRepository, StudentSubjectRepository $userCourseRepository, UserRepository $userRepository)
     {
-        $this->userRepository = $userRepository;
-        $this->courseRepository = $courseRepository;
+        $this->studentRepository = $studentRepository;
+        $this->subjectRepository = $subjectRepository;
         $this->userCourseRepository = $userCourseRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function getList()
     {
-        $data = $this->userRepository->getList();
-//        dd($data);
-        return view('user.list', ['data' => $data]);
+        $data = $this->studentRepository->getList();
+        dd($data);
+        return view('student.list', ['data' => $data]);
     }
 
     public function getForm()
     {
-        return view('user.create');
+        return view('student.create');
     }
 
     public function save(CreateStudentRequest $request)
     {
         $data = $request->all();
+        $data['password'] = Hash::make('000000');
         if ($request->hasFile('avatar')) {
             $image = $request->file('avatar');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/user', $imageName);
+            $image->storeAs('public/images/student', $imageName);
             $data['avatar'] = $imageName;
         }
-        $data['student_code'] = 'sv' . rand(0, 10000);
-        $data['password'] = Hash::make('000000');
-        $this->userRepository->save($data);
+        $this->studentRepository->save($data);
 
-        dispatch(new SendMailForDues($data));
-//        Mail::to($data['email'])->send(new SendMail($data));
+//        dispatch(new SendMailForDues($data));
+        Mail::to($data['email'])->send(new SendMail($data));
 
-        return redirect()->route('user.index')->with('success', 'User created successfully');
+        return redirect()->route('student.index')->with('success', 'User created successfully');
     }
 
     public function delete($id)
     {
         try {
-            $this->userRepository->delete($id);
-
+            $this->studentRepository->delete($id);
+            $userId = $this->studentRepository->findByUserId($id);
+            $this->userRepository->delete($userId);
             return redirect()->back()->with('success', 'deleted');
         } catch (\Exception $e) {
 
-            return redirect()->back()->with('error', 'An error occurred while deleting user.');
+            return redirect()->back()->with('error', 'An error occurred while deleting student.');
         }
     }
 
     public function getById($id)
     {
-        $data = $this->userRepository->findById($id);
-        return view('user.edit', ['data' => $data]);
+        $data = $this->studentRepository->findById($id);
+        return view('student.edit', ['data' => $data]);
     }
 
     public function update(UpdateStudenttRequest $request, $id)
     {
-        $record = $this->userRepository->findById($id);
+        $record = $this->studentRepository->findById($id);
         $data = $request->all();
 //        dd($data);
 
         if ($request->hasFile('avatar')) {
             // Nếu có ảnh mới thay vào, xóa ảnh cũ (nếu có)
             if ($record->image) {
-                Storage::delete('public/images/user/' . $record->image);
+                Storage::delete('public/images/student/' . $record->image);
             }
 
             $image = $request->file('avatar');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/user', $imageName);
+            $image->storeAs('public/images/student', $imageName);
             $data['avatar'] = $imageName;
         } else {
             // Nếu không có ảnh mới thay vào, giữ nguyên ảnh cũ
             $data['avatar'] = $record->image;
         }
-        $this->userRepository->update($data, $id);
-        return redirect()->route('user.index')->with('success', 'User update successfully');
+        $this->studentRepository->update($data, $id);
+        return redirect()->route('student.index')->with('success', 'User update successfully');
     }
 
     public function getUsersByAgeRange($request)
@@ -110,21 +116,22 @@ class StudentService
         $maxAge = $request->input('maxAge');
 
         // Kiểm tra nếu minAge và maxAge đều được cung cấp
-        $data = $this->userRepository->sortByAge($minAge, $maxAge);
-        return view('user.list', ['data' => $data])->with(['countRegisterCourse' => $this->userRepository]);
-    }
-
-    public function getPageAddScore($userId){
-        $student = $this->userRepository->findById($userId);
-        $data = $this->userRepository->listScoreStudent($userId);
-        $courseRepository = $this->courseRepository;
+        $data = $this->studentRepository->sortByAge($minAge, $maxAge);
 //        dd($data);
-        return view('dashboard.addscore',['data' => $data, 'student' => $student, 'courseRepository' => $courseRepository]);
+        return view('student.list', ['data' => $data])->with(['countRegisterCourse' => $this->studentRepository]);
     }
 
-    public function updateScore(Request $request, $userId, $courseId){
-        $data['score'] = $request->input('score');
-        $this->userCourseRepository->updateScore($userId, $courseId, $data);
+    public function getPageAddScore($studentId){
+        $student = $this->studentRepository->findById($studentId);
+        $data = $this->studentRepository->listScoreStudent($studentId);
+        $subjectRepository = $this->subjectRepository;
+//        dd($data, $student);
+        return view('dashboard.addscore',['data' => $data, 'student' => $student, 'subjectRepository' => $subjectRepository]);
+    }
+
+    public function updatePoint(Request $request, $studentId, $subjectId){
+        $data['point'] = $request->input('point');
+        $this->userCourseRepository->updatePoint($studentId, $subjectId, $data);
         return redirect()->back()->with(['success','Success']);
     }
 

@@ -70,8 +70,8 @@
 
 
                     <ul class="navbar-nav me-auto">
-                        <a href="{!! route('user.change-language', ['en']) !!}">English</a>
-                        <a href="{!! route('user.change-language', ['vi']) !!}">Vietnam</a>
+                        <a href="{!! route('student.change-language', ['en']) !!}">English</a>
+                        <a href="{!! route('student.change-language', ['vi']) !!}">Vietnam</a>
 
                         {{--                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"--}}
 {{--                                href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>--}}
@@ -93,9 +93,13 @@
                         <!-- ============================================================== -->
                         <li class="nav-item dropdown u-pro">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="#"
-                                id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img
-                                    src="{{ asset('storage/images/user/' . $user->avatar) }}" alt="user" class="" /> <span
-                                    class="hidden-md-down">{{$user->full_name}} &nbsp;</span> </a>
+                                id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                @if ($user->student)
+                                    <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" alt="user" class="" />
+                                @else
+                                    <img src="{{ asset('path/to/default/avatar.png') }}" alt="user" class="" /> <!-- Đường dẫn đến hình ảnh mặc định -->
+                                @endif<span
+                                    class="hidden-md-down">{{$user->name}} &nbsp;</span> </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
                         </li>
 
@@ -114,7 +118,7 @@
                                     class="fa fa-tachometer"></i><span class="hide-menu">{{__('Dashboard')}}</span></a>
                         </li>
 
-                        <li> <a class="waves-effect waves-dark" href="{{url('user')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{url('student')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('User')}}</span></a>
                         </li>
 
@@ -124,7 +128,7 @@
                         <li> <a class="waves-effect waves-dark" href="{{route('faculty-list')}}" aria-expanded="false"><i
                                     class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('faculty')}}</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('course-list')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('subject-list')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('Subject')}}</span></a>
                         </li>
 
@@ -145,7 +149,7 @@
                         @else
                             <li class="">
 {{--                                <a id="navbarDropdown" class="" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>--}}
-{{--                                    {{ Auth::user()->name }}--}}
+{{--                                    {{ Auth::student()->name }}--}}
 {{--                                </a>--}}
 
                                 <div class="">

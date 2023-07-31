@@ -707,13 +707,13 @@
     "Zip \/ Postal Code": "Zip \/ Mã Bưu Điện",
     "Åland Islands": "Quần đảo Åland",
     "User": "Sinh viên",
-    "Department": "Khoa",
-    "Course": "Môn học",
-    "Department Name": "Tên Khoa",
+    "faculty": "Khoa",
+    "Subject": "Môn học",
+    "Faculty Name": "Tên Khoa",
     "Image": "Hình ảnh",
     "Detail": "Chi tiết",
     "Status": "Trạng thái",
-    "Course name": "Tên môn học",
+    "Subject name": "Tên môn học",
     "List": "Danh sách",
     "Open": "Đang mở",
     "In Progress": "Đang diễn ra",
@@ -737,5 +737,7 @@
     "Open this select menu": "Chọn 1 trong các lựa chọn",
     "Date Birth": "Sinh ngày",
     "Score": "Điểm",
-    "Course register count": "Số môn học đã đăng kí"
+    "Course register count": "Số môn học đã đăng kí",
+    "Description": "Chi tiết",
+    "Registed": "Đã đăng ký"
 }
