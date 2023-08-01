@@ -16,10 +16,21 @@
         @error('detail')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
+<<<<<<< Updated upstream:resources/views/department/edit.blade.php
         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
         <label for="" class="form-label">{{__('Image')}}</label>
         <input  class="form-control" type="file" id="image" name="image" onchange="previewImage(event)">
         @error('image')
+=======
+        <label for=""  class="form-label">{{__('Faculty')}}</label>
+        <select class="form-control" name="faculty_id">
+            <option value="">-- Chọn khoa --</option>
+            @foreach($faculties as $faculty)
+                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+            @endforeach
+        </select>
+        @error('faculty_id')
+>>>>>>> Stashed changes:resources/views/subject/edit.blade.php
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
         <div class="pt-3">

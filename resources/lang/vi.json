@@ -707,9 +707,16 @@
     "Zip \/ Postal Code": "Zip \/ Mã Bưu Điện",
     "Åland Islands": "Quần đảo Åland",
     "User": "Sinh viên",
+<<<<<<< Updated upstream
     "Department": "Khoa",
     "Course": "Môn học",
     "Department Name": "Tên Khoa",
+=======
+    "faculty": "Khoa",
+    "Faculty": "Khoa",
+    "Subject": "Môn học",
+    "Faculty Name": "Tên Khoa",
+>>>>>>> Stashed changes
     "Image": "Hình ảnh",
     "Detail": "Chi tiết",
     "Status": "Trạng thái",
@@ -736,6 +743,28 @@
     "other": "Khác",
     "Open this select menu": "Chọn 1 trong các lựa chọn",
     "Date Birth": "Sinh ngày",
+<<<<<<< Updated upstream
     "Score": "Điểm",
     "Course register count": "Số môn học đã đăng kí"
+=======
+    "Point": "Điểm",
+    "Course register count": "Số môn học đã đăng kí",
+    "Description": "Chi tiết",
+    "Registered": "Đã đăng ký",
+    "Subject Name": "Tên môn học",
+    "Student created successfully": "Sinh viên đã được khởi tạo thành công",
+    "Student deleted successfully": "Sinh viên đã được xóa thành công",
+    "An error occurred while deleting": "Đã xảy ra lỗi trong khi xóa bản ghi",
+    "Student update successfully": "Sinh viên đã được cập nhật thành công",
+    "Avatar updated successfully": "Ảnh đại diện đã được cập nhật thành công",
+    "Faculty created successfully": "Khoa đã được khởi tạo thành công",
+    "Faculty deleted successfully": "Khoa đã được xóa thành công",
+    "Faculty updated successfully": "Khoa đã được cập nhật thành công",
+    "Subject created successfully": "Môn học đã được khởi tạo thành công",
+    "Subject deleted successfully": "Môn học đã được xóa thành công",
+    "Subject updated successfully": "Môn học đã được cập nhật thành công",
+    "Subject regis successfully": "Đăng kí thành công môn học"
+
+
+>>>>>>> Stashed changes
 }

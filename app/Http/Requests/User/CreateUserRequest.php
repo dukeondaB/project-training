@@ -30,8 +30,13 @@ class CreateUserRequest extends FormRequest
             'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
             'gender' => 'required',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+<<<<<<< Updated upstream:app/Http/Requests/User/CreateUserRequest.php
             'student_code' => '',
             'datebirth' => 'required',
+=======
+            'birth_day' => 'required',
+            'faculty_id' => 'required|exists:faculties,id',
+>>>>>>> Stashed changes:app/Http/Requests/Student/CreateStudentRequest.php
         ];
     }
     public function messages()

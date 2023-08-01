@@ -1,16 +1,27 @@
 @extends('layouts.dashboard')
-@section('title','Profile')
-@section('sub-title', 'Profile')
+@section('title',) {{__('Profile')}}     @endsection
+
+    @section('sub-title', 'Profile')
 @section('content')
     <div class="row">
         <!-- Column -->
         <div class="col-lg-4 col-xlg-3 col-md-5">
             <div class="card">
                 <div class="card-body">
+<<<<<<< Updated upstream
                     <center class="mt-4"><img src="{{ asset('storage/images/user/' . $user->avatar) }}"
 
                                               width="200"/>
                         <h4 class="card-title mt-2">{{$user->full_name}}</h4>
+=======
+                    <center class="mt-4">
+                        @if ($user->student)
+                            <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" width="200px" alt="user" class="" />
+                        @else
+                            <img src="{{ asset('path/to/default/avatar.png') }}" alt="user" class="" /> <!-- Đường dẫn đến hình ảnh mặc định -->
+                        @endif
+                        <h4 class="card-title mt-2">{{$user->name}}</h4>
+>>>>>>> Stashed changes
                         <h6 class="card-subtitle"></h6>
                         <div class="row text-center justify-content-md-center">
 

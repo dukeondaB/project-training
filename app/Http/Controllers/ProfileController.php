@@ -78,7 +78,7 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $this->profileService->uploadAvatar($request, Auth::id());
-        return redirect()->back();
+        return redirect()->back()->with('success', __('Avatar updated successfully'));
     }
 
     /**

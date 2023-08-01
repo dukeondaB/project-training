@@ -1,4 +1,7 @@
 @extends('layouts.login')
+@section('title', )
+{{__('Login')}}
+@endsection
 
 @section('content')
     <div class="limiter">

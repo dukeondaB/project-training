@@ -25,9 +25,14 @@ class CreateCourseRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+<<<<<<< Updated upstream:app/Http/Requests/Course/CreateCourseRequest.php
             'detail' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required',
+=======
+            'description' => 'required|string',
+            'faculty_id' => 'required|exists:faculties,id',
+>>>>>>> Stashed changes:app/Http/Requests/Subject/CreateSubjectRequest.php
         ];
     }
 

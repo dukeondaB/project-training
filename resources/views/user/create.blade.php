@@ -35,6 +35,16 @@
         @error('gender')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
+        <label for=""  class="form-label">{{__('Faculty')}}</label>
+        <select class="form-control" name="faculty_id">
+            <option value="">-- Chọn khoa --</option>
+            @foreach($faculties as $faculty)
+                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+            @endforeach
+        </select>
+        @error('faculty_id')
+        <p class="error" style="color: red">{{ $message }}</p>
+        @enderror
         <label for="" class="form-label">{{__('Date Birth')}}</label>
         <input type="date" name="datebirth" class="form-control" value="{{old('datebirth')}}">
         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">

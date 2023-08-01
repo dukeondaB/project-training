@@ -14,4 +14,13 @@ class Department extends Model
         'image',
         'detail',
     ];
+
+    protected $appends = ['name'];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+
 }

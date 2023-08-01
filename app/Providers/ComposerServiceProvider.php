@@ -29,6 +29,13 @@ class ComposerServiceProvider extends ServiceProvider
         View::composer(
             ['layouts.dashboard','dashboard.profile'],'App\Http\View\Composer\UserComposer'
         );
+<<<<<<< Updated upstream
 //        View::share('user', Auth::user());
+=======
+        View::composer(
+            ['subject.create','subject.edit','student.create','student.edit'], 'App\Http\View\Composer\FacultyComposer'
+        );
+//        View::share('student', Auth::student());
+>>>>>>> Stashed changes
     }
 }

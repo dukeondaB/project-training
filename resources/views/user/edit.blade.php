@@ -36,6 +36,16 @@
         @error('gender')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
+        <label for=""  class="form-label">{{__('Faculty')}}</label>
+        <select class="form-control" name="faculty_id">
+            <option value="">-- Chọn khoa --</option>
+            @foreach($faculties as $faculty)
+                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+            @endforeach
+        </select>
+        @error('faculty_id')
+        <p class="error" style="color: red">{{ $message }}</p>
+        @enderror
         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
         <label for="" class="form-label">Avatar</label>
         <input class="form-control" type="file" id="avatar" name="avatar" onchange="previewImage(event)">
