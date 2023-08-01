@@ -19,7 +19,7 @@ class Faculty extends Model
 
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->hasOne(Student::class);
     }
 
 

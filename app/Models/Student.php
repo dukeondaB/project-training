@@ -35,7 +35,7 @@ class Student extends Model
 
     public function faculty()
     {
-        return $this->hasOne(Faculty::class);
+        return $this->belongsTo(Faculty::class);
     }
     public function getAgeAttribute()
     {
