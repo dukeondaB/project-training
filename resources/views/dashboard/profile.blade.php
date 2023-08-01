@@ -10,9 +10,6 @@
                 <div class="card-body">
                     <center class="mt-4">
                         @if ($user->student)
-                            <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" alt="user" class="" />
-                    <center class="mt-4">
-                        @if ($user->student)
                             <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" width="200px" alt="user" class="" />
                         @else
                             <img src="{{ asset('path/to/default/avatar.png') }}" alt="user" class="" /> <!-- Đường dẫn đến hình ảnh mặc định -->

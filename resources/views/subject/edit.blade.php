@@ -16,6 +16,16 @@
         @error('detail')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
+        <label for=""  class="form-label">{{__('Faculty')}}</label>
+        <select class="form-control" name="faculty_id">
+            <option value="">-- Chọn khoa --</option>
+            @foreach($faculties as $faculty)
+                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+            @endforeach
+        </select>
+        @error('faculty_id')
+        <p class="error" style="color: red">{{ $message }}</p>
+        @enderror
         <div class="pt-3">
             <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Save')}}</button>
         </div>
