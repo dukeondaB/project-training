@@ -20,7 +20,12 @@ class SubjectRepository
     }
 
     public function showAll(){
-        return $this->model->with('faculty')->paginate(10);
+        $studentFacultyId = Auth::user()->student->faculty->id;
+//        dd($studentFacultyId);
+        $subjects = Subject::whereHas('faculty', function ($query) use ($studentFacultyId) {
+            $query->where('id', $studentFacultyId);
+        })->paginate(10);
+        return $subjects;
     }
 
     public function isRegister(){
