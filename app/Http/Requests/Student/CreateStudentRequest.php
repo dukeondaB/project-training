@@ -31,6 +31,7 @@ class CreateStudentRequest extends FormRequest
             'gender' => 'required',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'birth_day' => 'required',
+            'faculty_id' => 'required|exists:faculties,id',
         ];
     }
     public function messages()

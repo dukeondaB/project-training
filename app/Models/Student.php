@@ -18,7 +18,8 @@ class Student extends Model
         'avatar',
         'phone',
         'user_id',
-        'birth_day'
+        'birth_day',
+        'faculty_id'
     ];
 
     public function subjects(): BelongsToMany
@@ -32,11 +33,10 @@ class Student extends Model
         return $this->subjects()->where('subject_id', $subjectId)->exists();
     }
 
-    public function faculties()
+    public function faculty()
     {
-        return $this->belongsToMany(Faculty::class);
+        return $this->hasOne(Faculty::class);
     }
-
     public function getAgeAttribute()
     {
         return Carbon::parse($this->birth_day)->age;

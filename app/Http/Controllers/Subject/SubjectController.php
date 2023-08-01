@@ -7,6 +7,11 @@ use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
 use App\Http\Services\SubjectService;
 
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\StudentPointsImport;
+
+
 class SubjectController extends Controller
 {
 
@@ -85,12 +90,27 @@ class SubjectController extends Controller
 
 
     /**
-     * @param int $course_id
+     * @param int $subject_id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function register($subject_id)
+    public function register(int $subject_id)
     {
         $this->subjectService->register($subject_id);
         return redirect()->back();
+    }
+
+    public function import(Request $request){
+        $request->validate([
+            'import_file' => 'required|mimes:xls,xlsx,csv'
+        ]);
+        $file = $request->file('import_file');
+        try {
+            Excel::import(new StudentPointsImport(), $file);
+
+            return redirect()->route('subject-list')->with('success', 'Import thành công!');
+        } catch (\Exception $e) {
+            return redirect()->route('subject-list')->with('error', 'Đã xảy ra lỗi trong quá trình import: ' . $e->getMessage());
+        }
+
     }
 }

@@ -20,7 +20,7 @@ class SubjectRepository
     }
 
     public function showAll(){
-        return $this->model->paginate(10);
+        return $this->model->with('faculty')->paginate(10);
     }
 
     public function isRegister(){

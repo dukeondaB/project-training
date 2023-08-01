@@ -14,4 +14,13 @@ class Faculty extends Model
         'name',
         'description',
     ];
+
+    protected $appends = ['name'];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+
 }

@@ -36,7 +36,7 @@ class FacultyService
     {
         $data = $request->all();
         $this->facultyRepository->save($data);
-        return redirect()->route('faculty-list')->with('success', 'faculty created successfully');
+        return redirect()->route('faculty-list')->with('success', __('Faculty created successfully'));
     }
 
     public function delete($id)
@@ -44,10 +44,10 @@ class FacultyService
         try {
             $this->facultyRepository->delete($id);
 
-            return redirect()->back()->with('success', 'deleted');
+            return redirect()->back()->with('success', __('Faculty deleted successfully'));
         } catch (\Exception $e) {
 
-            return redirect()->back()->with('error', 'An error occurred while deleting faculty.');
+            return redirect()->back()->with('error', __('An error occurred while deleting'));
         }
     }
 
@@ -77,7 +77,8 @@ class FacultyService
             $data['image'] = $record->image;
         }
         $this->facultyRepository->update($data, $id);
-        return redirect()->route('faculty-list')->with('success', 'faculty created successfully');
+
+        return redirect()->route('faculty-list')->with('success', __('Faculty updated successfully'));
     }
 
 }

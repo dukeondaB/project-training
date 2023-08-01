@@ -2,6 +2,8 @@
 
 namespace App\Http\Services;
 
+
+use App\Http\Repositories\FacultyRepository;
 use App\Http\Repositories\SubjectRepository;
 use App\Http\Requests\Subject\CreateSubjectRequest;
 use App\Http\Requests\Subject\UpdateSubjectRequest;
@@ -13,10 +15,15 @@ class SubjectService
 {
 
     protected $subjectRepository;
+    /**
+     * @var FacultyRepository
+     */
+    protected $facultyRepository;
 
-    public function __construct(SubjectRepository $subjectRepository)
+    public function __construct(SubjectRepository $subjectRepository, FacultyRepository $facultyRepository)
     {
         $this->subjectRepository = $subjectRepository;
+        $this->facultyRepository = $facultyRepository;
     }
 
     public function showAll()
@@ -36,17 +43,18 @@ class SubjectService
         $data = $request->all();
         $this->subjectRepository->save($data);
 
-        return redirect()->route('subject-list')->with('success', 'Subject created successfully');
+        return redirect()->route('subject-list')->with('success', __('Subject created successfully'));
     }
 
     public function delete($id)
     {
         try {
             $this->subjectRepository->delete($id);
-            return redirect()->route('subject-list')->with('success', 'deleted');
+
+            return redirect()->route('subject-list')->with('success', __('Subject deleted successfully'));
         } catch (\Exception $e) {
 
-            return redirect()->route('subject-list')->with('error', 'An error occurred while deleting faculty.');
+            return redirect()->route('subject-list')->with('error', __('An error occurred while deleting'));
         }
     }
 
@@ -78,7 +86,7 @@ class SubjectService
 
         $this->subjectRepository->update($data, $id);
 
-        return redirect()->route('subject-list')->with('success', 'Subject created successfully');
+        return redirect()->route('subject-list')->with('success', __('Subject updated successfully'));
 
     }
 
@@ -88,7 +96,8 @@ class SubjectService
             $user = Auth::user();
             $user->student->subjects()->attach($course_id);
         }
-        return redirect()->back()->with('success', 'Thành công');
+
+        return redirect()->back()->with('success', __('Subject regis successfully'));
     }
 
 }

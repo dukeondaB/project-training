@@ -31,16 +31,20 @@ class StudentRepository
     public function save($data)
     {
         $user = $this->userRepository->save($data);
-        $student = $user->student()->create([
+        $studentData = [
             'address' => $data['address'],
             'gender' => $data['gender'],
             'birth_day' => $data['birth_day'],
             'phone' => $data['phone'],
             'avatar' => $data['avatar'],
             'user_id' => $this->userRepository->model->id, // Gán user_id từ người dùng vừa được tạo
-        ]);
+        ];
 
-        return $student;
+        if (isset($data['avatar'])) {
+            $studentData['avatar'] = $data['avatar'];
+        }
+
+        return $user->student()->create($studentData);;
     }
 
     public function findById($id)
@@ -67,16 +71,15 @@ class StudentRepository
     public function sortByAge($minAge, $maxAge)
     {
         $query = $this->model->with('user');
-//        dd($query);
-//        dd($countRegister);
         if ($minAge !== null && $maxAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) BETWEEN ? AND ?', [$minAge, $maxAge])->paginate(1)->withQueryString();
+
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) BETWEEN ? AND ?', [$minAge, $maxAge])->paginate(5)->withQueryString();
         } elseif ($minAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) >= ?', [$minAge])->paginate(1)->withQueryString();
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) >= ?', [$minAge])->paginate(5)->withQueryString();
         } elseif ($maxAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) <= ?', [$maxAge])->paginate(1)->withQueryString();
+            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) <= ?', [$maxAge])->paginate(5)->withQueryString();
         } else {
-            return $query->paginate(10);
+            return $query->paginate(5);
         }
     }
 

@@ -64,7 +64,7 @@ class StudentService
 //        dispatch(new SendMailForDues($data));
         Mail::to($data['email'])->send(new SendMail($data));
 
-        return redirect()->route('student.index')->with('success', 'User created successfully');
+        return redirect()->route('student.index')->with('success', __('Student created successfully'));
     }
 
     public function delete($id)
@@ -73,10 +73,10 @@ class StudentService
             $this->studentRepository->delete($id);
             $userId = $this->studentRepository->findByUserId($id);
             $this->userRepository->delete($userId);
-            return redirect()->back()->with('success', 'deleted');
+            return redirect()->back()->with('success', __('Student deleted successfully'));
         } catch (\Exception $e) {
 
-            return redirect()->back()->with('error', 'An error occurred while deleting student.');
+            return redirect()->back()->with('error', __('An error occurred while deleting'));
         }
     }
 
@@ -107,7 +107,8 @@ class StudentService
             $data['avatar'] = $record->image;
         }
         $this->studentRepository->update($data, $id);
-        return redirect()->route('student.index')->with('success', 'User update successfully');
+
+        return redirect()->route('student.index')->with('success', __('Student update successfully'));
     }
 
     public function getUsersByAgeRange($request)

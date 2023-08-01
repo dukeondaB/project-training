@@ -21,6 +21,10 @@ class FacultyRepository
         return $this->model->paginate(10);
     }
 
+    public function getAll(){
+        return $this->model->all();
+    }
+
     public function save($data){
         return $this->model->create($data);
     }

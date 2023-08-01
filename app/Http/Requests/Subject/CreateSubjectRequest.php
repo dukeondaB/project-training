@@ -26,6 +26,7 @@ class CreateSubjectRequest extends FormRequest
         return [
             'name' => 'required|string|max:255',
             'description' => 'required|string',
+            'faculty_id' => 'required|exists:faculties,id',
         ];
     }
 

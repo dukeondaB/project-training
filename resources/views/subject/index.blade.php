@@ -7,16 +7,22 @@
         <a href="{{route('subject.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
     </div>
 
+    <div class="pt-5">
+        <form class="form-control-sm" action="{{ route('subject-import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="file" class="form-control" name="import_file" required>
+            <button type="submit" class="btn-success">Import</button>
+        </form>
+    </div>
     <table class="table table-sm">
         <thead>
         <tr>
             <th>#</th>
             <th>{{__('Subject Name')}}</th>
             <th>{{__('Description')}}</th>
-            <th></th>
-           <th>{{__('Point')}}</th>
-
-           <th>{{__('Action')}}</th>
+            <th>{{__('Faculty')}}</th>
+            <th>{{__('Point')}}</th>
+            <th>{{__('Action')}}</th>
             <th></th>
         </tr>
         </thead>
@@ -32,9 +38,9 @@
                 <td>
                     {{$item->description}}
                 </td>
-              <td>
-
-              </td>
+                <td>
+                    {{$item->faculty->name}}
+                </td>
 {{--                @can('student-access', Auth()->student())--}}
                     <td>
                         @php
@@ -55,7 +61,7 @@
 
                 <td>
                     <form action="{{ route('subject.destroy', $item->id) }}" method="POST" id="deleteForm">
-                        @csrf  
+                        @csrf
                         @method('DELETE')
 
                         <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">{{__('Delete')}}</button>
@@ -64,7 +70,7 @@
                 </td>
 
                 @if ($user->student->isSubjectRegistered($item->id))
-                    <td>{{__('Registed')}}</td>
+                    <td>{{__('Registered')}}</td>
                 @else
                     <td>
                         <form action="{{route('subject-register', $item->id)}}" method="POST" id="registerForm" >

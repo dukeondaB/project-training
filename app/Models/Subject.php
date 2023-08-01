@@ -14,11 +14,17 @@ class Subject extends Model
     protected $fillable = [
         'name',
         'description',
+        'faculty_id'
     ];
 
     public function students(): BelongsToMany
     {
         return $this->belongsToMany(Student::class, 'student_subject','subject_id','student_id')->withPivot('score');
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
     }
 
 }

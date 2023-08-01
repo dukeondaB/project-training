@@ -24,10 +24,9 @@ class UpdateSubjectRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'detail' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status' => 'required',
+            'name' => 'string|max:255',
+            'description' => 'string',
+            'faculty_id' => 'exists:faculties,id',
         ];
     }
 }

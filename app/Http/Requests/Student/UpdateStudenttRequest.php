@@ -24,13 +24,15 @@ class UpdateStudenttRequest extends FormRequest
     public function rules()
     {
         return [
-            'full_name' => 'required|string|min:5|max:125',
+            'name' => 'string|min:5|max:125',
 //            'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
-            'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
-            'gender' => 'required',
+            'phone' => 'regex:/^(0[0-9]{9,10})$/',
+            'gender' => '',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'student_code' => '',
 //            'datebirth' => 'required',
+            'faculty_id' => 'exists:faculties,id',
+
         ];
     }
 }
