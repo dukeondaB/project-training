@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth','locale']], function () {
     Route::get('student/{student_id}/list-subject', [StudentController::class, 'getPageAddScore'])->name('list-subject-by-student');
     Route::put('update-point/{student_id}/{subject_id}', [StudentController::class, 'updatePoint'])->name('update-point');
     Route::post('/subject/import', [SubjectController::class, 'import'])->name('subject-import');
+    Route::post('/send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
 
 
 });

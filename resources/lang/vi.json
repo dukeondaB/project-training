@@ -759,5 +759,9 @@
     "Subject created successfully": "Môn học đã được khởi tạo thành công",
     "Subject deleted successfully": "Môn học đã được xóa thành công",
     "Subject updated successfully": "Môn học đã được cập nhật thành công",
-    "Subject regis successfully": "Đăng kí thành công môn học"
+    "Subject regis successfully": "Đăng kí thành công môn học",
+    "Subject register count": "Số lượng môn đăng ký",
+    "Change language successfully": "Đổi ngôn ngữ thành công",
+    "Send email notification successfully": "Gửi email thông báo thành công",
+    "Send email notification error": "Gửi email thông báo thất bại"
 }

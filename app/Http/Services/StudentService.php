@@ -10,7 +10,13 @@ use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\UpdateStudenttRequest;
 use App\Jobs\SendMailForDues;
 use App\Mail\SendMail;
+use App\Mail\SendNotification;
+use App\Models\Student;
+use App\Models\StudentSubject;
+use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -61,8 +67,8 @@ class StudentService
         }
         $this->studentRepository->save($data);
 
-//        dispatch(new SendMailForDues($data));
-        Mail::to($data['email'])->send(new SendMail($data));
+        dispatch(new SendMailForDues($data));
+//        Mail::to($data['email'])->send(new SendMail($data));
 
         return redirect()->route('student.index')->with('success', __('Student created successfully'));
     }
@@ -116,10 +122,12 @@ class StudentService
         $minAge = $request->input('minAge');
         $maxAge = $request->input('maxAge');
 
-        // Kiểm tra nếu minAge và maxAge đều được cung cấp
+
+//        $data = $this->studentRepository->sortByAge($minAge, $maxAge);
         $data = $this->studentRepository->sortByAge($minAge, $maxAge);
-//        dd($data);
-        return view('student.list', ['data' => $data])->with(['countRegisterCourse' => $this->studentRepository]);
+
+        // showButtonStudentIsNotRegister
+        return view('student.list', ['data' => $data])->with(['studentRepository' => $this->studentRepository]);
     }
 
     public function getPageAddScore($studentId){
@@ -136,9 +144,25 @@ class StudentService
         return redirect()->back()->with(['success','Success']);
     }
 
-    public function showStudentIsNotRegister(){
+    public function sendEmailNotification($studentId)
+    {
+        // Lấy thông tin sinh viên và số lượng môn học đã đăng ký
+        $student = $this->studentRepository->findById($studentId);
+        $count = $this->studentRepository->countRegisterCourse($studentId);
 
+        // Kiểm tra và gửi email nếu cần
+        if ($student && $count !== null && $count < $student->faculty->subjects()->count()) {
+            dispatch(new \App\Jobs\SendNotification($student->user->email,$student->user->name,$count));
+//            Mail::to($student->user->email)->send(new SendNotification($student->user->name, $count));
+            // Thêm logic xử lý sau khi gửi email thành công (nếu cần)
+            // ...
+            return redirect()->back()->with(['success', 'Send email notification successfully']);
+        }
+
+        return redirect()->back()->with(['error', 'Send email notification error']);
+
+        // Chuyển hướng hoặc hiển thị thông báo sau khi xử lý
+        // ...
     }
-
 
 }

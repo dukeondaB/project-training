@@ -19,8 +19,13 @@ class Student extends Model
         'phone',
         'user_id',
         'birth_day',
-        'faculty_id'
+        'faculty_id',
+        'total_point',
+        'status'
     ];
+
+    const STATUS_ENROLLED = 'Enrolled'; // Đang học
+    const STATUS_DROPPED = 'Dropped'; // Buộc thôi học
 
     public function subjects(): BelongsToMany
     {
@@ -37,6 +42,15 @@ class Student extends Model
     {
         return $this->belongsTo(Faculty::class);
     }
+    public function registeredSubjectsCount()
+    {
+        return $this->studentSubjects()->count();
+    }
+
+    public function studentSubjects()
+    {
+        return $this->hasMany(StudentSubject::class);
+    }
     public function getAgeAttribute()
     {
         return Carbon::parse($this->birth_day)->age;
@@ -46,4 +60,6 @@ class Student extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+
 }

@@ -13,11 +13,19 @@ class StudentPointsImport implements ToModel
         $subjectId = $row[1]; // Cột 2 chứa subject_id
         $point = $row[2]; // Cột 3 chứa điểm số
 
-        return new StudentSubject([
-            'student_id' => $studentId,
-            'subject_id' => $subjectId,
-            'point' => $point,
-        ]);
+        // Trả về null nếu dòng dữ liệu không hợp lệ
+        if (empty($studentId) || empty($subjectId) || empty($point)) {
+            return null;
+        }
+
+        // Cập nhật hoặc tạo mới bản ghi trong bảng student_subject
+        $studentSubject = StudentSubject::updateOrCreate(
+            ['student_id' => $studentId, 'subject_id' => $subjectId],
+            ['point' => $point]
+        );
+
+        // Trả về null nếu không muốn lưu bản ghi vào mảng dữ liệu
+        return $studentSubject;
     }
 
 }

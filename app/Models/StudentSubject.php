@@ -12,4 +12,14 @@ class StudentSubject extends Model
     protected $table = 'student_subject';
     // Các trường trong bảng student_subject (nếu có)
     protected $fillable = ['student_id', 'subject_id', 'point'];
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
+    }
 }

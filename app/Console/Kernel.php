@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->job('command:calculate:average_point')->everyMinute();
     }
 
     /**
@@ -26,6 +26,13 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
+
+        $this->app->singleton('command.calculate:average_point', function ($app) {
+            return new \App\Console\Commands\CalculateAveragePointCommand();
+        });
+        $this->app->singleton('command.update:student_status', function ($app) {
+            return new \App\Console\Commands\UpdateStudentStatusCommand();
+        });
 
         require base_path('routes/console.php');
     }

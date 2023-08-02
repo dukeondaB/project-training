@@ -102,7 +102,7 @@ class StudentController extends Controller
     public function changeLanguage($language){
         \Session::put('website_language', $language);
 
-        return redirect()->back();
+        return redirect()->back()->with(['success', 'Change language successfully']);
     }
 
     public function getPageAddScore($studentId){
@@ -112,5 +112,10 @@ class StudentController extends Controller
     public function updatePoint(Request $request, $studentId, $subjectId)
     {
         return $this->studentService->updatePoint($request, $studentId, $subjectId);
+    }
+
+    public function sendEmailNotification($studentId)
+    {
+        return $this->studentService->sendEmailNotification($studentId);
     }
 }

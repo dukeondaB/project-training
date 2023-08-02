@@ -5,6 +5,7 @@
 
     <div class="">
         <a href="{{route('student.index')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Go back')}}</a>
+        <button>Thêm điểm nhanh</button>
     </div>
 
 {{--    <div>--}}

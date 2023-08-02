@@ -57,16 +57,21 @@
                 <td>{{__($item->gender)}}</td>
                 <td>
                     @php
-                        $count = $countRegisterCourse->countRegisterCourse($item->id);
+                        $count = $studentRepository->countRegisterCourse($item->id);
+                        $faculty = $item->faculty;
+                        $totalSubjectsInFaculty = $faculty ? $faculty->subjects()->count() : 0;
+                        $isRegistrationComplete = $count !== null && $count >= $totalSubjectsInFaculty;
                     @endphp
 
                     @if ($count !== null && $count !== '')
                         {{$count}}
-                        <a href="{{ route('list-subject-by-student', ['student_id' => $item->id])}}"> <i class="fa fa-bars"></i> </a>
+                       <a href="{{ route('list-subject-by-student', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
                     @else
                         {{__('N/A')}}
                     @endif
+
                 </td>
+
                 <td>
                     <form action="{{ route('student.destroy', $item->id) }}" method="POST" id="deleteForm">
                         @csrf
@@ -76,6 +81,16 @@
                         <a href="{{route('student.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
                     </form>
                 </td>
+               <td>
+                   @if (!$isRegistrationComplete)
+                       <form action="{{ route('send-notification', ['studentId' => $item->id]) }}" method="POST">
+                           @csrf
+                           <button type="submit" class="btn btn-success">Gửi email</button>
+                       </form>
+                   @else
+                       <span class="text-success">Đã đăng ký đủ</span>
+                   @endif
+               </td>
             </tr>
 
         @endforeach

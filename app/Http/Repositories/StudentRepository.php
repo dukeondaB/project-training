@@ -2,7 +2,9 @@
 
 namespace App\Http\Repositories;
 
+use App\Models\Faculty;
 use App\Models\Student;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StudentRepository
@@ -99,4 +101,18 @@ class StudentRepository
 
         return $studentWithSubject;
     }
+
+    public function isRegistrationComplete($studentId)
+    {
+        $student = $this->model->find($studentId);
+        if (!$student) {
+            return false;
+        }
+
+        $count = $this->countRegisterCourse($studentId);
+        $totalSubjectsInFaculty = $student->faculty->subjects()->count();
+
+        return $count !== null && $count >= $totalSubjectsInFaculty;
+    }
+
 }

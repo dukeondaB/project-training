@@ -22,5 +22,10 @@ class Faculty extends Model
         return $this->hasOne(Student::class);
     }
 
+    public function subjects()
+    {
+        return $this->hasMany(Subject::class);
+    }
+
 
 }
