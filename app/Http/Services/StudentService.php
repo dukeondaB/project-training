@@ -68,7 +68,6 @@ class StudentService
         $this->studentRepository->save($data);
 
         dispatch(new SendMailForDues($data));
-//        Mail::to($data['email'])->send(new SendMail($data));
 
         return redirect()->route('student.index')->with('success', __('Student created successfully'));
     }
@@ -96,10 +95,8 @@ class StudentService
     {
         $record = $this->studentRepository->findById($id);
         $data = $request->all();
-//        dd($data);
 
         if ($request->hasFile('avatar')) {
-            // Nếu có ảnh mới thay vào, xóa ảnh cũ (nếu có)
             if ($record->image) {
                 Storage::delete('public/images/student/' . $record->image);
             }
@@ -109,7 +106,6 @@ class StudentService
             $image->storeAs('public/images/student', $imageName);
             $data['avatar'] = $imageName;
         } else {
-            // Nếu không có ảnh mới thay vào, giữ nguyên ảnh cũ
             $data['avatar'] = $record->image;
         }
         $this->studentRepository->update($data, $id);
@@ -122,20 +118,18 @@ class StudentService
         $minAge = $request->input('minAge');
         $maxAge = $request->input('maxAge');
 
-
-//        $data = $this->studentRepository->sortByAge($minAge, $maxAge);
         $data = $this->studentRepository->sortByAge($minAge, $maxAge);
 
-        // showButtonStudentIsNotRegister
         return view('student.list', ['data' => $data])->with(['studentRepository' => $this->studentRepository]);
     }
 
     public function getPageAddScore($studentId){
         $student = $this->studentRepository->findById($studentId);
+        $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
+        $subject = Subject::whereIn('id', $registeredSubjects)->get();
         $data = $this->studentRepository->listScoreStudent($studentId);
         $subjectRepository = $this->subjectRepository;
-//        dd($data, $student);
-        return view('dashboard.addscore',['data' => $data, 'student' => $student, 'subjectRepository' => $subjectRepository]);
+        return view('dashboard.addscore',['data' => $data, 'subject' => $subject , 'student' => $student, 'subjectRepository' => $subjectRepository]);
     }
 
     public function updatePoint(Request $request, $studentId, $subjectId){
@@ -146,23 +140,34 @@ class StudentService
 
     public function sendEmailNotification($studentId)
     {
-        // Lấy thông tin sinh viên và số lượng môn học đã đăng ký
         $student = $this->studentRepository->findById($studentId);
         $count = $this->studentRepository->countRegisterCourse($studentId);
 
         // Kiểm tra và gửi email nếu cần
         if ($student && $count !== null && $count < $student->faculty->subjects()->count()) {
-            dispatch(new \App\Jobs\SendNotification($student->user->email,$student->user->name,$count));
-//            Mail::to($student->user->email)->send(new SendNotification($student->user->name, $count));
-            // Thêm logic xử lý sau khi gửi email thành công (nếu cần)
-            // ...
+            $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
+            $notRegisteredSubjects = $student->faculty->subjects()->whereNotIn('subjects.id', $registeredSubjects)->get();
+
+            dispatch(new \App\Jobs\SendNotification($student->user->email, $student->user->name, $count, $notRegisteredSubjects));
+
             return redirect()->back()->with(['success', 'Send email notification successfully']);
         }
 
         return redirect()->back()->with(['error', 'Send email notification error']);
+    }
 
-        // Chuyển hướng hoặc hiển thị thông báo sau khi xử lý
-        // ...
+    public function savePoints(Request $request)
+    {
+        $subjectIds = $request->input('subject_id');
+        $subjectIds = array_filter($subjectIds);
+        $studentId = $request->input('student_id');
+
+        $points = $request->input('point');
+        $points = array_filter($points);
+
+        $this->studentRepository->savePoints($studentId, $subjectIds, $points);
+
+        return redirect()->back();
     }
 
 }

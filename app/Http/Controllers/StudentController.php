@@ -118,4 +118,9 @@ class StudentController extends Controller
     {
         return $this->studentService->sendEmailNotification($studentId);
     }
+
+    public function savePoints(Request $request)
+    {
+        return $this->studentService->savePoints($request);
+    }
 }

@@ -13,6 +13,10 @@ class SendNotification extends Mailable
 
     public $studentName;
     public $subjectCount;
+    /**
+     * @var mixed
+     */
+    public $notRegisteredSubjects;
 
     /**
      * Create a new message instance.
@@ -20,10 +24,11 @@ class SendNotification extends Mailable
      * @param string $studentName
      * @param int $subjectCount
      */
-    public function __construct($studentName, $subjectCount)
+    public function __construct($studentName, $subjectCount, $notRegisteredSubjects)
     {
         $this->studentName = $studentName;
         $this->subjectCount = $subjectCount;
+        $this->notRegisteredSubjects = $notRegisteredSubjects;
     }
 
     /**
@@ -39,6 +44,7 @@ class SendNotification extends Mailable
                 ->with([
                     'studentName' => $this->studentName,
                     'subjectCount' => $this->subjectCount,
+                    'notRegisteredSubjects'=> $this->notRegisteredSubjects,
                 ]);
         }else{
             return $this->view('mail.sendnotification')

@@ -39,11 +39,11 @@ class SubjectRepository
         return $subjects;
     }
 
-    public function isRegister(){
-        $student = $this->model->students()->where('user_id', Auth::id());
-        $registeredCourses = $student->courses->pluck('id')->toArray();
-        return $this->findById($registeredCourses);
-    }
+//    public function isRegister(){
+//        $student = $this->model->students()->where('user_id', Auth::id());
+//        $registeredCourses = $student->courses->pluck('id')->toArray();
+//        return $this->findById($registeredCourses);
+//    }
 
     public function getStudentPointInSubject($subjectId)
     {

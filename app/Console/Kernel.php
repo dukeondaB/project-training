@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job('command:calculate:average_point')->everyMinute();
+        $schedule->job('command.update:student_status')->everyMinute();
     }
 
     /**

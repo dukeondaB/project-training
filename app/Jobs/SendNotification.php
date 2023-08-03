@@ -18,6 +18,10 @@ class SendNotification implements ShouldQueue
     public $email;
     public $studentName;
     public $subjectCount;
+    /**
+     * @var mixed
+     */
+    public $notRegisterdSubjects;
 
     /**
      * Create a new job instance.
@@ -26,11 +30,12 @@ class SendNotification implements ShouldQueue
      * @param string $studentName
      * @param int $subjectCount
      */
-    public function __construct($email, $studentName, $subjectCount)
+    public function __construct($email, $studentName, $subjectCount, $notRegisteredSubjects)
     {
         $this->email = $email;
         $this->studentName = $studentName;
         $this->subjectCount = $subjectCount;
+        $this->notRegisterdSubjects = $notRegisteredSubjects;
     }
 
     /**
@@ -41,9 +46,9 @@ class SendNotification implements ShouldQueue
     public function handle()
     {
         if ($this->subjectCount) {
-            Mail::to($this->email)->send(new SendNotificationMail($this->studentName, $this->subjectCount));
+            Mail::to($this->email)->send(new SendNotificationMail($this->studentName, $this->subjectCount, $this->notRegisterdSubjects));
         } else {
-            Mail::to($this->email)->send(new SendNotificationMail($this->studentName));
+            Mail::to($this->email)->send(new SendNotificationMail($this->studentName, $this->notRegisterdSubjects));
         }
     }
 }

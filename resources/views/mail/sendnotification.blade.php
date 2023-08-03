@@ -8,6 +8,7 @@
 @if (isset($subjectCount))
     <p>Bạn đã đăng ký {{ $subjectCount }} môn học trong khoa của mình.</p>
     <p>Xin hãy đăng ký đủ số lượng môn học để hoàn thành chương trình học.</p>
+    <p>Những môn bạn chưa đăng ký gồm: </p> @foreach($notRegisteredSubjects as $item){{$item->name}}, @endforeach
 @else
     <p>Bạn chưa đăng ký môn học nào trong khoa của mình.</p>
     <!-- Nếu bạn muốn hiển thị thông báo khác nếu không có subjectCount -->

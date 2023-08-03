@@ -763,5 +763,9 @@
     "Subject register count": "Số lượng môn đăng ký",
     "Change language successfully": "Đổi ngôn ngữ thành công",
     "Send email notification successfully": "Gửi email thông báo thành công",
-    "Send email notification error": "Gửi email thông báo thất bại"
+    "Send email notification error": "Gửi email thông báo thất bại",
+    "Add Point": "Thêm điểm",
+    "Enter Point": "Nhập điểm",
+    "Update point": "Cập nhật"
+
 }

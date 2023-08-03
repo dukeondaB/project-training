@@ -29,7 +29,7 @@ class CalculateAveragePoint implements ShouldQueue
                 $averageScore = $totalScore / $student->subjects->count();
 
                 $student->total_point = $averageScore; // Cập nhật điểm trung bình cho sinh viên
-                $student->save();
+                $student->updateOrCreate();
             }
         }
     }

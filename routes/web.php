@@ -42,6 +42,7 @@ Route::group(['middleware' => ['auth','locale']], function () {
     Route::post('subject/register/{subject_id}',[SubjectController::class, 'register'])->name('subject-register');
     Route::get('student/{student_id}/list-subject', [StudentController::class, 'getPageAddScore'])->name('list-subject-by-student');
     Route::put('update-point/{student_id}/{subject_id}', [StudentController::class, 'updatePoint'])->name('update-point');
+    Route::post('/save-points', [StudentController::class, 'savePoints'])->name('save-points');
     Route::post('/subject/import', [SubjectController::class, 'import'])->name('subject-import');
     Route::post('/send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
 

@@ -4,6 +4,7 @@ namespace App\Http\Repositories;
 
 use App\Models\Faculty;
 use App\Models\Student;
+use App\Models\StudentSubject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -113,6 +114,34 @@ class StudentRepository
         $totalSubjectsInFaculty = $student->faculty->subjects()->count();
 
         return $count !== null && $count >= $totalSubjectsInFaculty;
+    }
+
+    public function savePoints($studentId, $subjectIds, $points){
+        $student = $this->findById($studentId);
+        $data = [];
+        foreach ($subjectIds as $index => $subjectId) {
+            $data[] = [
+                'student_id' => $studentId,
+                'subject_id' => $subjectId,
+                'point' => $points[$index],
+                'faculty_id' => $student->faculty_id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+        }
+        foreach ($data as $record) {
+            StudentSubject::updateOrCreate(
+                [
+                    'student_id' => $record['student_id'],
+                    'subject_id' => $record['subject_id'],
+                ],
+                [
+                    'faculty_id' => $record['faculty_id'],
+                    'point' => $record['point'],
+                    'updated_at' => $record['updated_at'],
+                ]
+            );
+        }
     }
 
 }
