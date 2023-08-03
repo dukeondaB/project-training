@@ -16,11 +16,10 @@ class CalculateAveragePoint implements ShouldQueue
 
     public function handle()
     {
-        $students = Student::all();
+        $students = Student::where('status', "Enrolled")->get();
 
         foreach ($students as $student) {
             $registeredSubjectsCount = $student->countRegisteredSubjects();
-
             if ($registeredSubjectsCount == $student->faculty->subjects()->count()) {
                 $totalScore = 0;
                 foreach ($student->subjects as $subject) {
