@@ -4,21 +4,13 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 
-class ProfileRepository
+class ProfileRepository extends BaseRepository
 {
-    /**
-     * @var User $model
-     */
-
-    protected $model;
-    /**
-     * @var StudentRepository
-     */
     protected $studentRepository;
 
-    public function __construct(User $model, StudentRepository $studentRepository)
+    public function __construct(User $user, StudentRepository $studentRepository)
     {
-        $this->model = $model;
+        parent::__construct($user);
         $this->studentRepository = $studentRepository;
     }
 
@@ -35,7 +27,7 @@ class ProfileRepository
     }
 
     public function findById($id){
-        return $this->model->findOrFail($id);
+        return $this->user->findOrFail($id);
     }
 
 }

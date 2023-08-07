@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class StudentService
 {
@@ -55,6 +56,8 @@ class StudentService
         return view('student.create');
     }
 
+
+    // create và update chung request để thêm if else
     public function save(CreateStudentRequest $request)
     {
         $data = $request->all();
@@ -69,7 +72,7 @@ class StudentService
 
         dispatch(new SendMailForDues($data));
 
-        return redirect()->route('student.index')->with('success', __('Student created successfully'));
+        return redirect()->route('students.index')->with('success', __('Student created successfully'));
     }
 
     public function delete($id)
@@ -110,15 +113,18 @@ class StudentService
         }
         $this->studentRepository->update($data, $id);
 
-        return redirect()->route('student.index')->with('success', __('Student update successfully'));
+        return redirect()->route('students.index')->with('success', __('Student update successfully'));
     }
 
     public function getUsersByAgeRange($request)
     {
+        // truyền array qua lại
         $minAge = $request->input('minAge');
         $maxAge = $request->input('maxAge');
+        $minPoint = $request->input('minPoint');
+        $maxPoint = $request->input('maxPoint');
 
-        $data = $this->studentRepository->sortByAge($minAge, $maxAge);
+        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
 
         return view('student.list', ['data' => $data])->with(['studentRepository' => $this->studentRepository]);
     }
@@ -161,10 +167,11 @@ class StudentService
         $subjectIds = $request->input('subject_id');
         $subjectIds = array_filter($subjectIds);
         $studentId = $request->input('student_id');
-
+        //đồng bộ tên gọi giữa biến và
         $points = $request->input('point');
         $points = array_filter($points);
-
+//        dd($points);
+        // Tiếp tục xử lý khi dữ liệu hợp lệ
         $this->studentRepository->savePoints($studentId, $subjectIds, $points);
 
         return redirect()->back();

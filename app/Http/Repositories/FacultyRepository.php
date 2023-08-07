@@ -4,17 +4,11 @@ namespace App\Http\Repositories;
 
 use App\Models\Faculty;
 
-class FacultyRepository
+class FacultyRepository extends BaseRepository
 {
-    /**
-     * @var $model
-     */
-
-    protected $model;
-
-    public function __construct(Faculty $model)
+    public function __construct(Faculty $faculty)
     {
-        $this->model = $model;
+        parent::__construct($faculty);
     }
 
     public function showAll(){
@@ -34,7 +28,7 @@ class FacultyRepository
        return $data->delete();
     }
 
-    public function getById($id){
+    public function find($id){
         return $this->model->find($id);
     }
 

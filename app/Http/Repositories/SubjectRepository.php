@@ -8,13 +8,8 @@ use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class SubjectRepository
+class SubjectRepository extends BaseRepository
 {
-    /**
-     * @var $model
-     */
-
-    protected $model;
     /**
      * @var StudentSubject
      */
@@ -24,19 +19,23 @@ class SubjectRepository
      */
     protected $student;
 
-    public function __construct(Subject $model, StudentSubject $studentSubject, Student $student)
+    public function __construct(Subject $subject, StudentSubject $studentSubject, Student $student)
     {
-        $this->model = $model;
+        parent::__construct($subject);
         $this->studentSubject = $studentSubject;
         $this->student = $student;
     }
 
     public function showAll(){
+        if (Auth::user()->student){
         $studentFacultyId = Auth::user()->student->faculty->id;
+
         $subjects = Subject::whereHas('faculty', function ($query) use ($studentFacultyId) {
             $query->where('id', $studentFacultyId);
         })->paginate(10);
-        return $subjects;
+            return $subjects;
+        }
+        return $this->model->paginate(10);
     }
 
 //    public function isRegister(){
@@ -48,13 +47,10 @@ class SubjectRepository
     public function getStudentPointInSubject($subjectId)
     {
         $student = $this->student->where('user_id', Auth::id())->first();
-
         if ($student) {
-            $studentPoint = DB::table('student_subject')
-                ->where('student_id', $student->id)
+            $studentPoint = $student->studentSubjects
                 ->where('subject_id', $subjectId)
                 ->first();
-
             if ($studentPoint && isset($studentPoint->point)) {
                 return $studentPoint->point;
             }

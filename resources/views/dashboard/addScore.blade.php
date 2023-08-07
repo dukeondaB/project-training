@@ -22,7 +22,7 @@
     </style>
 
     <div class="">
-        <a href="{{route('student.index')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Go back')}}</a>
+        <a href="{{route('students.index')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Go back')}}</a>
         <button type="button" class="btn btn-primary" id="openModalButton">Nhập điểm</button>
     </div>
 
@@ -77,7 +77,7 @@
                 @endif
             </td>
             <td>
-                <form method="post" action="{{route('update-point', ['student_id' => $student->id, 'subject_id'=> $item->id])}}">
+                <form method="post" action="{{route('student.update-point', ['student_id' => $student->id, 'subject_id'=> $item->id])}}">
                     @csrf
                     @method("PUT")
                     <input type="text" id="point" name="point" placeholder="{{__('Enter Point')}}">
@@ -102,9 +102,8 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('save-points') }}" method="POST">
+                <form action="{{ route('student.save-points') }}" method="POST">
                     @csrf
-
                     <input type="hidden" name="student_id" value="{{ $student->id }}">
                     <div class="modal-body" id="modalBody">
                         <!-- Dòng đầu tiên -->
@@ -115,7 +114,7 @@
                                     <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
-                            <input type="text" name="point[]" placeholder="{{__('Point')}}">
+                            <input type="text" name="point[]" value="" placeholder="{{__('Point')}}">
                         </div>
                         <!-- Không cần nút "X" cho dòng đầu tiên -->
 

@@ -3,20 +3,39 @@
 @section('sub-title','List')
 @section('content')
 
-    <div class="">
-        <a href="{{route('student.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
+    <div class="row">
+        <div>
+            <a href="{{route('students.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
+        </div>
     </div>
-    <div>
-        <form class="form-control-sm" action="{{ route('student.index') }}" method="GET">
-            @csrf
-            <label for="minAge" class="">{{__('Min Age')}}:</label>
-            <input type="number" name="minAge" class="form-control-sm" id="minAge" min="0">
+    <div class="row">
+        <div>
+            <form class="form-control-sm" action="{{ route('students.index') }}" method="GET">
+                @csrf
+                <label for="minAge" class="">{{__('Min Age')}}:</label>
+                <input type="number" name="minAge" class="form-control-sm" id="minAge" min="0">
 
-            <label for="maxAge">{{__('Max Age')}}:</label>
-            <input type="number" name="maxAge" class="form-control-sm" id="maxAge" min="0">
+                <label for="maxAge">{{__('Max Age')}}:</label>
+                <input type="number" name="maxAge" class="form-control-sm" id="maxAge" min="0">
 
-            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
-        </form>
+                <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
+            </form>
+        </div>
+        <div>
+            <form class="form-control-sm" action="{{ route('students.index') }}" method="GET">
+                @csrf
+                <label for="minPoint" class="">{{__('Min Point')}}:</label>
+                <input type="number" name="minPoint" class="form-control-sm" id="minPoint" min="0">
+
+                <label for="maxPoint">{{__('Max point')}}:</label>
+                <input type="number" name="maxPoint" class="form-control-sm" id="maxPoint" min="0">
+
+                <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
+            </form>
+        </div>
+    </div>
+    <div class="grid">
+        <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">Thêm nhanh</button>
     </div>
     <table class="table table-sm">
         <thead>
@@ -29,22 +48,24 @@
             <th>{{__('Address')}}</th>
             <th>{{__('Age')}}</th>
             <th>{{__('Gender')}}</th>
+            <th>{{__('Average point')}}</th>
             <th>{{__('Subject register count')}}</th>
             <th>{{__('Action')}}</th>
         </tr>
         </thead>
         <tbody>
         {{--        {{dd($data)}}--}}
+{{--        nên đặt tên là model thêm s  thêm số thứ tự--}}
         @foreach($data as $item)
             <tr>
                 <td>
-                    {{$item->id}}
+                    {{ $loop->iteration }}
                 </td>
                 <td>
-                    {{$item->user->name}}
+                    {{ $item->user->name }}
                 </td>
                 <td>
-                    {{$item->user->email}}
+                    {{ $item->user->email }}
                 </td>
                 <td>
                     {{$item->phone}}
@@ -55,17 +76,11 @@
                 <td>{{$item->address}}</td>
                 <td>{{$item->age}}</td>
                 <td>{{__($item->gender)}}</td>
+                <td>{{$item->total_point === null ? 'N/A' : $item->total_point}}</td>
                 <td>
-                    @php
-                        $count = $studentRepository->countRegisterCourse($item->id);
-                        $faculty = $item->faculty;
-                        $totalSubjectsInFaculty = $faculty ? $faculty->subjects()->count() : 0;
-                        $isRegistrationComplete = $count !== null && $count >= $totalSubjectsInFaculty;
-                    @endphp
-
-                    @if ($count !== null && $count !== '')
-                        {{$count}}
-                       <a href="{{ route('list-subject-by-student', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
+                    @if (count($item->studentSubjects) !== null && count($item->studentSubjects) !== '')
+                        {{count($item->studentSubjects)}}
+                       <a href="{{ route('student.subject-list', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
                     @else
                         {{__('N/A')}}
                     @endif
@@ -73,16 +88,16 @@
                 </td>
 
                 <td>
-                    <form action="{{ route('student.destroy', $item->id) }}" method="POST" id="deleteForm">
+                    <form action="{{ route('students.destroy', $item->id) }}" method="POST" id="deleteForm">
                         @csrf
                         @method('DELETE')
 
                         <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">{{__('Delete')}}</button>
-                        <a href="{{route('student.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
+                        <a href="{{route('students.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
                     </form>
                 </td>
                <td>
-                   @if (!$isRegistrationComplete)
+                   @if (!$isRegistrationComplete = count($item->studentSubjects) !== null && count($item->studentSubjects) >= $totalSubjectsInFaculty = $item->faculty ? count($item->faculty->subjects) : 0)
                        <form action="{{ route('send-notification', ['studentId' => $item->id]) }}" method="POST">
                            @csrf
                            <button type="submit" class="btn btn-success">Gửi email</button>

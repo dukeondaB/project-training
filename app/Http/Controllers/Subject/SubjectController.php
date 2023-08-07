@@ -107,9 +107,9 @@ class SubjectController extends Controller
         try {
             Excel::import(new StudentPointsImport(), $file);
 
-            return redirect()->route('subject-list')->with('success', 'Import thành công!');
+            return redirect()->route('subject.index')->with('success', 'Import thành công!');
         } catch (\Exception $e) {
-            return redirect()->route('subject-list')->with('error', 'Đã xảy ra lỗi trong quá trình import: ' . $e->getMessage());
+            return redirect()->route('subject.index')->with('error', 'Đã xảy ra lỗi trong quá trình import: ' . $e->getMessage());
         }
 
     }

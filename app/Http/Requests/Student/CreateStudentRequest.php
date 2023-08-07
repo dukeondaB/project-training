@@ -23,7 +23,6 @@ class CreateStudentRequest extends FormRequest
      */
     public function rules()
     {
-//        dd(request()->all());
         return [
             'name' => 'required|string|min:5|max:125',
             'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',

@@ -29,7 +29,7 @@ class Student extends Model
 
     public function subjects(): BelongsToMany
     {
-        return $this->belongsToMany(Subject::class, 'student_subject','student_id','subject_id')
+        return $this->belongsToMany(Subject::class)
             ->withPivot('point');
     }
 
@@ -42,10 +42,13 @@ class Student extends Model
     {
         return $this->belongsTo(Faculty::class);
     }
+
+    // optimize lại
     public function registeredSubjectsCount()
     {
         return $this->studentSubjects()->count();
     }
+
 
     public function studentSubjects()
     {

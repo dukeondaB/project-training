@@ -40,6 +40,7 @@ class CalculateAveragePointCommand extends Command
     public function handle()
     {
         $students = Student::where('status', 'enrolled')->get();
+        
         foreach ($students as $student) {
             $registeredSubjectsCount = $student->registeredSubjectsCount();
             if ($registeredSubjectsCount == $student->faculty->subjects()->count()) { // Đã đăng ký đủ môn học

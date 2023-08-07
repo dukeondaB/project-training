@@ -19,7 +19,7 @@
                         <div class="row text-center justify-content-md-center">
                         </div>
                         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-                        <form method="post" action="{{route('profile.update', $user->id)}}" enctype=multipart/form-data>
+                        <form method="post" action="{{route('profiles.update', $user->id)}}" enctype=multipart/form-data>
                             @csrf
                             @method('PUT')
 

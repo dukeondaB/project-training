@@ -36,7 +36,7 @@ class FacultyService
     {
         $data = $request->all();
         $this->facultyRepository->save($data);
-        return redirect()->route('faculty-list')->with('success', __('Faculty created successfully'));
+        return redirect()->route('faculty.index')->with('success', __('Faculty created successfully'));
     }
 
     public function delete($id)
@@ -51,9 +51,9 @@ class FacultyService
         }
     }
 
-    public function getById($id)
+    public function find($id)
     {
-        $data = $this->facultyRepository->getById($id);
+        $data = $this->facultyRepository->find($id);
         return view('faculty.edit', ['data' => $data]);
     }
 
@@ -78,7 +78,7 @@ class FacultyService
         }
         $this->facultyRepository->update($data, $id);
 
-        return redirect()->route('faculty-list')->with('success', __('Faculty updated successfully'));
+        return redirect()->route('faculty.index')->with('success', __('Faculty updated successfully'));
     }
 
 }

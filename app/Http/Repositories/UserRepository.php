@@ -4,15 +4,11 @@ namespace App\Http\Repositories;
 
 use App\Models\User;
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-    /**
-     * @var $model
-     */
-
-    public function __construct(User $model)
+    public function __construct(User $user)
     {
-        $this->model = $model;
+        parent::__construct($user);
     }
 
     public function save($data)

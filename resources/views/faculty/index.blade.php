@@ -62,5 +62,16 @@
             }
         }
     </script>
+    <script>
+        // Đợi cho trang tải hoàn tất
+        window.addEventListener('load', function() {
+            // Gọi hộp thoại thông báo Sweet Alert
+            Swal.fire({
+                icon: 'info', // Loại biểu tượng (info, success, error, warning, question)
+                title: 'Chào mừng đến với trang của tôi!', // Tiêu đề hộp thoại
+                text: 'Bạn đã vào trang thành công!', // Nội dung hộp thoại
+            });
+        });
+    </script>
 
 @endsection

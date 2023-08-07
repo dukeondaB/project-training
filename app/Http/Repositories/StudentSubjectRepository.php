@@ -5,21 +5,14 @@ namespace App\Http\Repositories;
 use App\Models\Student;
 use App\Models\StudentSubject;
 
-class StudentSubjectRepository
+class StudentSubjectRepository extends BaseRepository
 {
-    /**
-     * @var StudentSubject $model
-     */
-
-    protected $model;
-
-    public function __construct(StudentSubject $model)
+    public function __construct(StudentSubject $studentSubject)
     {
-        $this->model = $model;
+        parent::__construct($studentSubject);
     }
 
     public function updatePoint($studentId, $subjectId, $data){
-//        dd($data);
       $studentSubject =$this->model->where('subject_id', $subjectId)->where('student_id', $studentId)->first();
     if ($studentSubject) {
         $studentSubject->update($data);

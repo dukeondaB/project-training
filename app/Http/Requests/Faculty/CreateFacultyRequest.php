@@ -23,10 +23,22 @@ class CreateFacultyRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'required|string|max:155',
-            'description' => 'required|string',
-        ];
+        // Kiểm tra xem đây có phải là route "students.create" hay không
+        $isCreate = $this->routeIs('students.create');
+
+        // Sử dụng conditional validation để chọn rules phù hợp
+        if ($isCreate) {
+            return [
+                'name' => 'required|string|max:155',
+                'description' => 'required|string',
+            ];
+        }
+            return [
+                'name' => 'string|max:155',
+                'description' => 'string',
+                // Thêm các rules khác cho trường hợp update tại đây
+            ];
+
     }
 
     public function messages()

@@ -43,7 +43,7 @@ class SubjectService
         $data = $request->all();
         $this->subjectRepository->save($data);
 
-        return redirect()->route('subject-list')->with('success', __('Subject created successfully'));
+        return redirect()->route('subject.index')->with('success', __('Subject created successfully'));
     }
 
     public function delete($id)
@@ -51,10 +51,10 @@ class SubjectService
         try {
             $this->subjectRepository->delete($id);
 
-            return redirect()->route('subject-list')->with('success', __('Subject deleted successfully'));
+            return redirect()->route('subject.index')->with('success', __('Subject deleted successfully'));
         } catch (\Exception $e) {
 
-            return redirect()->route('subject-list')->with('error', __('An error occurred while deleting'));
+            return redirect()->route('subject.index')->with('error', __('An error occurred while deleting'));
         }
     }
 
@@ -86,7 +86,7 @@ class SubjectService
 
         $this->subjectRepository->update($data, $id);
 
-        return redirect()->route('subject-list')->with('success', __('Subject updated successfully'));
+        return redirect()->route('subject.index')->with('success', __('Subject updated successfully'));
 
     }
 

@@ -29,9 +29,11 @@
     <!-- You can change the theme colors from here -->
     <link href="{{asset('css/colors/default.css')}}" id="theme" rel="stylesheet">
 
+    <link href="{{ asset('vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
+
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
@@ -114,21 +116,21 @@
                 <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="{{url('dashboard')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('dashboard')}}" aria-expanded="false"><i
                                     class="fa fa-tachometer"></i><span class="hide-menu">{{__('Dashboard')}}</span></a>
                         </li>
 
-                        <li> <a class="waves-effect waves-dark" href="{{url('student')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('students.index')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('User')}}</span></a>
                         </li>
 
-                        <li> <a class="waves-effect waves-dark" href="{{url('/profile')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('profiles.index')}}" aria-expanded="false"><i
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">{{__('Profile')}}</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('faculty-list')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('faculty.index')}}" aria-expanded="false"><i
                                     class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('faculty')}}</span></a>
                         </li>
-                        <li> <a class="waves-effect waves-dark" href="{{route('subject-list')}}" aria-expanded="false"><i
+                        <li> <a class="waves-effect waves-dark" href="{{route('subject.index')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('Subject')}}</span></a>
                         </li>
 
@@ -223,6 +225,8 @@
     <script src="{{asset('assets/node_modules/morrisjs/morris.min.js')}}"></script>
     <script src="{{asset('assets/node_modules/d3/d3.min.js')}}"></script>
     <script src="{{asset('assets/node_modules/c3-master/c3.min.js')}}"></script><script src="{{asset('js/dashboard1.js')}}"></script>
+    <script src="{{ asset('\vendor\realrashid\sweet-alert\resources\js\sweetalert.all.js') }}"></script>
+    @include('sweetalert::alert')
 </body>
 
 </html>

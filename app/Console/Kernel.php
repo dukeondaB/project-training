@@ -2,11 +2,16 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CalculateAveragePointCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
 {
+
+    protected $commands = [
+        CalculateAveragePointCommand::class,
+        ];
     /**
      * Define the application's command schedule.
      *
@@ -15,8 +20,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->job('command:calculate:average_point')->everyMinute();
-        $schedule->job('command.update:student_status')->everyMinute();
+        $schedule->job('command:average_point')->everyMinute();
+        $schedule->job('update:student_status')->everyMinute();
     }
 
     /**
@@ -28,10 +33,10 @@ class Kernel extends ConsoleKernel
     {
         $this->load(__DIR__.'/Commands');
 
-        $this->app->singleton('command.calculate:average_point', function ($app) {
+        $this->app->singleton('command:average_point', function ($app) {
             return new \App\Console\Commands\CalculateAveragePointCommand();
         });
-        $this->app->singleton('command.update:student_status', function ($app) {
+        $this->app->singleton('update:student_status', function ($app) {
             return new \App\Console\Commands\UpdateStudentStatusCommand();
         });
 

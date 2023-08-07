@@ -24,6 +24,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
+//        đổi tên function
         return $this->studentService->getUsersByAgeRange($request);
     }
 

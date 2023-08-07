@@ -2,27 +2,21 @@
 
 namespace App\Http\Repositories;
 
-use App\Models\Faculty;
 use App\Models\Student;
 use App\Models\StudentSubject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-class StudentRepository
+class StudentRepository extends BaseRepository
 {
-    /**
-     * @var Student $model
-     */
-
-    protected $model;
     /**
      * @var UserRepository
      */
     protected $userRepository;
 
-    public function __construct(Student $model, UserRepository $userRepository)
+    public function __construct(Student $student, UserRepository $userRepository)
     {
-        $this->model = $model;
+        parent::__construct($student);
         $this->userRepository = $userRepository;
     }
 
@@ -33,6 +27,7 @@ class StudentRepository
 
     public function save($data)
     {
+        // gọi từ userRepo từ service
         $user = $this->userRepository->save($data);
         $studentData = [
             'address' => $data['address'],
@@ -40,7 +35,7 @@ class StudentRepository
             'birth_day' => $data['birth_day'],
             'phone' => $data['phone'],
             'avatar' => $data['avatar'],
-            'user_id' => $this->userRepository->model->id, // Gán user_id từ người dùng vừa được tạo
+            'user_id' => $user->id, // Gán user_id từ người dùng vừa được tạo
         ];
 
         if (isset($data['avatar'])) {
@@ -71,19 +66,34 @@ class StudentRepository
         return $item->update($data);
     }
 
-    public function sortByAge($minAge, $maxAge)
+    public function filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
     {
         $query = $this->model->with('user');
-        if ($minAge !== null && $maxAge !== null) {
 
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) BETWEEN ? AND ?', [$minAge, $maxAge])->paginate(5)->withQueryString();
+        // Chuyển minAge và maxAge thành ngày tháng năm sinh
+        $now = now(); // Lấy ngày giờ hiện tại
+        $minBirthDate = $now->subYears($maxAge)->format('Y-m-d');
+        $maxBirthDate = $now->subYears($minAge)->format('Y-m-d');
+
+        // Kiểm tra và áp dụng điều kiện ngày sinh
+        if ($minAge !== null && $maxAge !== null) {
+            $query->whereBetween('birth_day', [$minBirthDate, $maxBirthDate]);
         } elseif ($minAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) >= ?', [$minAge])->paginate(5)->withQueryString();
+            $query->where('birth_day', '<=', $minBirthDate);
         } elseif ($maxAge !== null) {
-            return $query->whereRaw('TIMESTAMPDIFF(YEAR, birth_day, NOW()) <= ?', [$maxAge])->paginate(5)->withQueryString();
-        } else {
-            return $query->paginate(5);
+            $query->where('birth_day', '>=', $maxBirthDate);
         }
+
+        // Kiểm tra và áp dụng điều kiện điểm số
+        if ($minPoint !== null && $maxPoint !== null) {
+            $query->whereBetween('total_point', [$minPoint, $maxPoint]);
+        } elseif ($minPoint !== null) {
+            $query->where('total_point', '>=', $minPoint);
+        } elseif ($maxPoint !== null) {
+            $query->where('total_point', '<=', $maxPoint);
+        }
+
+        return $query->paginate(5)->withQueryString();
     }
 
     public function countRegisterCourse($userId)
@@ -98,18 +108,12 @@ class StudentRepository
 
     public function listScoreStudent($userId){
         $student = $this->findById($userId);
-        $studentWithSubject = $student->subjects;
-
-        return $studentWithSubject;
+        return $student->subjects;
     }
 
     public function isRegistrationComplete($studentId)
     {
-        $student = $this->model->find($studentId);
-        if (!$student) {
-            return false;
-        }
-
+        $student = $this->model->findOrFail($studentId);
         $count = $this->countRegisterCourse($studentId);
         $totalSubjectsInFaculty = $student->faculty->subjects()->count();
 
@@ -125,10 +129,10 @@ class StudentRepository
                 'subject_id' => $subjectId,
                 'point' => $points[$index],
                 'faculty_id' => $student->faculty_id,
-                'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
+        // sync
         foreach ($data as $record) {
             StudentSubject::updateOrCreate(
                 [

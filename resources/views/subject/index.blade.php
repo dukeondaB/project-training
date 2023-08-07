@@ -8,7 +8,7 @@
     </div>
 
     <div class="pt-5">
-        <form class="form-control-sm" action="{{ route('subject-import') }}" method="POST" enctype="multipart/form-data">
+        <form class="form-control-sm" action="{{ route('student-subject.import') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <input type="file" class="form-control" name="import_file" required>
             <button type="submit" class="btn-success">Import</button>
@@ -68,17 +68,18 @@
                         <a href="{{route('subject.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
                     </form>
                 </td>
-
+                @if($user->student)
                 @if ($user->student->isSubjectRegistered($item->id))
                     <td>{{__('Registered')}}</td>
                 @else
                     <td>
-                        <form action="{{route('subject-register', $item->id)}}" method="POST" id="registerForm" >
+                        <form action="{{route('subject.register', $item->id)}}" method="POST" id="registerForm" >
                             @csrf
 
                             <button class="btn btn-success" {{ $user->student->isSubjectRegistered($item->id) === true ? 'disabled' : '' }}>Đăng kí</button>
                         </form>
                     </td>
+                @endif
                 @endif
 {{--                    @can('student-access', Auth()->student())--}}
 

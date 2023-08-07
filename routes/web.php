@@ -20,33 +20,22 @@ use App\Http\Controllers\Subject\GetListSubjectController;
 |
 */
 
-Route::get('/', function () {
-    return redirect(\route('login'));
-});
-
-Auth::routes();
 Auth::routes(['register' => false]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-//route admin
 Route::group(['middleware' => ['auth','locale']], function () {
+//    xếp các đối tượng số nhiều, gần nhau group lại
     Route::get('change-language/{language}',[StudentController::class , 'changeLanguage'])->name('student.change-language');
-    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('student', StudentController::class);
-    Route::resource('profile', ProfileController::class)->only(['index','update']);
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('students', StudentController::class);
+    Route::resource('profiles', ProfileController::class)->only(['index','update']);
     Route::resource('faculty', FacultyController::class)->except('index');
-    Route::get('faculty-list', [GetListFacultyController::class, 'index'])->name('faculty-list');
-    Route::resource('subject',SubjectController::class);
-    Route::get('subject-list', [GetListSubjectController::class, 'index'])->name('subject-list');
-    Route::post('subject/register/{subject_id}',[SubjectController::class, 'register'])->name('subject-register');
-    Route::get('student/{student_id}/list-subject', [StudentController::class, 'getPageAddScore'])->name('list-subject-by-student');
-    Route::put('update-point/{student_id}/{subject_id}', [StudentController::class, 'updatePoint'])->name('update-point');
-    Route::post('/save-points', [StudentController::class, 'savePoints'])->name('save-points');
-    Route::post('/subject/import', [SubjectController::class, 'import'])->name('subject-import');
-    Route::post('/send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
-
-
+    Route::get('faculties', [GetListFacultyController::class, 'index'])->name('faculty.index');
+    Route::resource('subject',SubjectController::class)->except('index');
+    Route::get('subjects', [GetListSubjectController::class, 'index'])->name('subject.index');
+    Route::post('subject/register/{subject_id}',[SubjectController::class, 'register'])->name('subject.register');
+    Route::get('student/{student_id}/list-subject', [StudentController::class, 'getPageAddScore'])->name('student.subject-list');
+    Route::put('update-point/{student_id}/{subject_id}', [StudentController::class, 'updatePoint'])->name('student.update-point');
+    Route::post('save-points', [StudentController::class, 'savePoints'])->name('student.save-points');
+    Route::post('subject/import', [SubjectController::class, 'import'])->name('student-subject.import');
+    Route::post('send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
 });
-
-

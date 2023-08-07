@@ -61,7 +61,7 @@ class FacultyController extends Controller
      */
     public function edit($id)
     {
-        return $this->facultyService->getById($id);
+        return $this->facultyService->find($id);
     }
 
     /**

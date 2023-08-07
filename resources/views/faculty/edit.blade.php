@@ -14,20 +14,9 @@
         <label for="" class="form-label">{{__('Description')}}</label>
         <textarea id="description" name="description" class="form-control" rows="3">{{$data->description}}</textarea>
         @error('description')
-        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-        <label for="" class="form-label">{{__('Image')}}</label>
-        <input  class="form-control" type="file" id="image" name="image" onchange="previewImage(event)">
-        @error('image')
-        <label for=""  class="form-label">{{__('Faculty')}}</label>
-        <select class="form-control" name="faculty_id">
-            <option value="">-- Chọn khoa --</option>
-            @foreach($faculties as $faculty)
-                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-            @endforeach
-        </select>
-        @error('faculty_id')
         <p class="error" style="color: red">{{ $message }}</p>
         @enderror
+        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
         <div class="pt-3">
             <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Update')}}</button>
         </div>
@@ -46,26 +35,6 @@
                 return true;
             } else {
                 return false;
-            }
-        }
-    </script>
-    <script>
-        function previewImage(event) {
-            const input = event.target;
-            const imagePreview = document.getElementById('imagePreview');
-
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            } else {
-                imagePreview.src = '#';
-                imagePreview.style.display = 'none';
             }
         }
     </script>

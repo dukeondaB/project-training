@@ -3,7 +3,7 @@
 @section('sub-title') {{__('Create')}} @endsection
 
 @section('content')
-    <form method="post" action="{{route('student.store')}}" enctype=multipart/form-data>
+    <form method="post" action="{{route('students.store')}}" enctype=multipart/form-data>
         @csrf
         <label for="" class="form-label">{{__('Full name')}}</label>
         <input type="text" id="name" value="{{old('name')}}" class="form-control" name="name">
