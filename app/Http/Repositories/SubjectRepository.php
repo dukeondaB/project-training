@@ -6,7 +6,6 @@ use App\Models\Student;
 use App\Models\StudentSubject;
 use App\Models\Subject;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 
 class SubjectRepository extends BaseRepository
 {
@@ -30,20 +29,32 @@ class SubjectRepository extends BaseRepository
         if (Auth::user()->student){
         $studentFacultyId = Auth::user()->student->faculty->id;
 
-        $subjects = Subject::whereHas('faculty', function ($query) use ($studentFacultyId) {
+        $subjects = $this->model->whereHas('faculty', function ($query) use ($studentFacultyId) {
             $query->where('id', $studentFacultyId);
         })->paginate(10);
             return $subjects;
         }
         return $this->model->paginate(10);
-    }
+//        $user = Auth::user();
+//        if ($user->student) {
+//            $studentFacultyId = $user->student->faculty->id;
+//
+//            $subjects = $this->model
+//                ->leftJoin('student_subject', function ($join) use ($user) {
+//                    $join->on('subjects.id', '=', 'student_subject.subject_id')
+//                        ->where('student_subject.student_id', '=', $user->student->id);
+//                })
+//                ->where('student_subject.faculty_id', $studentFacultyId)
+//                ->select('subjects.*', 'student_subject.point as student_point')
+//                ->paginate(10);
+//
+////            dd($subjects);
+//            return $subjects;
 
-//    public function isRegister(){
-//        $student = $this->model->students()->where('user_id', Auth::id());
-//        $registeredCourses = $student->courses->pluck('id')->toArray();
-//        return $this->findById($registeredCourses);
+        }
+//
+//        return $this->model->paginate(10);
 //    }
-
     public function getStudentPointInSubject($subjectId)
     {
         $student = $this->student->where('user_id', Auth::id())->first();
@@ -69,24 +80,6 @@ class SubjectRepository extends BaseRepository
         }
 
         return null;
-    }
-
-    public function save($data){
-        return $this->model->create($data);
-    }
-
-    public function delete($id){
-        $data = $this->findById($id);
-        return $data->delete();
-    }
-
-    public function findById($id){
-        return $this->model->findOrFail($id);
-    }
-
-    public function update($data, $id){
-        $item = $this->model->find($id);
-        return $item->update($data);
     }
 
     public function CourseRegister($course_id){

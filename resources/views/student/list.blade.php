@@ -5,38 +5,39 @@
 
     <div class="row">
         <div>
-            <a href="{{route('students.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
+            {!! Html::linkRoute('students.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
         </div>
     </div>
+
     <div class="row">
         <div>
-            <form class="form-control-sm" action="{{ route('students.index') }}" method="GET">
-                @csrf
-                <label for="minAge" class="">{{__('Min Age')}}:</label>
-                <input type="number" name="minAge" class="form-control-sm" id="minAge" min="0">
+            {!! Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'form-control-sm']) !!}
+            <label for="minAge">{{__('Min Age')}}:</label>
+            {!! Form::number('minAge', null, ['class' => 'form-control-sm', 'id' => 'minAge', 'min' => 0]) !!}
 
-                <label for="maxAge">{{__('Max Age')}}:</label>
-                <input type="number" name="maxAge" class="form-control-sm" id="maxAge" min="0">
+            <label for="maxAge">{{__('Max Age')}}:</label>
+            {!! Form::number('maxAge', null, ['class' => 'form-control-sm', 'id' => 'maxAge', 'min' => 0]) !!}
 
-                <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
-            </form>
+            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
+            {!! Form::close() !!}
         </div>
         <div>
-            <form class="form-control-sm" action="{{ route('students.index') }}" method="GET">
-                @csrf
-                <label for="minPoint" class="">{{__('Min Point')}}:</label>
-                <input type="number" name="minPoint" class="form-control-sm" id="minPoint" min="0">
+            {!! Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'form-control-sm']) !!}
+            <label for="minPoint">{{__('Min Point')}}:</label>
+            {!! Form::number('minPoint', null, ['class' => 'form-control-sm', 'id' => 'minPoint', 'min' => 0]) !!}
 
-                <label for="maxPoint">{{__('Max point')}}:</label>
-                <input type="number" name="maxPoint" class="form-control-sm" id="maxPoint" min="0">
+            <label for="maxPoint">{{__('Max point')}}:</label>
+            {!! Form::number('maxPoint', null, ['class' => 'form-control-sm', 'id' => 'maxPoint', 'min' => 0]) !!}
 
-                <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
-            </form>
+            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
+            {!! Form::close() !!}
         </div>
     </div>
+
     <div class="grid">
         <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">Thêm nhanh</button>
     </div>
+
     <table class="table table-sm">
         <thead>
         <tr class="text-center">
@@ -54,8 +55,6 @@
         </tr>
         </thead>
         <tbody>
-        {{--        {{dd($data)}}--}}
-{{--        nên đặt tên là model thêm s  thêm số thứ tự--}}
         @foreach($data as $item)
             <tr>
                 <td>
@@ -80,41 +79,32 @@
                 <td>
                     @if (count($item->studentSubjects) !== null && count($item->studentSubjects) !== '')
                         {{count($item->studentSubjects)}}
-                       <a href="{{ route('student.subject-list', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
+                        <a href="{{ route('student.subject-list', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
                     @else
                         {{__('N/A')}}
                     @endif
-
                 </td>
-
                 <td>
-                    <form action="{{ route('students.destroy', $item->id) }}" method="POST" id="deleteForm">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">{{__('Delete')}}</button>
-                        <a href="{{route('students.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
-                    </form>
+                    {!! Form::open(['route' => ['students.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
+                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+                    {!! Html::linkRoute('students.edit', __('Edit'), ['student' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::close() !!}
                 </td>
-               <td>
-                   @if (!$isRegistrationComplete = count($item->studentSubjects) !== null && count($item->studentSubjects) >= $totalSubjectsInFaculty = $item->faculty ? count($item->faculty->subjects) : 0)
-                       <form action="{{ route('send-notification', ['studentId' => $item->id]) }}" method="POST">
-                           @csrf
-                           <button type="submit" class="btn btn-success">Gửi email</button>
-                       </form>
-                   @else
-                       <span class="text-success">Đã đăng ký đủ</span>
-                   @endif
-               </td>
+                <td>
+                    @if (!$isRegistrationComplete = count($item->studentSubjects) !== null && count($item->studentSubjects) >= $totalSubjectsInFaculty = $item->faculty ? count($item->faculty->subjects) : 0)
+                        {!! Form::open(['route' => ['send-notification', 'studentId' => $item->id], 'method' => 'POST']) !!}
+                        {!! Form::submit(__('Gửi email'), ['class' => 'btn btn-success']) !!}
+                        {!! Form::close() !!}
+                    @else
+                        <span class="text-success">{{__('Đã đăng ký đủ')}}</span>
+                    @endif
+                </td>
             </tr>
-
         @endforeach
-
-
-
         </tbody>
     </table>
     {{ $data->links() }}
+
 
     <script>
         function confirmDelete() {

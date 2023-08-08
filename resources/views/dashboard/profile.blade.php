@@ -9,58 +9,45 @@
             <div class="card">
                 <div class="card-body">
                     <center class="mt-4">
-                        @if ($user->student)
-                            <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" width="200px" alt="user" class="" />
+                        @if (\Illuminate\Support\Facades\Auth::user()->student)
+                            <img src="{{ asset('storage/images/student/' . \Illuminate\Support\Facades\Auth::user()->student->avatar) }}" width="200px" alt="user" class="" />
                         @else
                             <img src="{{ asset('path/to/default/avatar.png') }}" alt="user" class="" /> <!-- Đường dẫn đến hình ảnh mặc định -->
                         @endif
-                        <h4 class="card-title mt-2">{{$user->name}}</h4>
+                        <h4 class="card-title mt-2">{{\Illuminate\Support\Facades\Auth::user()->name}}</h4>
                         <h6 class="card-subtitle"></h6>
                         <div class="row text-center justify-content-md-center">
                         </div>
                         <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-                        <form method="post" action="{{route('profiles.update', $user->id)}}" enctype=multipart/form-data>
-                            @csrf
-                            @method('PUT')
-
-                            <label for="" class="form-label">{{__('Avatar')}}</label>
-                            <input class="form-control" type="file" id="avatar" name="avatar"
-                                   onchange="previewImage(event)">
-                            <div class="pt-3">
-                                <button
-                                    class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">
-                                    {{__('Save')}}</button>
-                            </div>
-                        </form>
-
+                        {!! Form::open(['route' => ['profiles.update', \Illuminate\Support\Facades\Auth::user()->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+                        {!! Form::label('avatar', __('Avatar'), ['class' => 'form-label']) !!}
+                        {!! Form::file('avatar', ['class' => 'form-control', 'onchange' => 'previewImage(event)']) !!}
+                        <div class="pt-3">
+                            {!! Form::submit(__('Save'), ['class' => 'btn btn-info pull-left hidden-sm-down text-white']) !!}
+                        </div>
+                        {!! Form::close() !!}
                     </center>
                 </div>
             </div>
         </div>
-        <!-- Column -->
-        <!-- Column -->
         <div class="col-lg-8 col-xlg-9 col-md-7">
             <div class="card">
-                <!-- Tab panes -->
                 <div class="card-body">
+                    {!! Form::label('full_name', __('Full name'), ['class' => 'form-label']) !!}
+                    {!! Form::text('full_name', \Illuminate\Support\Facades\Auth::user()->name, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
 
-                    <label for="" class="form-label">{{__('Full name')}}</label>
-                    <input type="text" id="full_name" disabled value="{{$user->name}}" class="form-control"
-                           name="full_name">
+                    {!! Form::label('email', 'Email', ['class' => 'form-label']) !!}
+                    {!! Form::text('email', \Illuminate\Support\Facades\Auth::user()->email, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
 
-                    <label for="" class="form-label">Email</label>
-                    <input type="text" disabled value="{{$user->email}}" id="email" class="form-control" name="email">
+                    {!! Form::label('phone', __('Phone'), ['class' => 'form-label']) !!}
+                    {!! Form::text('phone', optional(\Illuminate\Support\Facades\Auth::user()->student)->phone, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
 
-                    <label for="" class="form-label">{{__('Phone')}}</label>
-                    <input type="text" id="phone" disabled value="{{ optional($user->student)->phone }}" class="form-control" name="phone">
+                    {!! Form::label('address', __('Address'), ['class' => 'form-label']) !!}
+                    {!! Form::text('address', optional(\Illuminate\Support\Facades\Auth::user()->student)->address, ['class' => 'form-control', 'disabled' => 'disabled']) !!}
 
-                    <label for="" class="form-label">{{__('Address')}}</label>
-                    <input type="text" id="address" disabled value="{{ optional($user->student)->address }}" class="form-control" name="address">
-                    <label for="" class="form-label">{{__('Gender')}}</label>
-                    <select class="form-select" disabled name="gender" aria-label="Default select example">
-                        <option selected>{{ optional($user->student)->gender }}</option>
+                    {!! Form::label('gender', __('Gender'), ['class' => 'form-label']) !!}
+                    {!! Form::select('gender', [optional(\Illuminate\Support\Facades\Auth::user()->student)->gender => optional(\Illuminate\Support\Facades\Auth::user()->student)->gender], null, ['class' => 'form-select', 'disabled' => 'disabled']) !!}
 
-                    </select>
                     <script>
                         function previewImage(event) {
                             const input = event.target;
@@ -84,4 +71,5 @@
                 </div>
             </div>
         </div>
+    </div>
 @endsection

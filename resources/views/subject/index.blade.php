@@ -2,17 +2,16 @@
 @section('title') {{__('Subject')}}   @endsection
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
-
     <div class="">
-        <a href="{{route('subject.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
+        {!! Html::linkRoute('subject.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
 
     <div class="pt-5">
-        <form class="form-control-sm" action="{{ route('student-subject.import') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <input type="file" class="form-control" name="import_file" required>
-            <button type="submit" class="btn-success">Import</button>
-        </form>
+        {!! Form::open(['route' => 'student-subject.import', 'method' => 'POST', 'class' => 'form-control-sm', 'enctype' => 'multipart/form-data']) !!}
+        @csrf
+        {!! Form::file('import_file', ['class' => 'form-control', 'required' => 'required']) !!}
+        {!! Form::submit(__('Import'), ['class' => 'btn-success']) !!}
+        {!! Form::close() !!}
     </div>
     <table class="table table-sm">
         <thead>
@@ -30,65 +29,56 @@
         @foreach($data as $item)
             <tr>
                 <td>
-                    {{$item->id}}
+                    {{ $loop->iteration }}
                 </td>
                 <td>
-                    {{$item->name}}
+                    {{ $item->name }}
                 </td>
                 <td>
-                    {{$item->description}}
+                    {{ $item->description }}
                 </td>
                 <td>
-                    {{$item->faculty->name}}
+                    {{ $item->faculty->name }}
                 </td>
-{{--                @can('student-access', Auth()->student())--}}
-                    <td>
-                        @php
-                            $studentPoint = $subjectRepository->getStudentPointInSubject($item->id);
-                        @endphp
-
-                        @if ($studentPoint !== null && $studentPoint !== '')
-                            {{$studentPoint}}
-                        @else
-                            {{__('N/A')}}
-                        @endif
-{{--                    </td>--}}
-{{--                @endcan--}}
-
-
-
-
-
+                {{-- @can('student-access', Auth()->student()) --}}
                 <td>
-                    <form action="{{ route('subject.destroy', $item->id) }}" method="POST" id="deleteForm">
-                        @csrf
-                        @method('DELETE')
+                    @php
+                        $studentPoint = $subjectRepository->getStudentPointInSubject($item->id);
+                    @endphp
 
-                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">{{__('Delete')}}</button>
-                        <a href="{{route('subject.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
-                    </form>
+                    @if ($studentPoint !== null && $studentPoint !== '')
+                        {{$studentPoint}}
+                    @else
+                        {{__('N/A')}}
+                    @endif
+                </td>
+                {{-- @endcan --}}
+                <td>
+                    {!! Form::open(['route' => ['subject.destroy', $item->id], 'method' => 'POST', 'id' => 'deleteForm']) !!}
+                    @csrf
+                    @method('DELETE')
+
+                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+                    {!! Html::linkRoute('subject.edit', __('Edit'), ['subject' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::close() !!}
                 </td>
                 @if($user->student)
-                @if ($user->student->isSubjectRegistered($item->id))
-                    <td>{{__('Registered')}}</td>
-                @else
-                    <td>
-                        <form action="{{route('subject.register', $item->id)}}" method="POST" id="registerForm" >
+                    @if ($user->student->isSubjectRegistered($item->id))
+                        <td>{{__('Registered')}}</td>
+                    @else
+                        <td>
+                            {!! Form::open(['route' => ['subject.register', $item->id], 'method' => 'POST', 'id' => 'registerForm']) !!}
                             @csrf
-
-                            <button class="btn btn-success" {{ $user->student->isSubjectRegistered($item->id) === true ? 'disabled' : '' }}>Đăng kí</button>
-                        </form>
-                    </td>
+                            {!! Form::button(__('Đăng kí'), ['class' => 'btn btn-success', 'type' => 'submit', 'disabled' => $user->student->isSubjectRegistered($item->id) === true]) !!}
+                            {!! Form::close() !!}
+                        </td>
+                    @endif
                 @endif
-                @endif
-{{--                    @can('student-access', Auth()->student())--}}
+                {{-- @can('student-access', Auth()->student()) --}}
 
-{{--                    @endcan--}}
-
+                {{-- @endcan --}}
             </tr>
-
         @endforeach
-
         </tbody>
     </table>
     {{ $data->links() }}

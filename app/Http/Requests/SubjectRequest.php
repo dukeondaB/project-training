@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Faculty;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateFacultyRequest extends FormRequest
+class SubjectRequest extends FormRequest
 {
     /**
      * Determine if the student is authorized to make this request.
@@ -23,21 +23,20 @@ class CreateFacultyRequest extends FormRequest
      */
     public function rules()
     {
-        // Kiểm tra xem đây có phải là route "students.create" hay không
-        $isCreate = $this->routeIs('students.create');
-
-        // Sử dụng conditional validation để chọn rules phù hợp
-        if ($isCreate) {
+        $isCreate = $this->is('/subject/create'); // dùng is với url routeIs với route name
+        if ($isCreate){
             return [
-                'name' => 'required|string|max:155',
+                'name' => 'required|string|max:255',
                 'description' => 'required|string',
+                'faculty_id' => 'required|exists:faculties,id',
+            ];
+        }else{
+            return [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'faculty_id' => 'required|exists:faculties,id',
             ];
         }
-            return [
-                'name' => 'string|max:155',
-                'description' => 'string',
-                // Thêm các rules khác cho trường hợp update tại đây
-            ];
 
     }
 
@@ -47,8 +46,9 @@ class CreateFacultyRequest extends FormRequest
             'name.required' => 'Name is required.',
             'name.string' => 'Name must be a string.',
             'name.max' => 'Name may not be greater than :max characters.',
-            'description.required' => 'Description is required.',
-            'description.string' => 'Description must be a string.',
+            'description.required' => 'Detail is required.',
+            'description.string' => 'Detail must be a string.',
+
         ];
     }
 }

@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Faculty;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Faculty\CreateFacultyRequest;
-use App\Http\Requests\Faculty\UpdateFacultyRequest;
+use App\Http\Requests\FacultyRequest;
 use App\Http\Services\FacultyService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class FacultyController extends Controller
 {
@@ -34,10 +37,10 @@ class FacultyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param CreateFacultyRequest $request
-     * @return \Illuminate\Http\Response
+     * @param FacultyRequest $request
+     * @return RedirectResponse
      */
-    public function store(CreateFacultyRequest $request)
+    public function store(FacultyRequest $request)
     {
         return $this->facultyService->save($request);
     }
@@ -56,8 +59,8 @@ class FacultyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return Application|Factory|View
      */
     public function edit($id)
     {
@@ -67,11 +70,11 @@ class FacultyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  FacultyRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateFacultyRequest $request, $id)
+    public function update(FacultyRequest $request, $id)
     {
         return $this->facultyService->update($request, $id);
     }

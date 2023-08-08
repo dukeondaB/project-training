@@ -3,8 +3,7 @@
 namespace App\Http\Services;
 
 use App\Http\Repositories\FacultyRepository;
-use App\Http\Requests\Faculty\CreateFacultyRequest;
-use App\Http\Requests\Faculty\UpdateFacultyRequest;
+use App\Http\Requests\FacultyRequest;
 use Illuminate\Support\Facades\Storage;
 
 class FacultyService
@@ -23,7 +22,7 @@ class FacultyService
 
     public function showAll()
     {
-        $data = $this->facultyRepository->showAll();
+        $data = $this->facultyRepository->paginate();
         return view('faculty.index', ['data' => $data]);
     }
 
@@ -32,10 +31,10 @@ class FacultyService
         return view('faculty.create');
     }
 
-    public function save(CreateFacultyRequest $request)
+    public function save(FacultyRequest $request)
     {
         $data = $request->all();
-        $this->facultyRepository->save($data);
+        $this->facultyRepository->create($data);
         return redirect()->route('faculty.index')->with('success', __('Faculty created successfully'));
     }
 
@@ -44,10 +43,10 @@ class FacultyService
         try {
             $this->facultyRepository->delete($id);
 
-            return redirect()->back()->with('success', __('Faculty deleted successfully'));
+            return redirect()->route('faculty.index')->with('success', __('Faculty deleted successfully'));
         } catch (\Exception $e) {
 
-            return redirect()->back()->with('error', __('An error occurred while deleting'));
+            return redirect()->route('faculty.index')->with('error', __('An error occurred while deleting'));
         }
     }
 
@@ -57,26 +56,10 @@ class FacultyService
         return view('faculty.edit', ['data' => $data]);
     }
 
-    public function update(UpdateFacultyRequest $request, $id)
+    public function update(FacultyRequest $request, $id)
     {
-        $record = $this->facultyRepository->findById($id);
         $data = $request->all();
-
-        if ($request->hasFile('image')) {
-            // Nếu có ảnh mới thay vào, xóa ảnh cũ (nếu có)
-            if ($record->image) {
-                Storage::delete('public/images/faculty/' . $record->image);
-            }
-
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/faculty', $imageName);
-            $data['image'] = $imageName;
-        } else {
-            // Nếu không có ảnh mới thay vào, giữ nguyên ảnh cũ
-            $data['image'] = $record->image;
-        }
-        $this->facultyRepository->update($data, $id);
+        $this->facultyRepository->update($id, $data);
 
         return redirect()->route('faculty.index')->with('success', __('Faculty updated successfully'));
     }

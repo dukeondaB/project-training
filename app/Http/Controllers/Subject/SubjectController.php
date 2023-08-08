@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Subject;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Subject\CreateSubjectRequest;
-use App\Http\Requests\Subject\UpdateSubjectRequest;
+use App\Http\Requests\SubjectRequest;
 use App\Http\Services\SubjectService;
-
+use App\Imports\StudentPointsImport;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\StudentPointsImport;
 
 
 class SubjectController extends Controller
@@ -37,7 +35,7 @@ class SubjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CreateSubjectRequest $request)
+    public function store(SubjectRequest $request)
     {
         return $this->subjectService->save($request);
     }
@@ -67,11 +65,11 @@ class SubjectController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  UpdateSubjectRequest  $request
+     * @param  SubjectRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateSubjectRequest $request, $id)
+    public function update(SubjectRequest $request, $id)
     {
         return $this->subjectService->update($request,$id);
     }

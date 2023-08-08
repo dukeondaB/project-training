@@ -3,56 +3,52 @@
 @section('sub-title') {{__('Edit')}} @endsection
 
 @section('content')
-    <form method="post" action="{{route('student.update', $data->id)}}" enctype=multipart/form-data>
-        @csrf
-        @method('PUT')
-        <label for="" class="form-label">{{__('Full name')}}</label>
-        <input type="text" id="full_name" value="{{$data->full_name}}" class="form-control" name="full_name">
-        @error('full_name')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for="" class="form-label" >Email</label>
-        <input type="text" value="{{$data->email}}" disabled id="email" class="form-control" name="email">
-        @error('email')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for="" class="form-label">{{__('Phone')}}</label>
-        <input type="text" id="phone" value="{{$data->phone}}" class="form-control" name="phone">
-        @error('phone')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for="" class="form-label">{{__('Address')}}</label>
-        <input type="text" id="address" value="{{$data->address}}" class="form-control" name="address">
-        @error('address')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for="" class="form-label">{{__('Gender')}}</label>
-        <select class="form-select" name="gender" aria-label="Default select example">
-            <option selected>{{__('Open this select menu')}}</option>
-            <option value="male" {{$data->gender === 'male' ? 'selected' : ''}}>{{__('Male')}}</option>
-            <option value="female" {{$data->gender === 'female' ? 'selected' : ''}}>{{__('Female')}}</option>
-            <option value="other" {{$data->gender === 'other' ? 'selected' : ''}}>{{__('Other')}}</option>
-        </select>
-        @error('gender')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for=""  class="form-label">{{__('Faculty')}}</label>
-        <select class="form-control" name="faculty_id">
-            <option value="">-- Chọn khoa --</option>
-            @foreach($faculties as $faculty)
-                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-            @endforeach
-        </select>
-        @error('faculty_id')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-        <label for="" class="form-label">Avatar</label>
-        <input class="form-control" type="file" id="avatar" name="avatar" onchange="previewImage(event)">
-        <div class="pt-3">
-            <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Save')}}</button>
-        </div>
-    </form>
+    {!! Form::model($data, ['route' => ['students.update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+    <label for="name" class="form-label">{{__('Full_name')}}</label>
+    {!! Form::text('name', $data->user->name, ['class' => 'form-control']) !!}
+    @error('name')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <label for="email" class="form-label">{{__('Email')}}</label>
+    {!! Form::text('email', $data->user->email, ['class' => 'form-control', 'disabled']) !!}
+    @error('email')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <label for="phone" class="form-label">{{__('Phone')}}</label>
+    {!! Form::text('phone', $data->phone, ['class' => 'form-control']) !!}
+    @error('phone')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <label for="address" class="form-label">{{__('Address')}}</label>
+    {!! Form::text('address', $data->address, ['class' => 'form-control']) !!}
+    @error('address')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <label for="gender" class="form-label">{{__('Gender')}}</label>
+    {!! Form::select('gender', ['' => __('Open this select menu'), 'male' => __('Male'), 'female' => __('Female'), 'other' => __('Other')], $data->gender, ['class' => 'form-select']) !!}
+    @error('gender')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <label for="faculty_id" class="form-label">{{__('Faculty')}}</label>
+    {!! Form::select('faculty_id', ['' => '-- Chọn khoa --'] + $faculties->pluck('name', 'id')->toArray(), $data->faculty_id, ['class' => 'form-control']) !!}
+    @error('faculty_id')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+
+    <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
+    <label for="avatar" class="form-label">{{__('Avatar')}}</label>
+    {!! Form::file('avatar', ['class' => 'form-control', 'id' => 'avatar', 'onchange' => 'previewImage(event)']) !!}
+
+    <div class="pt-3">
+        {!! Form::button(__('Save'), ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white', 'type' => 'submit']) !!}
+    </div>
+    {!! Form::close() !!}
+
     <script>
         function previewImage(event) {
             const input = event.target;

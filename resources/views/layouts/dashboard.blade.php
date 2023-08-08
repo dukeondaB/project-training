@@ -37,16 +37,6 @@
 </head>
 
 <body class="fix-header fix-sidebar card-no-border">
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-{{--    <div class="preloader">--}}
-{{--        <div class="loader">--}}
-{{--            <div class="loader__figure"></div>--}}
-{{--            <p class="loader__label">Admin Wrap</p>--}}
-{{--        </div>--}}
-{{--    </div>--}}
-
     <div id="main-wrapper">
 
         <header class="topbar">
@@ -60,7 +50,6 @@
                             <!-- Light Logo icon -->
                             <img src="{{asset('../assets/images/logo-light-icon.png')}}" alt="homepage" class="light-logo" />
                         </b>
-                        <!--End Logo icon -->
                         <!-- Logo text --><span>
                             <!-- dark Logo text -->
                             <img src="{{asset('../assets/images/logo-text.png')}}" alt="homepage" class="dark-logo" />
@@ -75,33 +64,20 @@
                         <a href="{!! route('student.change-language', ['en']) !!}">English</a>
                         <a href="{!! route('student.change-language', ['vi']) !!}">Vietnam</a>
 
-                        {{--                        <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up waves-effect waves-dark"--}}
-{{--                                href="javascript:void(0)"><i class="fa fa-bars"></i></a> </li>--}}
-
-{{--                        <li class="nav-item hidden-xs-down search-box"> <a--}}
-{{--                                class="nav-link hidden-sm-down waves-effect waves-dark" href="javascript:void(0)"><i--}}
-{{--                                    class="fa fa-search"></i></a>--}}
-{{--                            <form class="app-search">--}}
-{{--                                <input type="text" class="form-control" placeholder="Search & enter"> <a--}}
-{{--                                    class="srh-btn"><i class="fa fa-times"></i></a></form>--}}
-{{--                        </li>--}}
                     </ul>
 
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown u-pro">
                         </li>
-                        <!-- ============================================================== -->
-                        <!-- Profile -->
-                        <!-- ============================================================== -->
                         <li class="nav-item dropdown u-pro">
                             <a class="nav-link dropdown-toggle waves-effect waves-dark profile-pic" href="#"
                                 id="navbarDropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                @if ($user->student)
-                                    <img src="{{ asset('storage/images/student/' . $user->student->avatar) }}" alt="user" class="" />
+                                @if (\Illuminate\Support\Facades\Auth::user()->student)
+                                    <img src="{{ asset('storage/images/student/' . \Illuminate\Support\Facades\Auth::user()->student->avatar) }}" alt="user" class="" />
                                 @else
                                     <img src="{{ asset('path/to/default/avatar.png') }}" alt="user" class="" /> <!-- Đường dẫn đến hình ảnh mặc định -->
                                 @endif<span
-                                    class="hidden-md-down">{{$user->name}} &nbsp;</span> </a>
+                                    class="hidden-md-down">{{\Illuminate\Support\Facades\Auth::user()->name}} &nbsp;</span> </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown"></ul>
                         </li>
 
@@ -111,9 +87,7 @@
         </header>
 
         <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
             <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li> <a class="waves-effect waves-dark" href="{{route('dashboard')}}" aria-expanded="false"><i

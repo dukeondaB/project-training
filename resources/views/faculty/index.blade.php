@@ -2,51 +2,40 @@
 @section('title')   {{__('faculty')}}  @endsection
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
-
     <div class="">
-        <a href="{{route('faculty.create')}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Create')}}</a>
+        {!! Html::linkRoute('faculty.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
 
-    <table  class="table table-sm">
+    <table class="table table-sm">
         <thead>
         <tr>
             <th>#</th>
             <th>{{__('Faculty Name')}}</th>
             <th>{{__('Description')}}</th>
-
             <th>{{__('Action')}}</th>
         </tr>
         </thead>
         <tbody>
-{{--        {{dd($data)}}--}}
         @foreach($data as $item)
             <tr>
                 <td>
-                    {{$item->id}}
+                    {{ $loop->iteration }}
                 </td>
                 <td>
-                    {{$item->name}}
+                    {{ $item->name }}
                 </td>
                 <td>
-                    {{$item->description}}
+                    {{ $item->description }}
                 </td>
 
                 <td>
-                    <form action="{{ route('faculty.destroy', $item->id) }}" method="POST" id="deleteForm">
-                        @csrf
-                        @method('DELETE')
-
-                        <button type="submit" class="btn btn-danger" onclick="return confirmDelete()">{{__('Delete')}}</button>
-                        <a href="{{route('faculty.edit', $item->id)}}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Edit')}}</a>
-                    </form>
+                    {!! Form::open(['route' => ['faculty.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
+                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+                    {!! Html::linkRoute('faculty.edit', __('Edit'), ['faculty' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::close() !!}
                 </td>
-
             </tr>
-
         @endforeach
-
-
-
         </tbody>
     </table>
 

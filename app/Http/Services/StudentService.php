@@ -2,25 +2,17 @@
 
 namespace App\Http\Services;
 
-use App\Http\Repositories\SubjectRepository;
-use App\Http\Repositories\StudentSubjectRepository;
 use App\Http\Repositories\StudentRepository;
+use App\Http\Repositories\StudentSubjectRepository;
+use App\Http\Repositories\SubjectRepository;
 use App\Http\Repositories\UserRepository;
-use App\Http\Requests\Student\CreateStudentRequest;
-use App\Http\Requests\Student\UpdateStudenttRequest;
+use App\Http\Requests\StudentRequest;
 use App\Jobs\SendMailForDues;
-use App\Mail\SendMail;
-use App\Mail\SendNotification;
-use App\Models\Student;
-use App\Models\StudentSubject;
 use App\Models\Subject;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class StudentService
 {
@@ -43,22 +35,12 @@ class StudentService
         $this->userCourseRepository = $userCourseRepository;
         $this->userRepository = $userRepository;
     }
-
-    public function getList()
-    {
-        $data = $this->studentRepository->getList();
-        dd($data);
-        return view('student.list', ['data' => $data]);
-    }
-
     public function getForm()
     {
         return view('student.create');
     }
 
-
-    // create và update chung request để thêm if else
-    public function save(CreateStudentRequest $request)
+    public function save(StudentRequest $request)
     {
         $data = $request->all();
         $data['password'] = Hash::make('000000');
@@ -68,7 +50,15 @@ class StudentService
             $image->storeAs('public/images/student', $imageName);
             $data['avatar'] = $imageName;
         }
-        $this->studentRepository->save($data);
+        $user = $this->userRepository->create($data);
+
+        $studentData = Arr::except($data, ['password', 'email', 'name']);
+        $studentData['user_id'] = $user->id;
+
+        if (isset($data['avatar'])) {
+            $studentData['avatar'] = $data['avatar'];
+        }
+        $user->student()->create($studentData);
 
         dispatch(new SendMailForDues($data));
 
@@ -90,13 +80,13 @@ class StudentService
 
     public function getById($id)
     {
-        $data = $this->studentRepository->findById($id);
+        $data = $this->studentRepository->findOrFail($id);
         return view('student.edit', ['data' => $data]);
     }
 
-    public function update(UpdateStudenttRequest $request, $id)
+    public function update(StudentRequest $request, $id)
     {
-        $record = $this->studentRepository->findById($id);
+        $record = $this->studentRepository->findOrFail($id);
         $data = $request->all();
 
         if ($request->hasFile('avatar')) {
@@ -111,7 +101,7 @@ class StudentService
         } else {
             $data['avatar'] = $record->image;
         }
-        $this->studentRepository->update($data, $id);
+        $this->studentRepository->update($id, $data);
 
         return redirect()->route('students.index')->with('success', __('Student update successfully'));
     }
@@ -119,22 +109,22 @@ class StudentService
     public function getUsersByAgeRange($request)
     {
         // truyền array qua lại
-        $minAge = $request->input('minAge');
-        $maxAge = $request->input('maxAge');
-        $minPoint = $request->input('minPoint');
-        $maxPoint = $request->input('maxPoint');
-
+        $minAge = $request->minAge;
+        $maxAge = $request->maxAge;
+        $minPoint = $request->minPoint;
+        $maxPoint = $request->maxPoint;
         $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
 
         return view('student.list', ['data' => $data])->with(['studentRepository' => $this->studentRepository]);
     }
 
     public function getPageAddScore($studentId){
-        $student = $this->studentRepository->findById($studentId);
+        $student = $this->studentRepository->findOrFail($studentId);
         $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
         $subject = Subject::whereIn('id', $registeredSubjects)->get();
         $data = $this->studentRepository->listScoreStudent($studentId);
         $subjectRepository = $this->subjectRepository;
+
         return view('dashboard.addscore',['data' => $data, 'subject' => $subject , 'student' => $student, 'subjectRepository' => $subjectRepository]);
     }
 
@@ -146,7 +136,7 @@ class StudentService
 
     public function sendEmailNotification($studentId)
     {
-        $student = $this->studentRepository->findById($studentId);
+        $student = $this->studentRepository->findOrFail($studentId);
         $count = $this->studentRepository->countRegisterCourse($studentId);
 
         // Kiểm tra và gửi email nếu cần
@@ -176,5 +166,4 @@ class StudentService
 
         return redirect()->back();
     }
-
 }

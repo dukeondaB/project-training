@@ -11,11 +11,6 @@ class UserRepository extends BaseRepository
         parent::__construct($user);
     }
 
-    public function save($data)
-    {
-        return $this->model->create($data);
-    }
-
     public function createStudent($data){
         return $this->model->student()->create($data);
     }

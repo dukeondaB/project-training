@@ -31,6 +31,11 @@ abstract class BaseRepository
         return $this->model->find($id);
     }
 
+    public function findOrFail($id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
     public function create(array $data)
     {
         return $this->model->create($data);
@@ -38,7 +43,7 @@ abstract class BaseRepository
 
     public function update($id, array $data)
     {
-        $record = $this->model->find($id);
+        $record = $this->findOrFail($id);
         if ($record) {
             $record->update($data);
             return $record;

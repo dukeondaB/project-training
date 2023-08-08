@@ -4,7 +4,6 @@ namespace App\Http\Repositories;
 
 use App\Models\Student;
 use App\Models\StudentSubject;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends BaseRepository
@@ -20,50 +19,8 @@ class StudentRepository extends BaseRepository
         $this->userRepository = $userRepository;
     }
 
-    public function getList()
-    {
-        return $this->model->with('user')->paginate(10);
-    }
-
-    public function save($data)
-    {
-        // gọi từ userRepo từ service
-        $user = $this->userRepository->save($data);
-        $studentData = [
-            'address' => $data['address'],
-            'gender' => $data['gender'],
-            'birth_day' => $data['birth_day'],
-            'phone' => $data['phone'],
-            'avatar' => $data['avatar'],
-            'user_id' => $user->id, // Gán user_id từ người dùng vừa được tạo
-        ];
-
-        if (isset($data['avatar'])) {
-            $studentData['avatar'] = $data['avatar'];
-        }
-
-        return $user->student()->create($studentData);;
-    }
-
-    public function findById($id)
-    {
-        return $this->model->findOrFail($id);
-    }
-
     public function findByUserId($id){
         return $this->model->where('user_id',$id)->first();
-    }
-
-    public function delete($id)
-    {
-        $data = $this->findById($id);
-        return $data->delete();
-    }
-
-    public function update($data, $id)
-    {
-        $item = $this->findById($id);
-        return $item->update($data);
     }
 
     public function filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
@@ -75,26 +32,25 @@ class StudentRepository extends BaseRepository
         $minBirthDate = $now->subYears($maxAge)->format('Y-m-d');
         $maxBirthDate = $now->subYears($minAge)->format('Y-m-d');
 
-        // Kiểm tra và áp dụng điều kiện ngày sinh
-        if ($minAge !== null && $maxAge !== null) {
-            $query->whereBetween('birth_day', [$minBirthDate, $maxBirthDate]);
-        } elseif ($minAge !== null) {
-            $query->where('birth_day', '<=', $minBirthDate);
-        } elseif ($maxAge !== null) {
-            $query->where('birth_day', '>=', $maxBirthDate);
-        }
+        $query->when($minAge && $maxAge, function ($q) use ($minBirthDate, $maxBirthDate) {
+            return $q->whereBetween('birth_day', [$minBirthDate, $maxBirthDate]);
+        })->when($minAge && !$maxAge, function ($q) use ($minBirthDate) {
+            return $q->where('birth_day', '<=', $minBirthDate);
+        })->when(!$minAge && $maxAge, function ($q) use ($maxBirthDate) {
+            return $q->where('birth_day', '>=', $maxBirthDate);
+        });
 
-        // Kiểm tra và áp dụng điều kiện điểm số
-        if ($minPoint !== null && $maxPoint !== null) {
-            $query->whereBetween('total_point', [$minPoint, $maxPoint]);
-        } elseif ($minPoint !== null) {
-            $query->where('total_point', '>=', $minPoint);
-        } elseif ($maxPoint !== null) {
-            $query->where('total_point', '<=', $maxPoint);
-        }
+        $query->when($minPoint && $maxPoint, function ($q) use ($minPoint, $maxPoint) {
+            return $q->whereBetween('total_point', [$minPoint, $maxPoint]);
+        })->when($minPoint && !$maxPoint, function ($q) use ($minPoint) {
+            return $q->where('total_point', '>=', $minPoint);
+        })->when(!$minPoint && $maxPoint, function ($q) use ($maxPoint) {
+            return $q->where('total_point', '<=', $maxPoint);
+        });
 
         return $query->paginate(5)->withQueryString();
     }
+
 
     public function countRegisterCourse($userId)
     {
@@ -107,7 +63,7 @@ class StudentRepository extends BaseRepository
     }
 
     public function listScoreStudent($userId){
-        $student = $this->findById($userId);
+        $student = $this->findOrFail($userId);
         return $student->subjects;
     }
 
@@ -121,7 +77,7 @@ class StudentRepository extends BaseRepository
     }
 
     public function savePoints($studentId, $subjectIds, $points){
-        $student = $this->findById($studentId);
+        $student = $this->findOrFail($studentId);
         $data = [];
         foreach ($subjectIds as $index => $subjectId) {
             $data[] = [

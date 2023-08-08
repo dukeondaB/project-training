@@ -3,33 +3,28 @@
 @section('sub-title') {{__('Create')}} @endsection
 
 @section('content')
-    <form method="post" action="{{route('subject.store')}}" enctype=multipart/form-data>
-        @csrf
-        <label for="" class="form-label">{{__('Subject name')}}</label>
-        <input type="text" value="{{old('name')}}" id="name" class="form-control" name="name">
-        @error('name')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for="" class="form-label">{{__('Description')}}</label>
-        <textarea id="description"  name="description" class="form-control" rows="3">{{old('description')}}</textarea>
-        @error('description')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
-        <label for=""  class="form-label">{{__('Faculty')}}</label>
-        <select class="form-control" name="faculty_id">
-            <option value="">-- Chọn khoa --</option>
-            @foreach($faculties as $faculty)
-                <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
-            @endforeach
-        </select>
-        @error('faculty_id')
-        <p class="error" style="color: red">{{ $message }}</p>
-        @enderror
+    {!! Form::open(['route' => 'subject.store', 'method' => 'post', 'enctype' => 'multipart/form-data']) !!}
+    @csrf
+    <label for="" class="form-label">{{__('Subject name')}}</label>
+    {!! Form::text('name', old('name'), ['class' => 'form-control', 'id' => 'name']) !!}
+    @error('name')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+    <label for="" class="form-label">{{__('Description')}}</label>
+    {!! Form::textarea('description', old('description'), ['class' => 'form-control', 'id' => 'description', 'rows' => 3]) !!}
+    @error('description')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
+    <label for="" class="form-label">{{__('Faculty')}}</label>
+    {!! Form::select('faculty_id', ['' => '-- ' . __('Chọn khoa') . ' --'] + $faculties->pluck('name', 'id')->toArray(), null, ['class' => 'form-control']) !!}
+    @error('faculty_id')
+    <p class="error" style="color: red">{{ $message }}</p>
+    @enderror
 
-        <div class="pt-3">
-            <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">{{__('Save')}}</button>
-        </div>
-    </form>
+    <div class="pt-3">
+        {!! Form::submit(__('Save'), ['class' => 'btn btn-info pull-left hidden-sm-down text-white']) !!}
+    </div>
+    {!! Form::close() !!}
 
     <script>
         function previewImage(event) {

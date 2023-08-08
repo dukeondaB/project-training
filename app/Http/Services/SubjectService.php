@@ -5,9 +5,7 @@ namespace App\Http\Services;
 
 use App\Http\Repositories\FacultyRepository;
 use App\Http\Repositories\SubjectRepository;
-use App\Http\Requests\Subject\CreateSubjectRequest;
-use App\Http\Requests\Subject\UpdateSubjectRequest;
-use App\Models\User;
+use App\Http\Requests\SubjectRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -38,10 +36,10 @@ class SubjectService
         return view('subject.create');
     }
 
-    public function save(CreateSubjectRequest $request)
+    public function save(SubjectRequest $request)
     {
         $data = $request->all();
-        $this->subjectRepository->save($data);
+        $this->subjectRepository->create($data);
 
         return redirect()->route('subject.index')->with('success', __('Subject created successfully'));
     }
@@ -60,31 +58,15 @@ class SubjectService
 
     public function getById($id)
     {
-        $data = $this->subjectRepository->findById($id);
+        $data = $this->subjectRepository->findOrFail($id);
         return view('subject.edit', ['data' => $data]);
     }
 
-    public function update(UpdateSubjectRequest $request, $id)
+    public function update(SubjectRequest $request, $id)
     {
-        $record = $this->subjectRepository->findById($id);
         $data = $request->all();
 
-        if ($request->hasFile('image')) {
-            // Nếu có ảnh mới thay vào, xóa ảnh cũ (nếu có)
-            if ($record->image) {
-                Storage::delete('public/images/courses/' . $record->image);
-            }
-
-            $image = $request->file('image');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/courses', $imageName);
-            $data['image'] = $imageName;
-        } else {
-            // Nếu không có ảnh mới thay vào, giữ nguyên ảnh cũ
-            $data['image'] = $record->image;
-        }
-
-        $this->subjectRepository->update($data, $id);
+        $this->subjectRepository->update($id, $data);
 
         return redirect()->route('subject.index')->with('success', __('Subject updated successfully'));
 

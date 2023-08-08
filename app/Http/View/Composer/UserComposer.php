@@ -17,7 +17,7 @@ class UserComposer
 
     public function compose(View $view)
     {
-        $view->with('user', User::where('id', Auth::id())->with('student')->first());
+//        $view->with('user', User::where('id', Auth::id())->with('student')->first());
 //        $view->with('student')
     }
 
