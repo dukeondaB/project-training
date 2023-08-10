@@ -79,29 +79,17 @@ class StudentRepository extends BaseRepository
     public function savePoints($studentId, $subjectIds, $points){
         $student = $this->findOrFail($studentId);
         $data = [];
+
         foreach ($subjectIds as $index => $subjectId) {
-            $data[] = [
-                'student_id' => $studentId,
-                'subject_id' => $subjectId,
+            $data[$subjectId] = [
                 'point' => $points[$index],
                 'faculty_id' => $student->faculty_id,
                 'updated_at' => now(),
             ];
         }
-        // synchozi
-        foreach ($data as $record) {
-            StudentSubject::updateOrCreate(
-                [
-                    'student_id' => $record['student_id'],
-                    'subject_id' => $record['subject_id'],
-                ],
-                [
-                    'faculty_id' => $record['faculty_id'],
-                    'point' => $record['point'],
-                    'updated_at' => $record['updated_at'],
-                ]
-            );
-        }
+
+        // Sử dụng sync để đồng bộ dữ liệu
+        $student->subjects()->syncWithoutDetaching($data);
     }
 
 }

@@ -57,7 +57,7 @@
                         <td>
                             {!! Form::open(['route' => ['subject.register', $item->id], 'method' => 'POST', 'id' => 'registerForm']) !!}
                             @csrf
-                            {!! Form::button(__('Đăng kí'), ['class' => 'btn btn-success', 'type' => 'submit', 'disabled' => $user->student->isSubjectRegistered($item->id) === true]) !!}
+                            {!! Form::button(__('Register'), ['class' => 'btn btn-success', 'type' => 'submit', 'disabled' => $user->student->isSubjectRegistered($item->id) === true]) !!}
                             {!! Form::close() !!}
                         </td>
                     @endif

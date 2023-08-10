@@ -102,7 +102,7 @@
                                     class="fa fa-user-circle-o"></i><span class="hide-menu">{{__('Profile')}}</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('faculty.index')}}" aria-expanded="false"><i
-                                    class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('faculty')}}</span></a>
+                                    class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('Faculty')}}</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('subject.index')}}" aria-expanded="false"><i
                                     class="fa fa-briefcase"></i><span class="hide-menu">{{__('Subject')}}</span></a>

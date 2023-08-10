@@ -1,5 +1,5 @@
 @extends('layouts.dashboard')
-@section('title')   {{__('faculty')}}  @endsection
+@section('title')   {{__('Faculty')}}  @endsection
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
     <div class="">
