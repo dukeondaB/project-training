@@ -1,47 +1,47 @@
 @extends('layouts.dashboard')
-@section('title') {{__('User')}}   @endsection
-@section('sub-title') {{__('Edit')}} @endsection
+@section('title') {{ __('User') }}   @endsection
+@section('sub-title') {{ __('Edit') }} @endsection
 
 @section('content')
     {!! Form::model($data, ['route' => ['students.update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
-    <label for="name" class="form-label">{{__('Full_name')}}</label>
+    <label for="name" class="form-label">{{ __('Full_name') }}</label>
     {!! Form::text('name', $data->user->name, ['class' => 'form-control']) !!}
     @error('name')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    <label for="email" class="form-label">{{__('Email')}}</label>
+    <label for="email" class="form-label">{{ __('Email') }}</label>
     {!! Form::text('email', $data->user->email, ['class' => 'form-control', 'disabled']) !!}
     @error('email')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    <label for="phone" class="form-label">{{__('Phone')}}</label>
+    <label for="phone" class="form-label">{{ __('Phone') }}</label>
     {!! Form::text('phone', $data->phone, ['class' => 'form-control']) !!}
     @error('phone')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    <label for="address" class="form-label">{{__('Address')}}</label>
+    <label for="address" class="form-label">{{ __('Address') }}</label>
     {!! Form::text('address', $data->address, ['class' => 'form-control']) !!}
     @error('address')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    <label for="gender" class="form-label">{{__('Gender')}}</label>
+    <label for="gender" class="form-label">{{ __('Gender') }}</label>
     {!! Form::select('gender', ['' => __('Open this select menu'), 'male' => __('Male'), 'female' => __('Female'), 'other' => __('Other')], $data->gender, ['class' => 'form-select']) !!}
     @error('gender')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    <label for="faculty_id" class="form-label">{{__('Faculty')}}</label>
+    <label for="faculty_id" class="form-label">{{ __('Faculty') }}</label>
     {!! Form::select('faculty_id', ['' => '-- Chọn khoa --'] + $faculties->pluck('name', 'id')->toArray(), $data->faculty_id, ['class' => 'form-control']) !!}
     @error('faculty_id')
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
     <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-    <label for="avatar" class="form-label">{{__('Avatar')}}</label>
+    <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
     {!! Form::file('avatar', ['class' => 'form-control', 'id' => 'avatar', 'onchange' => 'previewImage(event)']) !!}
 
     <div class="pt-3">

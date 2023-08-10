@@ -2,6 +2,7 @@
 
 namespace App\Http\Repositories;
 
+use App\Enums\PerPage;
 use App\Models\Student;
 use App\Models\StudentSubject;
 use Illuminate\Support\Facades\DB;
@@ -26,7 +27,6 @@ class StudentRepository extends BaseRepository
     public function filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
     {
         $query = $this->model->with('user');
-
         // Chuyển minAge và maxAge thành ngày tháng năm sinh
         $now = now(); // Lấy ngày giờ hiện tại
         $minBirthDate = $now->subYears($maxAge)->format('Y-m-d');
@@ -48,7 +48,7 @@ class StudentRepository extends BaseRepository
             return $q->where('total_point', '<=', $maxPoint);
         });
 
-        return $query->paginate(5)->withQueryString();
+        return $query->paginate(PerPage::TEN)->withQueryString();
     }
 
 
@@ -88,7 +88,7 @@ class StudentRepository extends BaseRepository
                 'updated_at' => now(),
             ];
         }
-        // sync
+        // synchozi
         foreach ($data as $record) {
             StudentSubject::updateOrCreate(
                 [

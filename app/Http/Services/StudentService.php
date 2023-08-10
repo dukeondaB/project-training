@@ -42,28 +42,41 @@ class StudentService
 
     public function save(StudentRequest $request)
     {
-        $data = $request->all();
-        $data['password'] = Hash::make('000000');
-        if ($request->hasFile('avatar')) {
-            $image = $request->file('avatar');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/student', $imageName);
-            $data['avatar'] = $imageName;
+        try {
+            $data = $request->all();
+            $data['password'] = Hash::make('000000');
+
+            if ($request->hasFile('avatar')) {
+                $image = $request->file('avatar');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/images/student', $imageName);
+                $data['avatar'] = $imageName;
+            }
+
+            $user = $this->userRepository->create($data);
+
+            $studentData = Arr::except($data, ['password', 'email', 'name']);
+            $studentData['user_id'] = $user->id;
+
+            if (isset($data['avatar'])) {
+                $studentData['avatar'] = $data['avatar'];
+            }
+
+            $user->student()->create($studentData);
+
+            dispatch(new SendMailForDues($data));
+
+            if ($request->ajax())
+            {
+                return response()->json(['success' => ['general' => 'success: ']], 200);
+            }
+
+            return redirect()->route('students.index')->with('success', __('Student created successfully'));
+        } catch (\Exception $e) {
+            return response()->json(['error' => ['general' => 'An error occurred: ' . $e->getMessage()]], 422);
         }
-        $user = $this->userRepository->create($data);
-
-        $studentData = Arr::except($data, ['password', 'email', 'name']);
-        $studentData['user_id'] = $user->id;
-
-        if (isset($data['avatar'])) {
-            $studentData['avatar'] = $data['avatar'];
-        }
-        $user->student()->create($studentData);
-
-        dispatch(new SendMailForDues($data));
-
-        return redirect()->route('students.index')->with('success', __('Student created successfully'));
     }
+
 
     public function delete($id)
     {
@@ -106,7 +119,7 @@ class StudentService
         return redirect()->route('students.index')->with('success', __('Student update successfully'));
     }
 
-    public function getUsersByAgeRange($request)
+    public function filterByDateOfBirthAndPoint($request)
     {
         // truyền array qua lại
         $minAge = $request->minAge;
@@ -114,8 +127,18 @@ class StudentService
         $minPoint = $request->minPoint;
         $maxPoint = $request->maxPoint;
         $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
+        foreach ($data as $item) {
+            $item->count = count($item->studentSubjects);
+            $faculty = $item->faculty;
 
-        return view('student.list', ['data' => $data])->with(['studentRepository' => $this->studentRepository]);
+            if ($faculty) {
+                $item->total_subject = count($faculty->subjects);
+            } else {
+                $item->total_subject = 0; // Hoặc giá trị mặc định khác nếu cần
+            }
+        }
+//        dd($data);
+        return view('student.list', ['data' => $data]);
     }
 
     public function getPageAddScore($studentId){

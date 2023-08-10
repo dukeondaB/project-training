@@ -21,7 +21,6 @@ use App\Http\Controllers\Subject\GetListSubjectController;
 */
 
 Auth::routes(['register' => false]);
-
 Route::group(['middleware' => ['auth','locale']], function () {
 //    xếp các đối tượng số nhiều, gần nhau group lại
     Route::get('change-language/{language}',[StudentController::class , 'changeLanguage'])->name('student.change-language');

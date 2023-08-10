@@ -2,6 +2,7 @@
 @section('title','Home')
 @section('sub-title','Dashboard')
 @section('content')
+    {{\Session('website_language')}}
             <div class="row">
                 <!-- Column -->
                 <div class="col-lg-8">

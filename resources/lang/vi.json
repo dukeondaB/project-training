@@ -707,13 +707,10 @@
     "Zip \/ Postal Code": "Zip \/ Mã Bưu Điện",
     "Åland Islands": "Quần đảo Åland",
     "User": "Sinh viên",
-    "faculty": "Khoa",
     "Subject": "Môn học",
     "Faculty Name": "Tên Khoa",
     "faculty": "Khoa",
     "Faculty": "Khoa",
-    "Subject": "Môn học",
-    "Faculty Name": "Tên Khoa",
     "Image": "Hình ảnh",
     "Detail": "Chi tiết",
     "Status": "Trạng thái",
@@ -726,7 +723,6 @@
     "Max Age": "Tuổi cao nhất",
     "Filter": "Lọc",
     "Full Name": "Họ và tên",
-    "Full name": "Họ và tên",
     "Phone": "Số điện thoại",
     "Avatar": "Ảnh đại diện",
     "Age": "Tuổi",
@@ -740,8 +736,6 @@
     "other": "Khác",
     "Open this select menu": "Chọn 1 trong các lựa chọn",
     "Date Birth": "Sinh ngày",
-    "Course register count": "Số môn học đã đăng kí",
-    "Description": "Chi tiết",
     "Registed": "Đã đăng ký",
     "Point": "Điểm",
     "Course register count": "Số môn học đã đăng kí",
@@ -767,6 +761,7 @@
     "Add Point": "Thêm điểm",
     "Enter Point": "Nhập điểm",
     "Update point": "Cập nhật",
-    "Average point": "Điểm trung bình"
+    "Average point": "Điểm trung bình",
+    "Send email": "Gửi Email"
 
 }

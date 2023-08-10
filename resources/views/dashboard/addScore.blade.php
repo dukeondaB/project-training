@@ -79,7 +79,7 @@
         @endforeach
         </tbody>
     </table>
-    <div class="modal" id="scoreModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="scoreModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -116,6 +116,9 @@
             </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         document.getElementById('openModalButton').addEventListener('click', function() {

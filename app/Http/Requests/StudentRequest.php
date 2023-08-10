@@ -39,7 +39,7 @@ class StudentRequest extends FormRequest
         }else{
             return [
                 'name' => 'required|string|min:5|max:125',
-                'email' => 'nullable|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
+                'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
                 'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
                 'gender' => 'required',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

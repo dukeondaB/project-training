@@ -5,14 +5,6 @@
     <div class="">
         {!! Html::linkRoute('subject.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
-
-    <div class="pt-5">
-        {!! Form::open(['route' => 'student-subject.import', 'method' => 'POST', 'class' => 'form-control-sm', 'enctype' => 'multipart/form-data']) !!}
-        @csrf
-        {!! Form::file('import_file', ['class' => 'form-control', 'required' => 'required']) !!}
-        {!! Form::submit(__('Import'), ['class' => 'btn-success']) !!}
-        {!! Form::close() !!}
-    </div>
     <table class="table table-sm">
         <thead>
         <tr>
@@ -42,14 +34,10 @@
                 </td>
                 {{-- @can('student-access', Auth()->student()) --}}
                 <td>
-                    @php
-                        $studentPoint = $subjectRepository->getStudentPointInSubject($item->id);
-                    @endphp
-
-                    @if ($studentPoint !== null && $studentPoint !== '')
-                        {{$studentPoint}}
+                    @if (isset($item->studentPoint) && $item->studentPoint !== '')
+                        {{ $item->studentPoint }}
                     @else
-                        {{__('N/A')}}
+                        {{ __('N/A') }}
                     @endif
                 </td>
                 {{-- @endcan --}}
@@ -74,6 +62,7 @@
                         </td>
                     @endif
                 @endif
+
                 {{-- @can('student-access', Auth()->student()) --}}
 
                 {{-- @endcan --}}
