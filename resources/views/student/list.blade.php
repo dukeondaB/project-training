@@ -33,7 +33,7 @@
             <label for="minPoint">{{__('Min Point')}}:</label>
             {!! Form::number('minPoint', null, ['class' => 'form-control-sm', 'id' => 'minPoint', 'min' => 0]) !!}
 
-            <label for="maxPoint">{{__('Max point')}}:</label>
+            <label for="maxPoint">{{__('Max Point')}}:</label>
             {!! Form::number('maxPoint', null, ['class' => 'form-control-sm', 'id' => 'maxPoint', 'min' => 0]) !!}
 
             <button class="btn btn-success" type="submit">{{__("Filter")}}</button>

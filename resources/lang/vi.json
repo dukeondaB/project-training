@@ -762,6 +762,8 @@
     "Enter Point": "Nhập điểm",
     "Update point": "Cập nhật",
     "Average point": "Điểm trung bình",
-    "Send email": "Gửi Email"
+    "Send email": "Gửi Email",
+    "Min Point": "Điểm thấp nhất",
+    "Max Point": "Điểm cao nhất"
 
 }
