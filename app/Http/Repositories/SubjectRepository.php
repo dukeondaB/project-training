@@ -56,7 +56,7 @@ class SubjectRepository extends BaseRepository
     protected function getStudentPoints($student)
     {
         $studentPoints = [];
-
+//        dd($student);
         foreach ($student->subjects as $item) {
             $studentPoints[$item->pivot->subject_id] = $item->pivot->point;
         }

@@ -49,8 +49,8 @@
                 </td>
                 <td>
                     {!! Form::open(['route' => ['student.update-point', 'student_id' => $student->id, 'subject_id'=> $item->id], 'method' => 'PUT']) !!}
-                    {!! Form::text('point', null, ['placeholder' => __('Enter Point')]) !!}
-                    {!! Form::submit(__('Update point'), ['id' => 'update-score-btn']) !!}
+                    {!! Form::text('point', null, ['placeholder' => __('Enter Point'), 'class' => 'form-control', 'style' => 'width:200px']) !!}
+                    {!! Form::submit(__('Update point'), ['id' => 'update-score-btn', 'class' => 'btn btn-success']) !!}
                     {!! Form::close() !!}
                 </td>
             </tr>

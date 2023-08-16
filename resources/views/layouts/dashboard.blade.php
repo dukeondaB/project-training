@@ -29,8 +29,6 @@
     <!-- You can change the theme colors from here -->
     <link href="{{asset('css/colors/default.css')}}" id="theme" rel="stylesheet">
 
-    <link href="{{ asset('vendor/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet">
-
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 
@@ -198,9 +196,8 @@
     <script src="{{asset("assets/node_modules/raphael/raphael-min.js")}}"></script>
     <script src="{{asset('assets/node_modules/morrisjs/morris.min.js')}}"></script>
     <script src="{{asset('assets/node_modules/d3/d3.min.js')}}"></script>
-    <script src="{{asset('assets/node_modules/c3-master/c3.min.js')}}"></script><script src="{{asset('js/dashboard1.js')}}"></script>
-    <script src="{{ asset('\vendor\realrashid\sweet-alert\resources\js\sweetalert.all.js') }}"></script>
-    @include('sweetalert::alert')
+    <script src="{{asset('assets/node_modules/c3-master/c3.min.js')}}"></script>
+    <script src="{{asset('js/dashboard1.js')}}"></script>
 </body>
 
 </html>
