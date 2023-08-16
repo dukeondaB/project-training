@@ -56,41 +56,9 @@ class SubjectRepository extends BaseRepository
     protected function getStudentPoints($student)
     {
         $studentPoints = [];
-        $studentSubjects = $student->studentSubjects;
 
-        foreach ($studentSubjects as $studentSubject) {
-            $studentPoints[$studentSubject->subject_id] = $studentSubject->point;
-        }
-
-        return $studentPoints;
-    }
-
-    public function getStudentPointInSubject($subjectId)
-    {
-        $query = $this->student->where('user_id', Auth::id());
-
-        return $query->firstOrFail()
-            ->studentSubjects()
-            ->where('subject_id', $subjectId)
-            ->value('point');
-
-    }
-
-    public function getStudentPoint($studentId, $subjectId)
-    {
-        return $this->studentSubject
-            ->where('student_id', $studentId)
-            ->where('subject_id', $subjectId)
-            ->value('point');
-    }
-
-    public function getAllStudentPoints($studentId)
-    {
-        $studentSubjects = $this->studentSubject->where('student_id', $studentId)->get();
-        $studentPoints = [];
-
-        foreach ($studentSubjects as $studentSubject) {
-            $studentPoints[$studentSubject->subject_id] = $studentSubject->point;
+        foreach ($student->subjects as $item) {
+            $studentPoints[$item->pivot->subject_id] = $item->pivot->point;
         }
 
         return $studentPoints;

@@ -3,7 +3,7 @@
 @section('sub-title') {{__('Edit')}} @endsection
 
 @section('content')
-    {!! Form::model($data, ['route' => ['faculty.update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
+    {!! Form::model($data, ['route' => ['faculties.update', $data->id], 'method' => 'PUT', 'enctype' => 'multipart/form-data']) !!}
     @csrf
     <label for="name" class="form-label">{{__('Faculty Name')}}</label>
     {!! Form::text('name', null, ['class' => 'form-control']) !!}
@@ -21,7 +21,7 @@
     </div>
     {!! Form::close() !!}
 
-    {!! Form::open(['route' => ['faculty.destroy', $data->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
+    {!! Form::open(['route' => ['faculties.destroy', $data->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
     @csrf
     @method('DELETE')
     {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}

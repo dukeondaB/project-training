@@ -3,7 +3,7 @@
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
     <div class="">
-        {!! Html::linkRoute('faculty.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+        {!! Html::linkRoute('faculties.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
 
     <table class="table table-sm">
@@ -29,9 +29,9 @@
                 </td>
 
                 <td>
-                    {!! Form::open(['route' => ['faculty.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
+                    {!! Form::open(['route' => ['faculties.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
                     {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
-                    {!! Html::linkRoute('faculty.edit', __('Edit'), ['faculty' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Html::linkRoute('faculties.edit', __('Edit'), ['faculty' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
                     {!! Form::close() !!}
                 </td>
             </tr>

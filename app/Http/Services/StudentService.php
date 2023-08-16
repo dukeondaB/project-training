@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class StudentService
 {
@@ -35,6 +36,7 @@ class StudentService
         $this->userCourseRepository = $userCourseRepository;
         $this->userRepository = $userRepository;
     }
+
     public function getForm()
     {
         return view('student.create');
@@ -66,8 +68,7 @@ class StudentService
 
             dispatch(new SendMailForDues($data));
 
-            if ($request->ajax())
-            {
+            if ($request->ajax()) {
                 return response()->json(['success' => ['general' => 'success: ']], 200);
             }
 
@@ -127,34 +128,50 @@ class StudentService
         $minPoint = $request->minPoint;
         $maxPoint = $request->maxPoint;
         $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
+
         foreach ($data as $item) {
             $item->count = count($item->studentSubjects);
-            $faculty = $item->faculty;
 
-            if ($faculty) {
-                $item->total_subject = count($faculty->subjects);
+            if ($item->faculty) {
+                $item->total_subject = count($item->faculty->subjects);
             } else {
-                $item->total_subject = 0; // Hoặc giá trị mặc định khác nếu cần
+                $item->total_subject = 0;
             }
         }
 //        dd($data);
         return view('student.list', ['data' => $data]);
     }
 
-    public function getPageAddScore($studentId){
+    public function getPageAddScore($studentId)
+    {
         $student = $this->studentRepository->findOrFail($studentId);
         $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
         $subject = Subject::whereIn('id', $registeredSubjects)->get();
         $data = $this->studentRepository->listScoreStudent($studentId);
         $subjectRepository = $this->subjectRepository;
+        $subjectPoints = [];
 
-        return view('dashboard.addscore',['data' => $data, 'subject' => $subject , 'student' => $student, 'subjectRepository' => $subjectRepository]);
+        foreach ($student->subjects as $point) {
+            $subjectPoints[$point->id] = $point->pivot->point;
+        }
+
+        return view('dashboard.addScore', ['data' => $data, 'subject' => $subject, 'student' => $student, 'subjectPoint' => $subjectPoints]);
     }
 
-    public function updatePoint(Request $request, $studentId, $subjectId){
+    public function getPageAddPoint($studentId)
+    {
+        $student = $this->studentRepository->findOrFail($studentId);
+        $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
+        $subject = Subject::whereIn('id', $registeredSubjects)->get();
+//        dd($subject, $student->studentSubjects);
+        return view('student.addPoints', ['subject' => $subject, 'student' => $student]);
+    }
+
+    public function updatePoint(Request $request, $studentId, $subjectId)
+    {
         $data['point'] = $request->input('point');
         $this->userCourseRepository->updatePoint($studentId, $subjectId, $data);
-        return redirect()->back()->with(['success','Success']);
+        return redirect()->back()->with(['success', 'Success']);
     }
 
     public function sendEmailNotification($studentId)
@@ -177,15 +194,44 @@ class StudentService
 
     public function savePoints(Request $request)
     {
+        $rules = [
+            'student_id' => 'required|exists:students,id',
+            'subject_id.*' => 'required|exists:subjects,id',
+            'point.*' => 'required|numeric|min:0|max:10', // Tùy chỉnh min và max theo yêu cầu của bạn
+        ];
+
+        $messages = [
+            'student_id.required' => 'The student ID field is required.',
+            'student_id.exists' => 'The selected student ID is invalid.',
+            'subject_id.*.required' => 'The subject field is required.',
+            'subject_id.*.exists' => 'The selected subject is invalid.',
+            'point.*.required' => 'The point field is required.',
+            'point.*.numeric' => 'The point must be a number.',
+            'point.*.min' => 'The point must be at least :min.',
+            'point.*.max' => 'The point may not be greater than :max.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         $subjectIds = $request->input('subject_id');
-        $subjectIds = array_filter($subjectIds);
         $studentId = $request->input('student_id');
-        //đồng bộ tên gọi giữa biến và
         $points = $request->input('point');
-        $points = array_filter($points);
-//        dd($points);
-        // Tiếp tục xử lý khi dữ liệu hợp lệ
-        $this->studentRepository->savePoints($studentId, $subjectIds, $points);
+
+        $student = $this->studentRepository->findOrFail($studentId);
+        $data = [];
+
+        foreach ($subjectIds as $index => $subjectId) {
+            $data[$subjectId] = [
+                'point' => $points[$index],
+                'faculty_id' => $student->faculty_id,
+                'updated_at' => now(),
+            ];
+        }
+
+        $this->studentRepository->savePoints($student, $data);
 
         return redirect()->back();
     }

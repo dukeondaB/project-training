@@ -21,13 +21,14 @@ use App\Http\Controllers\Subject\GetListSubjectController;
 */
 
 Auth::routes(['register' => false]);
+
 Route::group(['middleware' => ['auth','locale']], function () {
-//    xếp các đối tượng số nhiều, gần nhau group lại
+
     Route::get('change-language/{language}',[StudentController::class , 'changeLanguage'])->name('student.change-language');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('students', StudentController::class);
     Route::resource('profiles', ProfileController::class)->only(['index','update']);
-    Route::resource('faculty', FacultyController::class)->except('index');
+    Route::resource('faculties', FacultyController::class)->except('index');
     Route::get('faculties', [GetListFacultyController::class, 'index'])->name('faculty.index');
     Route::resource('subject',SubjectController::class)->except('index');
     Route::get('subjects', [GetListSubjectController::class, 'index'])->name('subject.index');
@@ -37,4 +38,5 @@ Route::group(['middleware' => ['auth','locale']], function () {
     Route::post('save-points', [StudentController::class, 'savePoints'])->name('student.save-points');
     Route::post('subject/import', [SubjectController::class, 'import'])->name('student-subject.import');
     Route::post('send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
+    Route::get('student/getPageSavePoints/{studentId}',[StudentController::class, 'getPageSavePoints'])->name('student.add-points');
 });

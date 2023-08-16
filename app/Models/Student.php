@@ -49,7 +49,6 @@ class Student extends Model
         return $this->studentSubjects()->count();
     }
 
-
     public function studentSubjects()
     {
         return $this->hasMany(StudentSubject::class);

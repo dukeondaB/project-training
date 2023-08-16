@@ -17,29 +17,27 @@
     </div>
 
     <div class="row">
+        {!! Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'form-control-sm']) !!}
         <div>
-            {!! Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'form-control-sm']) !!}
             <label for="minAge">{{__('Min Age')}}:</label>
             {!! Form::number('minAge', null, ['class' => 'form-control-sm', 'id' => 'minAge', 'min' => 0]) !!}
 
             <label for="maxAge">{{__('Max Age')}}:</label>
             {!! Form::number('maxAge', null, ['class' => 'form-control-sm', 'id' => 'maxAge', 'min' => 0]) !!}
-
-            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
-            {!! Form::close() !!}
         </div>
         <div>
-            {!! Form::open(['route' => 'students.index', 'method' => 'GET', 'class' => 'form-control-sm']) !!}
             <label for="minPoint">{{__('Min Point')}}:</label>
             {!! Form::number('minPoint', null, ['class' => 'form-control-sm', 'id' => 'minPoint', 'min' => 0]) !!}
 
             <label for="maxPoint">{{__('Max Point')}}:</label>
             {!! Form::number('maxPoint', null, ['class' => 'form-control-sm', 'id' => 'maxPoint', 'min' => 0]) !!}
-
-            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
-            {!! Form::close() !!}
         </div>
+        <div>
+            <button class="btn btn-success" type="submit">{{__("Filter")}}</button>
+        </div>
+        {!! Form::close() !!}
     </div>
+
 
     <div class="grid">
         <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white" data-toggle="modal" data-target="#myModal">Thêm nhanh</button>

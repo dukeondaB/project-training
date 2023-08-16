@@ -39,7 +39,7 @@ class StudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  StudentRequest  $request
+     * @param StudentRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StudentRequest $request)
@@ -50,7 +50,7 @@ class StudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -61,7 +61,7 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -72,8 +72,8 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  StudentRequest  $request
-     * @param  int  $id
+     * @param StudentRequest $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(StudentRequest $request, $id)
@@ -84,7 +84,7 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -98,13 +98,15 @@ class StudentController extends Controller
 //        return $this->userService->getUsersByAgeRange($request);
 //    }
 
-    public function changeLanguage($language){
+    public function changeLanguage($language)
+    {
         \Session::put('website_language', $language);
 
         return redirect()->back()->with(['success', 'Change language successfully']);
     }
 
-    public function getPageAddScore($studentId){
+    public function getPageAddScore($studentId)
+    {
         return $this->studentService->getPageAddScore($studentId);
     }
 
@@ -116,6 +118,11 @@ class StudentController extends Controller
     public function sendEmailNotification($studentId)
     {
         return $this->studentService->sendEmailNotification($studentId);
+    }
+
+    public function getPageSavePoints($studentId)
+    {
+        return $this->studentService->getPageAddPoint($studentId);
     }
 
     public function savePoints(Request $request)

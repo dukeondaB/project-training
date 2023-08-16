@@ -3,7 +3,7 @@
 @section('sub-title') {{__('Create')}} @endsection
 
 @section('content')
-    {!! Form::open(['route' => 'faculty.store']) !!}
+    {!! Form::open(['route' => 'faculties.store']) !!}
     {!! Form::label('name', __('Faculty Name'), ['class' => 'form-label']) !!}
     {!! Form::text('name', old('name'), ['class' => 'form-control']) !!}
     @error('name')

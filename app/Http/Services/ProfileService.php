@@ -22,11 +22,13 @@ class ProfileService
         $this->studentRepository = $studentRepository;
     }
 
-    public function information(){
+    public function information()
+    {
         return view('dashboard.profile');
     }
 
-    public function uploadAvatar(Request $request, $id){
+    public function uploadAvatar(Request $request, $id)
+    {
         $record = $this->studentRepository->findByUserId($id);
 //        dd($record);
 //        dd($request->all());

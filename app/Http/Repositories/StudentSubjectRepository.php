@@ -12,14 +12,15 @@ class StudentSubjectRepository extends BaseRepository
         parent::__construct($studentSubject);
     }
 
-    public function updatePoint($studentId, $subjectId, $data){
-      $studentSubject =$this->model->where('subject_id', $subjectId)->where('student_id', $studentId)->first();
-    if ($studentSubject) {
-        $studentSubject->update($data);
-        return true; // or return the updated model, if needed
-    }
+    public function updatePoint($studentId, $subjectId, $data)
+    {
+        $studentSubject = $this->model->where('subject_id', $subjectId)->where('student_id', $studentId)->first();
+        if ($studentSubject) {
+            $studentSubject->update($data);
+            return true; // or return the updated model, if needed
+        }
 
-    return false;
+        return false;
     }
 
 }

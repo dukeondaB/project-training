@@ -15,9 +15,8 @@ class DashboardController extends Controller
         $this->dashboardService = $dashboardService;
     }
 
-    public function index(){
-//        $student = Auth::student();
+    public function index()
+    {
         return view('dashboard.index');
-//        $this->dashboardService->show();
     }
 }
