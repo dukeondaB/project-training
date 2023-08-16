@@ -2,6 +2,7 @@
 
 namespace App\Http\Services;
 
+use App\Enums\PerPage;
 use App\Http\Repositories\StudentRepository;
 use App\Http\Repositories\StudentSubjectRepository;
 use App\Http\Repositories\SubjectRepository;
@@ -127,9 +128,46 @@ class StudentService
         $maxAge = $request->maxAge;
         $minPoint = $request->minPoint;
         $maxPoint = $request->maxPoint;
-        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
+//        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
+        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
+            ->with(['studentSubjects', 'faculty.subjects', 'user'])
+            ->paginate(PerPage::TEN)
+            ->withQueryString();
+        $this->getAvgPointAndTotalSubject($data);
+
+        return view('student.list', ['data' => $data]);
+    }
+
+    public function getAvgPointAndTotalSubject($data)
+    {
+        $avgPointPerStudent = [];
+
+        foreach ($data as $studentData) {
+            $studentId = $studentData->id;
+            $totalPoints = 0;
+            $numSubjects = 0;
+
+            foreach ($studentData->subjects as $subject) {
+                $point = $subject->pivot->point;
+                if ($point !== null) {
+                    $totalPoints += $point;
+                    $numSubjects++;
+                }
+            }
+
+            if ($numSubjects > 0) {
+                $averagePoint = $totalPoints / $numSubjects;
+                $avgPointPerStudent[$studentId] = $averagePoint;
+            }
+        }
 
         foreach ($data as $item) {
+            if (isset($avgPointPerStudent[$item->id])) {
+                $item->avg_point = $avgPointPerStudent[$item->id];
+            } else {
+                $item->avg_point = null;
+            }
+
             $item->count = count($item->studentSubjects);
 
             if ($item->faculty) {
@@ -138,8 +176,8 @@ class StudentService
                 $item->total_subject = 0;
             }
         }
-//        dd($data);
-        return view('student.list', ['data' => $data]);
+
+        return $data;
     }
 
     public function getPageAddScore($studentId)
@@ -148,10 +186,9 @@ class StudentService
         $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
         $subject = Subject::whereIn('id', $registeredSubjects)->get();
         $data = $this->studentRepository->listScoreStudent($studentId);
-        $subjectRepository = $this->subjectRepository;
         $subjectPoints = [];
 
-        foreach ($student->subjects as $point) {
+        foreach ($data as $point) {
             $subjectPoints[$point->id] = $point->pivot->point;
         }
 

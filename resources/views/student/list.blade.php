@@ -43,7 +43,6 @@
         <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white" data-toggle="modal" data-target="#myModal">Thêm nhanh</button>
     </div>
 
-
     <table class="table table-sm">
         <thead>
         <tr class="text-center">
@@ -81,7 +80,7 @@
                 <td>{{ $item->address }}</td>
                 <td>{{ $item->age }}</td>
                 <td>{{ __($item->gender) }}</td>
-                <td>{{ $item->total_point === null ? 'N/A' : $item->total_point }}</td>
+                <td>{{ $item->avg_point === null ? 'N/A' : $item->avg_point }}</td>
                 <td>
                     @if ($item->count !== null && $item->count !== '')
                         {{ $item->count }}
