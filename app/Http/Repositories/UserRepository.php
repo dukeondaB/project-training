@@ -10,12 +10,8 @@ class UserRepository extends BaseRepository
     {
         parent::__construct($user);
     }
-
-    public function createStudent($data){
-        return $this->model->student()->create($data);
-    }
-
-    public function delete($id){
+    public function delete($id)
+    {
         $user = $this->model->findOrFail($id);
         return $user->delete();
     }

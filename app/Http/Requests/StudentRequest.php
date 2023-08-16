@@ -25,28 +25,28 @@ class StudentRequest extends FormRequest
     {
         $isCreate = $this->routeIs('students.create');
 
-        if ($isCreate)
-        {
+//        if ($isCreate)
+//        {
             return [
                 'name' => 'required|string|min:5|max:125',
-                'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
+                'email' => 'required|email|unique:students|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
                 'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
                 'gender' => 'required',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'birth_day' => 'required',
                 'faculty_id' => 'required',
             ];
-        }else{
-            return [
-                'name' => 'required|string|min:5|max:125',
-                'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
-                'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
-                'gender' => 'required',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'birth_day' => 'nullable',
-                'faculty_id' => 'required',
-            ];
-        }
+//        }else{
+//            return [
+//                'name' => 'required|string|min:5|max:125',
+//                'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
+//                'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
+//                'gender' => 'required',
+//                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+//                'birth_day' => 'nullable',
+//                'faculty_id' => 'required',
+//            ];
+//        }
 
     }
     public function messages()

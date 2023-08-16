@@ -9,19 +9,15 @@ use Illuminate\Support\Facades\DB;
 
 class StudentRepository extends BaseRepository
 {
-    /**
-     * @var UserRepository
-     */
-    protected $userRepository;
 
-    public function __construct(Student $student, UserRepository $userRepository)
+    public function __construct(Student $student)
     {
         parent::__construct($student);
-        $this->userRepository = $userRepository;
     }
 
-    public function findByUserId($id){
-        return $this->model->where('user_id',$id)->first();
+    public function findByUserId($id)
+    {
+        return $this->model->where('user_id', $id)->first();
     }
 
     public function filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
@@ -55,40 +51,21 @@ class StudentRepository extends BaseRepository
     public function countRegisterCourse($userId)
     {
         $count = DB::table('student_subject')->where('student_id', $userId)->count();
-        if ($count){
+        if ($count) {
             return $count;
         }
 
         return null;
     }
 
-    public function listScoreStudent($userId){
+    public function listScoreStudent($userId)
+    {
         $student = $this->findOrFail($userId);
         return $student->subjects;
     }
 
-    public function isRegistrationComplete($studentId)
+    public function savePoints(Student $student, array $data)
     {
-        $student = $this->model->findOrFail($studentId);
-        $count = $this->countRegisterCourse($studentId);
-        $totalSubjectsInFaculty = $student->faculty->subjects()->count();
-
-        return $count !== null && $count >= $totalSubjectsInFaculty;
-    }
-
-    public function savePoints($studentId, $subjectIds, $points){
-        $student = $this->findOrFail($studentId);
-        $data = [];
-
-        foreach ($subjectIds as $index => $subjectId) {
-            $data[$subjectId] = [
-                'point' => $points[$index],
-                'faculty_id' => $student->faculty_id,
-                'updated_at' => now(),
-            ];
-        }
-
-        // Sử dụng sync để đồng bộ dữ liệu
         $student->subjects()->syncWithoutDetaching($data);
     }
 
