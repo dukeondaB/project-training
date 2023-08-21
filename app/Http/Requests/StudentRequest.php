@@ -24,11 +24,11 @@ class StudentRequest extends FormRequest
     public function rules()
     {
         $checkMethod = $this->_method;
-
+//        dd($this->all());
         if ($checkMethod == 'PUT') {
             return [
                 'name' => 'required|string|min:5|max:125',
-                'email' => 'required|email|regex:/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/',
+                'email' => '',
                 'phone' => 'required|regex:/^(0[0-9]{9,10})$/',
                 'gender' => 'required',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',

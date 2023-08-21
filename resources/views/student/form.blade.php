@@ -50,11 +50,12 @@
     <p class="error" style="color: red">{{ $message }}</p>
     @enderror
 
-    @if(isset($student))
-        <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
-        <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
-        {!! Form::file('avatar', ['class' => 'form-control', 'id' => 'avatar', 'onchange' => 'previewImage(event)']) !!}
-    @endif
+    <label for="birth_day" class="form-label">{{ __('Date Birth') }} <span class="text-danger">*</span></label>
+    {!! Form::date('birth_day', old('birth_day'), ['class' => 'form-control']) !!}
+
+    <img id="imagePreview" src="#" alt="Preview" style="display: none; max-width: 200px;">
+    <label for="avatar" class="form-label">{{ __('Avatar') }}</label>
+    {!! Form::file('avatar', ['class' => 'form-control', 'id' => 'avatar', 'onchange' => 'previewImage(event)']) !!}
 
     <div class="pt-3">
         {!! Form::button(__('Save'), ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white', 'type' => 'submit']) !!}

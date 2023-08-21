@@ -3,7 +3,7 @@
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
     <div class="">
-        {!! Html::linkRoute('subject.form', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+        {!! Html::linkRoute('subject.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
     {!! Form::open(['route' => 'subject.register.multiple', 'method' => 'POST', 'id' => 'registerForm2']) !!}
 

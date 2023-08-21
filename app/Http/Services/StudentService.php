@@ -9,6 +9,7 @@ use App\Http\Requests\StudentRequest;
 use App\Jobs\SendMailForDues;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -37,26 +38,28 @@ class StudentService
     public function save(StudentRequest $request)
     {
         try {
-            $data = $request->all();
-//                setAttribute
-            $data['password'] = Hash::make('000000');
-            if ($request->hasFile('avatar')) {
-                $image = $request->file('avatar');
-                $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->storeAs('public/images/student', $imageName);
-                $data['avatar'] = $imageName;
-            }
+            DB::transaction(function () use ($request) {
+                $data = $request->all();
+                $data['password'] = Hash::make('000000');
 
-            $user = $this->userRepository->create($data);
-            $studentData['user_id'] = $user->id;
+                if ($request->hasFile('avatar')) {
+                    $image = $request->file('avatar');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->storeAs('public/images/student', $imageName);
+                    $data['avatar'] = $imageName;
+                }
 
-            if (isset($data['avatar'])) {
-                $studentData['avatar'] = $data['avatar'];
-            }
+                $user = $this->userRepository->create($data);
+                $studentData['user_id'] = $user->id;
 
-            $user->student()->create($studentData);
+                if (isset($data['avatar'])) {
+                    $studentData['avatar'] = $data['avatar'];
+                }
 
-            dispatch(new SendMailForDues($data));
+                $user->student()->create($studentData);
+
+                dispatch(new SendMailForDues($data));
+            });
 
             if ($request->ajax()) {
                 return response()->json(['success' => ['general' => 'success: ']], 200);
@@ -90,6 +93,7 @@ class StudentService
 
     public function update(StudentRequest $request, $id)
     {
+        dd($request);
         $student = $this->studentRepository->findOrFail($id);
         $data = $request->all();
         unset($data['avatar']);

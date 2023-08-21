@@ -44,6 +44,7 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
+//        dd($request->all());
         return $this->studentService->save($request);
     }
 
