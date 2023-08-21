@@ -23,32 +23,20 @@ class SubjectRequest extends FormRequest
      */
     public function rules()
     {
-        $isCreate = $this->is('/subject/create'); // dùng is với url routeIs với route name
-        if ($isCreate){
-            return [
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'faculty_id' => 'required|exists:faculties,id',
-            ];
-        }else{
+        $checkMethod = $this->_method;
+
+        if ($checkMethod == 'PUT') {
             return [
                 'name' => 'required|string|max:255',
                 'description' => 'nullable|string',
                 'faculty_id' => 'required|exists:faculties,id',
             ];
+        } else {
+            return [
+                'name' => 'required|string|max:255|unique:subjects',
+                'description' => 'required|string',
+                'faculty_id' => 'required|exists:faculties,id',
+            ];
         }
-
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Name is required.',
-            'name.string' => 'Name must be a string.',
-            'name.max' => 'Name may not be greater than :max characters.',
-            'description.required' => 'Detail is required.',
-            'description.string' => 'Detail must be a string.',
-
-        ];
     }
 }

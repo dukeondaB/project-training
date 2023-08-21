@@ -28,6 +28,7 @@
     <link href="{{asset('css/pages/dashboard1.css')}}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{asset('css/colors/default.css')}}" id="theme" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
@@ -88,16 +89,13 @@
             <div class="scroll-sidebar">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
-                        <li> <a class="waves-effect waves-dark" href="{{route('dashboard')}}" aria-expanded="false"><i
-                                    class="fa fa-tachometer"></i><span class="hide-menu">{{__('Dashboard')}}</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{route('dashboard')}}" aria-expanded="false"><i class="fas fa-tachometer-alt"></i><span class="hide-menu">{{__('Dashboard')}}</span></a>
                         </li>
 
-                        <li> <a class="waves-effect waves-dark" href="{{route('students.index')}}" aria-expanded="false"><i
-                                    class="fa fa-briefcase"></i><span class="hide-menu">{{__('User')}}</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{route('students.index')}}" aria-expanded="false"><i class="fas fa-users"></i><span class="hide-menu">{{__('Student')}}</span></a>
                         </li>
 
-                        <li> <a class="waves-effect waves-dark" href="{{route('profiles.index')}}" aria-expanded="false"><i
-                                    class="fa fa-user-circle-o"></i><span class="hide-menu">{{__('Profile')}}</span></a>
+                        <li> <a class="waves-effect waves-dark" href="{{route('profiles.index')}}" aria-expanded="false"><i class="fas fa-id-card"></i><span class="hide-menu">{{__('Profile')}}</span></a>
                         </li>
                         <li> <a class="waves-effect waves-dark" href="{{route('faculty.index')}}" aria-expanded="false"><i
                                     class="fa fa-graduation-cap"></i><span class="hide-menu">{{__('Faculty')}}</span></a>
@@ -130,7 +128,7 @@
                                     <a class="" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        <i class="fas fa-sign-out-alt"></i>{{ __('Logout') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

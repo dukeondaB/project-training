@@ -1,11 +1,16 @@
 @extends('layouts.dashboard')
-@section('title') {{__('User')}}   @endsection
+@section('title')
+    {{__('User')}}
+@endsection
 @section('sub-title','List')
 @section('content')
 
     <div class="row">
         <div>
-            {!! Html::linkRoute('students.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+            <a href="{{ route('students.create') }}"
+               class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">
+                <i class="fa fa-plus-square"></i> {{ __('Create') }}
+            </a>
         </div>
     </div>
     <div class="pt-5">
@@ -40,7 +45,8 @@
 
 
     <div class="grid">
-        <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white" data-toggle="modal" data-target="#myModal">Thêm nhanh</button>
+        <button class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white"
+                data-toggle="modal" data-target="#myModal">{{__('Quick Add')}}</button>
     </div>
 
     <table class="table table-sm">
@@ -75,7 +81,7 @@
                     {{ $item->phone }}
                 </td>
                 <td>
-                    <img width="150px" src="{{ asset('storage/images/student/' . $item->avatar) }}" alt="Product Image">
+                    <img width="150px" src="{{ asset('storage/images/student/' . $item->avatar) }}" alt="Avatar">
                 </td>
                 <td>{{ $item->address }}</td>
                 <td>{{ $item->age }}</td>
@@ -84,15 +90,20 @@
                 <td>
                     @if ($item->count !== null && $item->count !== '')
                         {{ $item->count }}
-                        <a href="{{ route('student.subject-list', ['student_id' => $item->id])}}"> <button class="btn btn-success">Xem chi tiết</button></a>
+                        <a href="{{ route('student.subject-list', ['student_id' => $item->id])}}">
+                            <button class="btn btn-success"><i class="fas fa-stream"></i></button>
+                        </a>
                     @else
                         {{ __('N/A') }}
                     @endif
                 </td>
                 <td>
                     {!! Form::open(['route' => ['students.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
-                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
-                    {!! Html::linkRoute('students.edit', __('Edit'), ['student' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::button('<i class="fa fa-window-close"></i> ', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+                    <a href="{{ route('students.edit', ['student' => $item->id]) }}"
+                       class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">
+                        <i class="fas fa-edit"></i>
+                    </a>
                     {!! Form::close() !!}
                 </td>
                 <td>
@@ -152,7 +163,7 @@
                     </div>
                     {!! Form::close() !!}
                 </div>
-                    <div class="modal-footer">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
                 </div>
             </div>
@@ -195,7 +206,7 @@
 
         }
 
-        $('#form').submit(function(event) {
+        $('#form').submit(function (event) {
             event.preventDefault();
             var form = $(this);
             var url = form.attr('action');
@@ -204,14 +215,14 @@
                 type: 'POST',
                 url: url,
                 data: form.serialize(),
-                beforeSend: function() {
+                beforeSend: function () {
                     $(document).find('p.error').html('');
                 },
-                success: function(data) {
+                success: function (data) {
                     console.log('0');
-                     location.reload();
+                    location.reload();
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.log('1');
                     var errors = xhr.responseJSON.errors;
                     for (var key in errors) {
@@ -221,6 +232,5 @@
             });
         });
     </script>
-
 
 @endsection

@@ -4,14 +4,11 @@ namespace App\Http\Services;
 
 use App\Enums\PerPage;
 use App\Http\Repositories\StudentRepository;
-use App\Http\Repositories\StudentSubjectRepository;
-use App\Http\Repositories\SubjectRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\StudentRequest;
 use App\Jobs\SendMailForDues;
 use App\Models\Subject;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -20,35 +17,29 @@ class StudentService
 {
 
     protected $studentRepository;
-    protected $subjectRepository;
-    /**
-     * @var StudentSubjectRepository
-     */
-    protected $userCourseRepository;
+
     /**
      * @var UserRepository
      */
     protected $userRepository;
 
-    public function __construct(StudentRepository $studentRepository, SubjectRepository $subjectRepository, StudentSubjectRepository $userCourseRepository, UserRepository $userRepository)
+    public function __construct(StudentRepository $studentRepository, UserRepository $userRepository)
     {
         $this->studentRepository = $studentRepository;
-        $this->subjectRepository = $subjectRepository;
-        $this->userCourseRepository = $userCourseRepository;
         $this->userRepository = $userRepository;
     }
 
     public function getForm()
     {
-        return view('student.create');
+        return view('student.form');
     }
 
     public function save(StudentRequest $request)
     {
         try {
             $data = $request->all();
+//                setAttribute
             $data['password'] = Hash::make('000000');
-
             if ($request->hasFile('avatar')) {
                 $image = $request->file('avatar');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
@@ -57,8 +48,6 @@ class StudentService
             }
 
             $user = $this->userRepository->create($data);
-
-            $studentData = Arr::except($data, ['password', 'email', 'name']);
             $studentData['user_id'] = $user->id;
 
             if (isset($data['avatar'])) {
@@ -95,41 +84,39 @@ class StudentService
 
     public function getById($id)
     {
-        $data = $this->studentRepository->findOrFail($id);
-        return view('student.edit', ['data' => $data]);
+        $student = $this->studentRepository->findOrFail($id);
+        return view('student.form', compact('student'));
     }
 
     public function update(StudentRequest $request, $id)
     {
-        $record = $this->studentRepository->findOrFail($id);
+        $student = $this->studentRepository->findOrFail($id);
         $data = $request->all();
-
+        unset($data['avatar']);
         if ($request->hasFile('avatar')) {
-            if ($record->image) {
-                Storage::delete('public/images/student/' . $record->image);
+            if ($student->image) {
+                Storage::delete('public/images/student/' . $student->image);
             }
 
             $image = $request->file('avatar');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->storeAs('public/images/student', $imageName);
             $data['avatar'] = $imageName;
-        } else {
-            $data['avatar'] = $record->image;
         }
         $this->studentRepository->update($id, $data);
 
         return redirect()->route('students.index')->with('success', __('Student update successfully'));
     }
 
-    public function filterByDateOfBirthAndPoint($request)
+    public function filter($request)
     {
-        // truyền array qua lại
-        $minAge = $request->minAge;
-        $maxAge = $request->maxAge;
-        $minPoint = $request->minPoint;
-        $maxPoint = $request->maxPoint;
-//        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint);
-        $data = $this->studentRepository->filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
+//        $array = $request->all();
+//        $minAge = $request->minAge;
+//        $maxAge = $request->maxAge;
+//        $minPoint = $request->minPoint;
+//        $maxPoint = $request->maxPoint;
+//        dùng array triuyee
+        $data = $this->studentRepository->filter($request->all())
             ->with(['studentSubjects', 'faculty.subjects', 'user'])
             ->paginate(PerPage::TEN)
             ->withQueryString();
@@ -195,7 +182,7 @@ class StudentService
         return view('dashboard.addScore', ['data' => $data, 'subject' => $subject, 'student' => $student, 'subjectPoint' => $subjectPoints]);
     }
 
-    public function getPageAddPoint($studentId)
+    public function points($studentId)
     {
         $student = $this->studentRepository->findOrFail($studentId);
         $registeredSubjects = $student->subjects()->pluck('subjects.id')->toArray();
@@ -207,7 +194,7 @@ class StudentService
     public function updatePoint(Request $request, $studentId, $subjectId)
     {
         $data['point'] = $request->input('point');
-        $this->userCourseRepository->updatePoint($studentId, $subjectId, $data);
+        $this->studentRepository->updatePoint($studentId, $subjectId, $data);
         return redirect()->back()->with(['success', 'Success']);
     }
 
@@ -215,6 +202,7 @@ class StudentService
     {
         $student = $this->studentRepository->findOrFail($studentId);
         $count = $this->studentRepository->countRegisterCourse($studentId);
+//        dùng pivot
 
         // Kiểm tra và gửi email nếu cần
         if ($student && $count !== null && $count < $student->faculty->subjects()->count()) {

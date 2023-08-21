@@ -111,4 +111,9 @@ class SubjectController extends Controller
         }
 
     }
+
+    public function registerMultiple(Request $request)
+    {
+        return $this->subjectService->registerMultiple($request);
+    }
 }

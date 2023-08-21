@@ -29,7 +29,7 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         View::composer(
-            ['subject.create','subject.edit','student.create','student.edit','student.list'], 'App\Http\View\Composer\FacultyComposer'
+            ['subject.form','subject.edit','student.form','student.edit','student.list'], 'App\Http\View\Composer\FacultyComposer'
         );
     }
 }

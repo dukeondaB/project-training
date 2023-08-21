@@ -3,11 +3,14 @@
 @section('sub-title') {{__('List')}} @endsection
 @section('content')
     <div class="">
-        {!! Html::linkRoute('subject.create', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+        {!! Html::linkRoute('subject.form', __('Create'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
+    {!! Form::open(['route' => 'subject.register.multiple', 'method' => 'POST', 'id' => 'registerForm2']) !!}
+
     <table class="table table-sm">
         <thead>
         <tr>
+            <th></th>
             <th>#</th>
             <th>{{__('Subject Name')}}</th>
             <th>{{__('Description')}}</th>
@@ -20,6 +23,15 @@
         <tbody>
         @foreach($data as $item)
             <tr>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="selectedSubjects[]" value="{{ $item->id }}" id="flexCheckDefault{{$item->id}}">
+                        <label class="form-check-label" for="flexCheckDefault{{$item->id}}">
+                        </label>
+
+                    </div>
+{{--                    <input class="form-check-input" type="checkbox" id="checkboxNoLabel" name="selectedSubjects[{{ $item->id }}]" value="{{ $item->id }}" aria-label="...">--}}
+                </td>
                 <td>
                     {{ $loop->iteration }}
                 </td>
@@ -42,12 +54,12 @@
                 </td>
                 {{-- @endcan --}}
                 <td>
-                    {!! Form::open(['route' => ['subject.destroy', $item->id], 'method' => 'POST', 'id' => 'deleteForm']) !!}
-                    @csrf
-                    @method('DELETE')
-
-                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
-                    {!! Html::linkRoute('subject.edit', __('Edit'), ['subject' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::open(['route' => ['subject.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
+                    {!! Form::button('<i class="fa fa-window-close"></i> ', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+                    <a href="{{ route('subject.edit', ['subject' => $item->id]) }}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">
+                        <i class="fas fa-edit"></i>
+                    </a>
+{{--                    {!! Html::linkRoute('subject.edit', __('Edit'), ['subject' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}--}}
                     {!! Form::close() !!}
                 </td>
                 @if($user->student)
@@ -70,6 +82,8 @@
         @endforeach
         </tbody>
     </table>
+    {!! Form::button(__('Register Selected Subjects'), ['route' => 'subject.register.multiple', 'class' => 'btn btn-success', 'type' => 'submit']) !!}
+    {!! Form::close() !!}
     {{ $data->links() }}
 
 

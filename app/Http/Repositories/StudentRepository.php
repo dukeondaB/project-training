@@ -20,31 +20,33 @@ class StudentRepository extends BaseRepository
         return $this->model->where('user_id', $id)->first();
     }
 
-    public function filterByDateOfBirthAndPoint($minAge, $maxAge, $minPoint, $maxPoint)
+    public function filter($array)
     {
+        $maxAge = isset($array['max-age']);
+//        $minAge = $array['min-age'];
         $query = $this->model;
-        // Chuyển minAge và maxAge thành ngày tháng năm sinh
-        $now = now(); // Lấy ngày giờ hiện tại
+        $now = now();
         $minBirthDate = $now->subYears($maxAge)->format('Y-m-d');
-        $maxBirthDate = $now->subYears($minAge)->format('Y-m-d');
+//        $maxBirthDate = $now->subYears($minAge)->format('Y-m-d');
 
-        $query->when($minAge && $maxAge, function ($q) use ($minBirthDate, $maxBirthDate) {
-            return $q->whereBetween('birth_day', [$minBirthDate, $maxBirthDate]);
-        })->when($minAge && !$maxAge, function ($q) use ($minBirthDate) {
-            return $q->where('birth_day', '<=', $minBirthDate);
-        })->when(!$minAge && $maxAge, function ($q) use ($maxBirthDate) {
-            return $q->where('birth_day', '>=', $maxBirthDate);
-        });
+//      check min, max
+//        when check theo data minbirthdate
+//        point tương tự sorting điểm theo whereHas
 
-        $query->when($minPoint && $maxPoint, function ($q) use ($minPoint, $maxPoint) {
-            return $q->whereBetween('total_point', [$minPoint, $maxPoint]);
-        })->when($minPoint && !$maxPoint, function ($q) use ($minPoint) {
-            return $q->where('total_point', '>=', $minPoint);
-        })->when(!$minPoint && $maxPoint, function ($q) use ($maxPoint) {
-            return $q->where('total_point', '<=', $maxPoint);
-        });
+//        $query->when($minAge && !$maxAge, function ($q) use ($minBirthDate) {
+//            return $q->where('birth_day', '<=', $minBirthDate);
+//        })->when(!$minAge && $maxAge, function ($q) use ($maxBirthDate) {
+//            return $q->where('birth_day', '>=', $maxBirthDate);
+//        });
+//
+//        $query->when($minPoint && $maxPoint, function ($q) use ($minPoint, $maxPoint) {
+//            return $q->whereBetween('total_point', [$minPoint, $maxPoint]);
+//        })->when($minPoint && !$maxPoint, function ($q) use ($minPoint) {
+//            return $q->where('total_point', '>=', $minPoint);
+//        })->when(!$minPoint && $maxPoint, function ($q) use ($maxPoint) {
+//            return $q->where('total_point', '<=', $maxPoint);
+//        });
 
-//        return $query->paginate(PerPage::TEN)->withQueryString();
         return $query;
     }
 
@@ -66,7 +68,13 @@ class StudentRepository extends BaseRepository
 
     public function savePoints(Student $student, array $data)
     {
-        $student->subjects()->syncWithoutDetaching($data);
+        return $student->subjects()->sync($data);
+    }
+
+    public function updatePoint($studentId, $subjectId, $data)
+    {
+        $student = $this->findOrFail($studentId);
+        return $student->subjects()->where('subject_id', $subjectId)->update($data);
     }
 
 }

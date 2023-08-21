@@ -23,10 +23,9 @@ use App\Http\Controllers\Subject\GetListSubjectController;
 Auth::routes(['register' => false]);
 
 Route::group(['middleware' => ['auth','locale']], function () {
-
     Route::get('change-language/{language}',[StudentController::class , 'changeLanguage'])->name('student.change-language');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::resource('students', StudentController::class);
+    Route::resource('students', StudentController::class)->except('show');
     Route::resource('profiles', ProfileController::class)->only(['index','update']);
     Route::resource('faculties', FacultyController::class)->except('index');
     Route::get('faculties', [GetListFacultyController::class, 'index'])->name('faculty.index');
@@ -38,5 +37,6 @@ Route::group(['middleware' => ['auth','locale']], function () {
     Route::post('save-points', [StudentController::class, 'savePoints'])->name('student.save-points');
     Route::post('subject/import', [SubjectController::class, 'import'])->name('student-subject.import');
     Route::post('send-notification/{studentId}',[StudentController::class, 'sendEmailNotification'])->name('send-notification');
-    Route::get('student/getPageSavePoints/{studentId}',[StudentController::class, 'getPageSavePoints'])->name('student.add-points');
+    Route::get('student/{studentId}/points',[StudentController::class, 'points'])->name('students.points');
+    Route::post('subjects/register/multiple', [SubjectController::class, 'registerMultiple'])->name('subject.register.multiple');
 });

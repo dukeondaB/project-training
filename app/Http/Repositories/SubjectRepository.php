@@ -29,7 +29,6 @@ class SubjectRepository extends BaseRepository
     public function showAll()
     {
         $query = $this->model->with('faculty');
-
         if (Auth::user()->student) {
             $studentFacultyId = Auth::user()->student->faculty->id;
 
@@ -56,7 +55,7 @@ class SubjectRepository extends BaseRepository
     protected function getStudentPoints($student)
     {
         $studentPoints = [];
-//        dd($student);
+
         foreach ($student->subjects as $item) {
             $studentPoints[$item->pivot->subject_id] = $item->pivot->point;
         }

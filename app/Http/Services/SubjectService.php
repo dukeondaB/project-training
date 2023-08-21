@@ -6,6 +6,7 @@ namespace App\Http\Services;
 use App\Http\Repositories\FacultyRepository;
 use App\Http\Repositories\SubjectRepository;
 use App\Http\Requests\SubjectRequest;
+use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,7 @@ class SubjectService
 
     public function getForm()
     {
-        return view('subject.create');
+        return view('subject.form');
     }
 
     public function save(SubjectRequest $request)
@@ -59,7 +60,7 @@ class SubjectService
     public function getById($id)
     {
         $data = $this->subjectRepository->findOrFail($id);
-        return view('subject.edit', ['data' => $data]);
+        return view('subject.form', ['data' => $data]);
     }
 
     public function update(SubjectRequest $request, $id)
@@ -80,6 +81,21 @@ class SubjectService
         }
 
         return redirect()->back()->with('success', __('Subject regis successfully'));
+    }
+
+    public function registerMultiple($request)
+    {
+        dd($request->all());
+        if (Auth::check()) {
+            $user = Auth::user();
+            $selectedSubjects = $request->input('selectedSubjects', []);
+
+            foreach ($selectedSubjects as $subjectId => $value) {
+                $user->student->subjects()->attach($subjectId);
+            }
+        }
+
+        return redirect()->back()->with('success', __('Subjects registered successfully'));
     }
 
 }

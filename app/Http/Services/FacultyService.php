@@ -28,7 +28,7 @@ class FacultyService
 
     public function getForm()
     {
-        return view('faculty.create');
+        return view('faculty.form');
     }
 
     public function save(FacultyRequest $request)
@@ -53,7 +53,7 @@ class FacultyService
     public function find($id)
     {
         $data = $this->facultyRepository->find($id);
-        return view('faculty.edit', ['data' => $data]);
+        return view('faculty.form', ['data' => $data]);
     }
 
     public function update(FacultyRequest $request, $id)

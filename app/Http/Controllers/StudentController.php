@@ -23,7 +23,7 @@ class StudentController extends Controller
      */
     public function index(Request $request)
     {
-        return $this->studentService->filterByDateOfBirthAndPoint($request);
+        return $this->studentService->filter($request);
     }
 
     /**
@@ -45,17 +45,6 @@ class StudentController extends Controller
     public function store(StudentRequest $request)
     {
         return $this->studentService->save($request);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -92,12 +81,6 @@ class StudentController extends Controller
         return $this->studentService->delete($id);
     }
 
-//    public function getUsersByAgeRange(Request $request)
-//    {
-////        dd($request);
-//        return $this->userService->getUsersByAgeRange($request);
-//    }
-
     public function changeLanguage($language)
     {
         \Session::put('website_language', $language);
@@ -120,9 +103,9 @@ class StudentController extends Controller
         return $this->studentService->sendEmailNotification($studentId);
     }
 
-    public function getPageSavePoints($studentId)
+    public function points($studentId)
     {
-        return $this->studentService->getPageAddPoint($studentId);
+        return $this->studentService->points($studentId);
     }
 
     public function savePoints(Request $request)

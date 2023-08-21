@@ -9,7 +9,7 @@
 
     <div class="">
         {!! Html::linkRoute('students.index', __('Go back'), [], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
-        {!! Html::linkRoute('student.add-points', __('Add Points'), ['studentId' => $student->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+        {!! Html::linkRoute('students.points', __('Add Points'), ['studentId' => $student->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
     </div>
     <table>
         <tr>

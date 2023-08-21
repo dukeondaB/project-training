@@ -30,8 +30,11 @@
 
                 <td>
                     {!! Form::open(['route' => ['faculties.destroy', $item->id], 'method' => 'DELETE', 'id' => 'deleteForm']) !!}
-                    {!! Form::submit(__('Delete'), ['class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
-                    {!! Html::linkRoute('faculties.edit', __('Edit'), ['faculty' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}
+                    {!! Form::button('<i class="fa fa-window-close"></i>', ['type' => 'submit', 'class' => 'btn btn-danger', 'onclick' => 'return confirmDelete()']) !!}
+{{--                    {!! Html::linkRoute('faculties.edit', __('Edit'), ['faculty' => $item->id], ['class' => 'btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white']) !!}--}}
+                    <a href="{{ route('faculties.edit', ['faculty' => $item->id]) }}" class="btn waves-effect waves-light btn btn-info pull-left hidden-sm-down text-white">
+                        <i class="fas fa-edit"></i>
+                    </a>
                     {!! Form::close() !!}
                 </td>
             </tr>

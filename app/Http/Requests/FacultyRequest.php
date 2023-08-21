@@ -24,20 +24,17 @@ class FacultyRequest extends FormRequest
      */
     public function rules()
     {
-        // Kiểm tra xem đây có phải là route "students.create" hay không
-        $isCreate = $this->routeIs('faculty.create');
-//        check method
-        // Sử dụng conditional validation để chọn rules phù hợp
-//        if ($isCreate) {
+        $checkMethod = $this->_method;
+        if ($checkMethod == 'PUT') {
+            return [
+                'name' => 'string|max:155',
+                'description' => 'nullable|string',
+            ];
+        } else {
             return [
                 'name' => 'required|unique:faculties|string|max:155',
                 'description' => 'required|string',
             ];
-//        }
-//            return [
-//                'name' => 'string|max:155',
-//                'description' => 'nullable|string',
-//            ];
-//
+        }
     }
 }
