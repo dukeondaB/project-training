@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 
 use App\Enums\PerPage;
+use App\Helper\FileHelper;
 use App\Http\Repositories\StudentRepository;
 use App\Http\Repositories\UserRepository;
 use App\Http\Requests\StudentRequest;
@@ -37,36 +38,23 @@ class StudentService
 
     public function save(StudentRequest $request)
     {
+        DB::beginTransaction();
         try {
-            DB::transaction(function () use ($request) {
-                $data = $request->all();
-                $data['password'] = Hash::make('000000');
-
-                if ($request->hasFile('avatar')) {
-                    $image = $request->file('avatar');
-                    $imageName = time() . '.' . $image->getClientOriginalExtension();
-                    $image->storeAs('public/images/student', $imageName);
-                    $data['avatar'] = $imageName;
-                }
-
-                $user = $this->userRepository->create($data);
-                $studentData['user_id'] = $user->id;
-
-                if (isset($data['avatar'])) {
-                    $studentData['avatar'] = $data['avatar'];
-                }
-
-                $user->student()->create($studentData);
-
-                dispatch(new SendMailForDues($data));
-            });
+            $data = FileHelper::uploadImage($request, $request->all(),'avatar','student');
+            $data['password'] = Hash::make('000000');
+            $user = $this->userRepository->create($data);
+            $studentData['user_id'] = $user->id;
+            $studentData = $data;
+            $user->student()->create($studentData);
+            dispatch(new SendMailForDues($data));
+            DB::commit();
 
             if ($request->ajax()) {
                 return response()->json(['success' => ['general' => 'success: ']], 200);
             }
-
             return redirect()->route('students.index')->with('success', __('Student created successfully'));
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json(['error' => ['general' => 'An error occurred: ' . $e->getMessage()]], 422);
         }
     }
@@ -93,20 +81,10 @@ class StudentService
 
     public function update(StudentRequest $request, $id)
     {
-        dd($request);
-        $student = $this->studentRepository->findOrFail($id);
-        $data = $request->all();
-        unset($data['avatar']);
-        if ($request->hasFile('avatar')) {
-            if ($student->image) {
-                Storage::delete('public/images/student/' . $student->image);
+        $data = FileHelper::uploadImage($request, $request->all(),'avatar','student');
+        if (!$request->hasFile('avatar')) {
+            unset($data['avatar']);
             }
-
-            $image = $request->file('avatar');
-            $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('public/images/student', $imageName);
-            $data['avatar'] = $imageName;
-        }
         $this->studentRepository->update($id, $data);
 
         return redirect()->route('students.index')->with('success', __('Student update successfully'));
